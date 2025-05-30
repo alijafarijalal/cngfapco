@@ -1,0 +1,14 @@
+﻿@model List<cngfapco.Models.Registration>
+
+@foreach (var cust in Model)
+    {
+        <tr>
+            <td>@cust.ID</td>
+            <td>@cust.WorkshopTitle</td>
+            <td>@cust.VehicleType</td>
+            <td>@cust.TypeofUse</td>
+            <td>@cust.FullName</td>
+            <td>@cust.MobileNumber</td>
+            <td>@cust.Plate</td>
+        </tr>
+    }

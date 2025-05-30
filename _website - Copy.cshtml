@@ -1,0 +1,242 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" lang="fa" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="copyright" content="Fanavaran Parsian Co. 2008" />
+    <meta name="distribution" content="global" />
+    <meta name="description" content="Fanavaran Parsian CNG Equipment!" />
+    <meta name="keywords" content="cng,gas,convert,natural,fanavaran,fan,avaran,parsian,company,گاز,تبدیل,سوخت,دوگانه سوز,بهینه سازی,بنزین,گاز سوز,سی ان جی,cng,ifco,تجهیزات سی ان جی" />
+    @*<link rel="stylesheet" type="text/css" media="screen,projection,print" href="css/layout5_setup.css" />
+        <link rel="stylesheet" type="text/css" media="screen,projection,print" href="css/layout5_text.css" />*@
+    <link rel="icon" type="image/x-icon" href="~/img/favicon.ico" />
+
+    <!-- Vendor styles -->
+    <link rel="stylesheet" href="~/Template2/vendors/material-design-iconic-font/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="~/Template2/vendors/animate.css/animate.min.css">
+    <link rel="stylesheet" href="~/Template2/vendors/jquery-scrollbar/jquery.scrollbar.css">
+    <link rel="stylesheet" href="~/Template2/vendors/fullcalendar/fullcalendar.min.css">
+    <link href='http://www.fontonline.ir/css/IranNastaliq.css' rel='stylesheet' type='text/css'>
+
+    <!-- App styles -->
+    <link rel="stylesheet" href="~/Template2/css/app.min.css">
+</head>
+
+<body data-ma-theme="indigo" style="background-color:#ffffff;" dir="rtl">
+    <main class="main main--alt">
+        <div class="page-loader">
+            <div class="page-loader__spinner">
+                <svg viewBox="25 25 50 50">
+                    <circle cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+                </svg>
+            </div>
+        </div>
+
+        <header class="header">
+            <div class="navigation-trigger hidden-xl-up" data-ma-action="aside-open" data-ma-target=".sidebar">
+                <div class="navigation-trigger__inner">
+                    <i class="navigation-trigger__line"></i>
+                    <i class="navigation-trigger__line"></i>
+                    <i class="navigation-trigger__line"></i>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="header__logo">
+                    <h1>
+                        <img src="~/img/faplogo.png" style="border-radius:2px" width="10%"/>
+                        <a href="#">
+
+                            <span class="" style="font-family:IranNastaliq,'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;font-size:150%;margin:4px 7px 2px 4px;">
+                                شرکت فن آوران پارسیان
+                                <br />
+                                <span class="hidden-sm-down" style="font-family:Vazir;font-size:50%;">بزرگترین شرکت تبدیل کارگاهی خودروهای بنزینی به دوگانه سوخت (بنزین-CNG) کشور</span>
+                            </span>
+
+                        </a>
+                    </h1>
+
+                </div>
+            </div>
+            <div class="col-md-5 hidden-sm-down hidden-xs-down hidden-lg-down hidden-tablet hidden-desktop">
+                <div style="background-color:#ffffff;border-radius:40px 40px;text-align:center;height:35px;">
+                    <span>
+                        <a href="/Website/Index"> صفحه اصلی </a>
+                    </span>
+                    <span style="color:#000000;">|</span>
+                    <span>
+                        <a href="/Users/LoginPage"> سامانه طرح تبدیل CNG  </a>
+                    </span>
+                    <span style="color:#000000;">|</span>
+                    <span>
+                        <a href="/Website/CNGHandBook">دفترچه راهنمای CNG</a>
+                    </span>
+                    <span style="color:#000000;">|</span>
+                    <span>
+                        <a href="/Website/WorkshopsList">اطلاعات کارگاه ها</a>
+                    </span>
+                </div>
+
+            </div>
+            <div class="col-md-1 hidden-sm-down hidden-xs-down hidden-lg-down hidden-tablet hidden-desktop">
+                <div class="header__logocng">
+                    <h1><img src="~/img/CNG-logo-green.png" width="100%" />   </h1>
+                </div>
+            </div>
+
+        </header>
+        <aside class="sidebar sidebar--hidden">
+            <div class="scroll-wrapper scrollbar-inner" style="position: relative;">
+                <div class="scrollbar-inner scroll-content scroll-scrolly_visible" style="height: auto; margin-bottom: -17px; margin-right: -17px; max-height: 388.25px;">
+                    <ul class="navigation">
+                        <li class="navigation__active"><a href="/Website/Index"> صفحه اصلی </a> </li>
+                        <li class=""><a href="/Users/LoginPage"> سامانه طرح تبدیل CNG  </a> </li>
+
+                        <li class="navigation__sub">
+                            <a href="#" data-toggle="dropdown">پیوندها</a>
+                            <ul>
+                                <li><a href="/Website/CNGHandBook" class="dropdown-item">دفترچه راهنمای CNG</a></li>
+                                <li><a href="/Website/WorkshopsList" class="dropdown-item">اطلاعات کارگاه ها</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div><div class="scroll-element scroll-x scroll-scrolly_visible"><div class="scroll-element_outer"><div class="scroll-element_size"></div><div class="scroll-element_track"></div><div class="scroll-bar" style="width: 0px;"></div></div></div><div class="scroll-element scroll-y scroll-scrolly_visible"><div class="scroll-element_outer"><div class="scroll-element_size"></div><div class="scroll-element_track"></div><div class="scroll-bar" style="height: 174px; top: 0px;"></div></div></div>
+            </div>
+        </aside>
+        <section class="content content--full">
+            <div class="content__inner">
+                <div class="row">
+                    <div class="col-md-3 col-sm-4">
+                        <span class="" style="">
+                            <i class="zmdi zmdi-calendar zmdi-hc-fw"></i> امروز  :
+                            @DateTime.Now.ToLongDateString()
+                        </span>
+                    </div>
+                    <div class="col-md-9 col-sm-8 hidden-sm-down hidden-xs-down" style="background-color:#ffd800;">
+                        <span>
+                            سخن روز
+                        </span> |
+                        <span class="h6" id="spam">
+                        </span>
+                        @*<span class="">
+                                امام جعفر صادق (ع)
+                            </span>*@
+
+                    </div>
+                </div>
+
+                @RenderBody()
+
+                <footer class="footer hidden-xs-down">
+                    <p>©تمام حقوق مادی و معنوی این سایت برای شرکت فن آوران پارسیان محفوظ می باشد.</p>
+
+                    <ul class="nav footer__nav">
+                        <li class="nav-link"><a href="/Website/Index"> صفحه اصلی </a> </li>
+                        <li class="nav-link"><a href="/Users/LoginPage"> سامانه طرح تبدیل CNG  </a></li>
+                        <li class="nav-link dropdown">
+                            <a href="#" data-toggle="dropdown">پیوندها</a>
+                            <div class="dropdown-menu">
+                                <a href="/Website/CNGHandBook" class="dropdown-item">دفترچه راهنمای CNG</a>
+                                <a href="/Website/WorkshopsList" class="dropdown-item">اطلاعات کارگاه ها</a>
+                            </div>
+                        </li>
+
+                    </ul>
+                    <!-- Begin WebGozar.com Counter code -->
+                    @*<script type="text/javascript" language="javascript" src="http://www.webgozar.ir/c.aspx?Code=2678319&amp;t=counter"></script>
+                    <noscript><a href="http://www.webgozar.com/counter/stats.aspx?code=2678319" target="_blank">&#1570;&#1605;&#1575;&#1585;</a></noscript>*@
+                    <!-- End WebGozar.com Counter code -->
+                </footer>
+            </div>
+        </section>
+    </main>
+
+    <!-- Older IE warning message -->
+    <!--[if IE]>
+        <div class="ie-warning">
+            <h1>Warning!!</h1>
+            <p>You are using an outdated version of Internet Explorer, please upgrade to any of the following web browsers to access this website.</p>
+
+            <div class="ie-warning__downloads">
+                <a href="http://www.google.com/chrome">
+                    <img src="img/browsers/chrome.png" alt="">
+                </a>
+
+                <a href="https://www.mozilla.org/en-US/firefox/new">
+                    <img src="img/browsers/firefox.png" alt="">
+                </a>
+
+                <a href="http://www.opera.com">
+                    <img src="img/browsers/opera.png" alt="">
+                </a>
+
+                <a href="https://support.apple.com/downloads/safari">
+                    <img src="img/browsers/safari.png" alt="">
+                </a>
+
+                <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">
+                    <img src="img/browsers/edge.png" alt="">
+                </a>
+
+                <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
+                    <img src="img/browsers/ie.png" alt="">
+                </a>
+            </div>
+            <p>Sorry for the inconvenience!</p>
+        </div>
+    <![endif]-->
+    <!-- Javascript -->
+    <!-- ../vendors -->
+    <script src="~/Template2/vendors/jquery/jquery.min.js"></script>
+    <script src="~/Template2/vendors/popper.js/popper.min.js"></script>
+    <script src="~/Template2/vendors/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/Template2/vendors/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+    <script src="~/Template2/vendors/jquery-scrollLock/jquery-scrollLock.min.js"></script>
+
+    <script src="~/Template2/vendors/flot/jquery.flot.js"></script>
+    <script src="~/Template2/vendors/flot/jquery.flot.resize.js"></script>
+    <script src="~/Template2/vendors/flot.curvedlines/curvedLines.js"></script>
+    <script src="~/Template2/vendors/jqvmap/jquery.vmap.min.js"></script>
+    <script src="~/Template2/vendors/jqvmap/maps/jquery.vmap.world.js"></script>
+    <script src="~/Template2/vendors/easy-pie-chart/jquery.easypiechart.min.js"></script>
+    <script src="~/Template2/vendors/salvattore/salvattore.min.js"></script>
+    <script src="~/Template2/vendors/sparkline/jquery.sparkline.min.js"></script>
+    <script src="~/Template2/vendors/moment/moment.min.js"></script>
+    <script src="~/Template2/vendors/fullcalendar/fullcalendar.min.js"></script>
+
+    <!-- Charts and maps-->
+    <script src="~/Template2/demo/js/flot-charts/curved-line.js"></script>
+    <script src="~/Template2/demo/js/flot-charts/dynamic.js"></script>
+    <script src="~/Template2/demo/js/flot-charts/line.js"></script>
+    <script src="~/Template2/demo/js/flot-charts/chart-tooltips.js"></script>
+    <script src="~/Template2/js/other-charts.js"></script>
+    <script src="~/Template2/demo/js/jqvmap.js"></script>
+
+    <!-- App functions and actions -->
+    <script src="~/Template2/js/app.min.js"></script>
+
+    <script>
+        function randomtext() {
+            var randomtxt = [
+                'عاقل ترين مردم خوش خلق ترين آنهاست. امام جعفر صادق (ع)',
+                'هر اهل فنی برای موفقیت در کسب و کار خود (که کارش بگیرد) به سه مطلب نیازمند است:1- تخصص و باهوشی در فن و حرفه مورد نظر. 2- امین باشد و در کار و مال مردم، امانت و درستی را حفظ کند. 3- با کارفرما و صاحب کار، خوش برخورد و خوش قلب باشد. امام جعفر صادق (ع)',
+                'خردمندترین مردم کسی است که به عواقب و فرجام کار بیشتر بنگرد. امام علی (ع)',
+                'مؤمن از دعای خویش یکی از سه بهره را دارد:یا برایش ذخیره می شود، یا برایش مستجاب می گردد، یا بلایی که مقدر بوده به او برسد، از او دفع می شود. امام سجاد (ع)',
+                'عالمی که مردم از علم او بهره بگیرند، از هفتاد هزار عابد بهتر است. امام محمد باقر (ع)',
+                'خداوند صله رحم و پیوند و نیکی به خویشاوندان را سبب طول عمر و مایه ی رشد تعداد آنان قرار داد. حضرت فاطمه (علیها السلام)'
+            ];
+            return randomtxt[Math.floor((Math.random() * 3.99))];
+        }
+
+        document.getElementById("spam").innerHTML = randomtext();
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,31 @@
+﻿@if (HttpRuntime.Cache["LoggedInUsers"] != null)
+{
+    List<string> LoggedOnUsers = (List<string>)HttpRuntime.Cache["LoggedInUsers"];
+    if (LoggedOnUsers.Count > 0)
+    {
+        <div class="">
+            <ul>
+                @foreach (string user in LoggedOnUsers)
+                {
+                    <li class="text-success h4">
+                        <div class="r_row">
+                            <div class="r_name">@Html.Encode(user)</div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+}
+
+@*<script type="text/javascript">
+    $(function () {
+        setInterval(loginDisplay, 90000);
+    });
+
+    function loginDisplay() {
+        $.post("/Users/getLoginUser", null, function (data) {
+
+        });
+    }
+</script>*@
