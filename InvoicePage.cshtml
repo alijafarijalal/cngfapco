@@ -1,0 +1,224 @@
+﻿@model IEnumerable<cngfapco.Models.Invoice>
+
+@{
+    ViewBag.Title = "Invoice";
+    Layout = "~/Views/Shared/_DataTableLayout.cshtml";
+    string InCode = (string)ViewBag.InvoiceCode;
+    int? WorkshopId = (int?)ViewBag.WorkshopId;
+    int? CustomerId = (int?)ViewBag.CustomerId;
+}
+
+@*<div class="widget Deductionsdiv" id="page">
+        <div class="widget-body">
+            <div class="row-fluid">
+                <div class="col-sm-6 col-md-6">
+                    <label style="font-family:'B Titr';font-size:14px;margin-right:5px;color:#004bff"> قرارداد را انتخاب کنید : </label><span>@@Html.DropDownList("ContractID", new SelectList(string.Empty, "Value", "Text"), "--انتخاب کاربر--", new { style = "width:200px" })</span>
+                    @Html.DropDownList("ContractID", null, "--بدون انتخاب--", htmlAttributes: new { @style = "width:100%;font-family:'B Nazanin';font-size:15px;color:#222222;border:none", @id = "ContractID", onchange = "form.submit();" })
+                    <hr />
+                    <label style="font-family:'B Titr';font-size:12px;margin-right:5px;color:#004bff"> نوع مبالغ را انتخاب کنید : </label>
+                    <select style="font-size:8px;width:100%;" id="CurrencyTypeID" name="CurrencyTypeID">
+                        <option value="1">دلار امریکا</option>
+                        <option value="2">یورو</option>
+                        <option value="3">پوند انگلیس</option>
+                        <option value="4">درهم امارات</option>
+                        <option value="5">دینار عراق</option>
+                        <option value="6" selected>ریال</option>
+                        <option value="7">لیر</option>
+                        <option value="8">یوآن چین</option>
+                    </select>
+                </div>
+                @try
+                {
+                    @Html.Action("contractDeductions")
+                }
+                catch
+                {
+
+                }
+
+            </div>
+        </div>
+        @*<input class="form-control" id="id_step2-number_2" name="step2-number_2" type="text" data-type="number">*
+    </div>*@
+<div id="DivIdToPrint">
+    <div class="widget" id="allitems">
+        <div class="widget-body">
+            <div class="row-fluid">
+                <table class="table" width="100%">
+                    <tr>
+                        <th width="20%" style="text-align:center;vertical-align:middle;"><img src="" width="100" alt="لوگوی شرکت" style="position:inherit;color:#a9a9a9" class="center" /></th>
+                        <th width="60%" style="font-family:'B Titr';font-size:25px;text-align:center;vertical-align:middle;">صورتحساب فروش کالا و خدمات</th>
+                        <th width="20%">
+                            <p>
+                                <span class="h6"> شماره سریال : </span><span> <input value=@ViewBag.invoiceCode type="text" id="InvoiceCode" name="InvoiceCode" style="width:70px;border:none" required /></span>
+                            </p>
+                            <p>
+                                <span> تاریخ : </span><span> <input type="text" id="CreatedDate" name="CreatedDate" value="@DateTime.Now.ToShortDateString()" style="width:70px;border:none" /> </span>
+                            </p>
+                        </th>
+                    </tr>
+                </table>
+
+            </div>
+            <div style="border:1px solid #262525;font-family:'B Titr';font-size:15px;margin-top:7px;background-color:#ffd800;" hidden>
+                <p class="text-center"> مشخصات فروشنده </p>
+            </div>
+            <div style="border:1px solid #a9a9a9;margin-top:1px;margin-bottom:2px;" hidden>
+                @try
+                {
+                    @Html.Action("GetWorkshopInfo", new { id = WorkshopId })
+                }
+                catch { }
+
+            </div>
+            <div style="border:1px solid #262525;font-family:'B Titr';font-size:15px;margin-top:7px;background-color:#ffd800;">
+                <p class="text-center"> مشخصات خریـدار </p>
+            </div>
+            <div style="border:1px solid #a9a9a9;margin-top:1px;margin-bottom:2px;" id="CustomerInfo">
+               
+                @try
+                {
+                    @Html.Action("GetCustomerInfo",new { id = CustomerId })
+                }
+                catch
+                {
+
+                }
+
+                <p></p>
+            </div>
+
+            <div style="border:1px solid #262525;font-family:'B Titr';font-size:15px;margin-top:7px;background-color:#ffd800;">
+                <p class="text-center"> مشخصات کالا یا خدمات مورد معامله </p>
+            </div>
+            <div style="border:1px solid #a9a9a9;margin-top:1px;margin-bottom:2px;">
+                <div class="">
+                    <div class="" style="overflow:auto; ">
+                        <table id="tblInvoices" class="table table-bordered table-advance" style="text-align:center;vertical-align:middle;font-size:12px;">
+                            <thead>
+                                <tr>
+                                    <th> ردیف </th>
+                                    <th> کد کالا </th>
+                                    <th> شرح کالا یا خدمات </th>
+                                    <th> تعداد / مقدار </th>
+                                    <th> واحد اندازه گیری </th>
+                                    <th> مبلغ واحد (ریال) </th>
+                                    <th> مبلغ کل (ریال) </th>
+                                    <th hidden>  مبلغ تخفیف (ریال) </th>
+                                    <th hidden>  مبلغ کل پس از تخفیف (ریال)</th>
+                                    <th hidden>  جمع مالیات و عوارض (ریال) </th>
+                                    <th hidden>  جمع مبلغ کل و مالیات و عوارض (ریال) </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @{
+                                    int rowNum = 0;
+                                }
+                                @foreach (var invoice in Model)
+                                {
+                                    <tr>
+                                        <td>@(rowNum += 1)</td>
+                                        <td>@invoice.ServiceCode</td>
+                                        <td>@invoice.ServiceDesc</td>
+                                        <td>@invoice.Number</td>
+                                        <td>@invoice.UnitofMeasurement</td>
+                                        <td>@invoice.UnitAmount.ToString("#,##")</td>
+                                        <td>@invoice.TotalAmount.Value.ToString("#,##")</td>
+                                        <td hidden>@(invoice.DiscountAmount.HasValue? invoice.DiscountAmount.Value.ToString("#,##"):"0")</td>
+                                        <td hidden>@invoice.TotalAmountafterDiscount.Value.ToString("#,##")</td>
+                                        <td hidden>@invoice.AmountTaxandComplications.Value.ToString("#,##")</td>
+                                        <td hidden>@invoice.TotalAmountTaxandComplications.Value.ToString("#,##")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tr style="font-weight:bold;">
+                                <td colspan="6" style="text-align:left;"> جمع کل (ریال) </td>
+                                <td> @(ViewBag.TotalAmount == null ? "0" : ViewBag.TotalAmount.ToString("#,##.##")) </td>
+                                <td hidden> @(ViewBag.DiscountAmount == null ? "0" : ViewBag.DiscountAmount.ToString("#,##.##")) </td>
+                                <td hidden> @(ViewBag.TotalAmountafterDiscount == null ? "0" : ViewBag.TotalAmountafterDiscount.ToString("#,##.##")) </td>
+                                <td hidden> @(ViewBag.AmountTaxandComplications == null ? "0" : ViewBag.AmountTaxandComplications.ToString("#,##.##")) </td>
+                                <td hidden> @(ViewBag.TotalAmountTaxandComplications == null ? "0" : ViewBag.TotalAmountTaxandComplications.ToString("#,##.##")) </td>
+
+                            </tr>
+                            <tr hidden>
+                                <td colspan="2" style="text-align:right;">
+                                    <span style="font-family:'B Titr';font-size:12px;margin-right:5px;"> شرایط و نحوه فروش : </span>
+                                    <span style="margin-right:15px;"> @ViewBag.SaleCondition </span>
+                                </td>
+                                <td colspan="5" rowspan="2" style="text-align:right;">
+                                    <span> @ViewBag.Description </span>
+                                    <br />
+                                    <span> @ViewBag.Comment </span>
+                                </td>
+                            </tr>
+                            <tr hidden>
+                                <td colspan="6" style="text-align:right;">
+                                    <span style="font-family:'B Titr';font-size:12px;margin-right:auto;"> توضیحات : </span>
+                                </td>
+                                @*<td colspan="5" style="text-align:right;" rowspan="2">
+                                    <span> @ViewBag.Description </span>
+                                    <br />
+                                    <span> @ViewBag.Comment </span>
+                                </td>*@
+                            </tr>
+                        </table>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <br />
+            <div class="row-fluid" style="margin-top:10px;">
+                <table width="100%" class="text-center">
+                    <tr>
+                        <td width="30%">
+                            <span> امضای خریدار / خدمات گیرنده </span>
+                        </td>
+                        <td width="40%"></td>
+                        <td width="30%"> <span> مهر و امضای کارگاه </span> </td>
+                    </tr>
+                </table>
+               
+            </div>
+            <hr />
+            <div class="row-fluid">               
+                <div class="span6">
+                    @*<a href="/Financials/InvoicetoPrint?InvoiceCode=@InCode" data-toggle="modal" data-target="#modal-large" onclick="SelectPrintType(@InCode)">
+                        <i class="icon-print" style="color:#00ff21;font-size:30px;"></i>
+                    </a>*@
+                    <a href="/Financials/InvoiceSimplePrint?InvoiceCode=@InCode&workshopId=@WorkshopId">
+                        <i class="icon-print" style="color:#00ff21;font-size:30px;"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function SelectPrintType(id) {
+        $.get("/Financials/SelectPrintType?InvoiceCode=" + id, function (res) {
+            $("#modal-large").modal();
+            $("#myModalLabel").html("انتخاب نوع پرینت");
+            $("#myModalBody").html(res);
+
+        });
+    }
+</script>
+
+<script>
+        function Getprint() {
+            $.ajax({
+                url: "/Financials/InvoicePage",
+                type: "Post",
+                data: { InvoiceCode: @ViewBag.invoiceCode}
+            }).done(function (res) {
+                window.location.href = '@Url.Action("InvoicePage", "Financials", new { InvoiceCode = ViewBag.invoiceCode })';
+                //$("#showResult").fadeOut(1000);
+                //$("#showResult").html(res);
+                //$("#showResult").fadeIn(1000);
+            });
+        }
+</script>

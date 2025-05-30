@@ -1,0 +1,191 @@
+﻿@model IEnumerable<cngfapco.Models.InvoiceFapa>
+
+@{
+    ViewBag.Title = "Invoice";
+    //Layout = "~/Views/Shared/_DataTableLayout.cshtml";
+    //Layout = "~/Views/Shared/_Layout_CRM.cshtml";
+    Layout = null;
+    string InCode = (string)ViewBag.InvoiceCode;
+    int? WorkshopId = (int?)ViewBag.WorkshopId;
+    int? CustomerId = (int?)ViewBag.CustomerId;
+    string fromDate = (string)ViewBag.fromDate;
+    string toDate = (string)ViewBag.toDate;
+}
+
+<link href="/assets/bootstrap-rtl/css/bootstrap-rtl.min.css" rel="stylesheet" />
+<link href="/assets/bootstrap-rtl/css/bootstrap-responsive-rtl.min.css" rel="stylesheet" />
+<link href="/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link href="/css/style.css" rel="stylesheet" />
+<link href="/css/style_responsive.css" rel="stylesheet" />
+<link href="/css/style_default.css" rel="stylesheet" id="style_color" />
+@*<link href="~/css/bootstrap.css" rel="stylesheet" />*@
+
+<style type="text/css">
+    table {
+        page-break-inside: auto;
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto
+    }
+
+    thead {
+        display: table-thead-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+<script>
+    $(document).ready(function(){
+    $('body').persiaNumber();  // برای کل صفحه
+    $('.p-price').persiaNumber(); // فقط تگ ها با کلاس مشخص
+});
+
+</script>
+
+<div class="widget-body" style="margin-top:-25px;">
+    <div style="margin-bottom:-10px;">
+        <table class="table" width="100%">
+            <tr>
+                <td width="20%" style="text-align:center;vertical-align:middle;"><img src="" width="100" alt="لوگوی شرکت" style="position:inherit;color:#a9a9a9" class="center" hidden /></td>
+                <td width="60%" style="text-align:center;vertical-align:middle">
+                    <h3> صورتحساب فروش کالا و خدمات </h3>
+                    <p style="margin-top:7px;margin-bottom:7px;">
+                        <span class="text-warning">از تاریخ: </span><strong>@fromDate</strong> 
+                        <span class="text-warning">تا تاریخ: </span><strong>@toDate</strong>
+                    </p>
+                </td>
+                <td width="20%">
+                    <span> شماره سریال : </span><strong> @ViewBag.invoiceCode </strong>
+                    <br />
+                    <span> تاریخ صدور : </span><strong class="p-price"> @DateTime.Now.ToShortDateString() </strong>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="" style="border:1px solid #262525;font-size:17px;margin-top:4px;background-color:#ffd800;font-weight:300;">
+        <p class="text-center"> مشخصات فروشنده </p>
+    </div>
+    <div style="border:1px solid #a9a9a9;margin-top:1px;margin-bottom:1px;">
+        @try
+        {
+            @Html.Action("GetWorkshopInfo", new { id = WorkshopId })
+        }
+        catch { }
+
+    </div>
+    <div class="" style="border:1px solid #262525;font-size:17px;margin-top:1px;background-color:#ffd800;font-weight:300;">
+        <p class="text-center"> مشخصات خریـدار </p>
+    </div>
+    <div class="thead" style="border:1px solid #a9a9a9;margin-top:1px;margin-bottom:1px;" id="CustomerInfo">
+        <table class="table" width="100%" style="border:0px;font-size:14px;" cellpadding="0" cellspacing="0">
+            <tr>
+                <td width="40%"><span style="margin-right:5px;"> نام شخص حقیقی / حقوقی : </span><span class="text-info" style="font-size:13px;"> شرکت توسعه طرحهای صنعتی فن آوران پارسیان </span><input id="OwnersID" name="OwnersID" type="hidden" value="شرکت توسعه طرحهای صنعتی فن آوران پارسیان" /></td>
+                <td width="30%"><span style="margin-right:auto;"> شماره اقتصادی : </span><span class="text-info" style="font-size:13px;" dir="rtl"> 411154346447 </span> <input id="EmployerEconomicalnumber" name="EmployerEconomicalnumber" type="hidden" value="411154346447" /></td>
+                <td width="30%"><span style="margin-right:auto;"> شماره ثبت / شماره ملی : </span><span class="text-info" style="font-size:13px;" dir="rtl"> 192588 </span><input id="Employerregistrationnumber" name="Employerregistrationnumber" type="hidden" value="192588" /></td>
+
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <span style="margin-right:5px;"> نشانی کامل | </span><span> استان : </span><span class="text-info" style="font-size:13px;"> تهران </span><input id="EmployerState" name="EmployerState" type="hidden" value="تهران" />
+                    <span> شهرستان : </span><span class="text-info" style="font-size:13px;">تهران</span><input id="EmployerAddress1" name="EmployerAddress1" type="hidden" value="تهران" />
+                    <span class="text-info" style="font-size:13px;"> میدان نوبنیاد، خیابان شهید لنگری، کوچه تیموری، پلاک 3 </span><input id="EmployerAddress2" name="EmployerAddress2" type="hidden" value=" میدان نوبنیاد، خیابان شهید لنگری، کوچه تیموری، پلاک 3" />
+
+                </td>
+                <td><span style="margin-right:auto;"> کد پستی (10 رقمی) : </span><span class="text-info" style="font-size:13px;" dir="rtl">1693713441 </span>  <input id="EmployerPostalcode" name="EmployerPostalcode" type="hidden" value="1693713441" /></td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="margin-right:auto;"> تلفن : </span><span class="text-info" style="font-size:13px;" dir="rtl"> 22960055 (021) </span><input id="EmployerPhone" name="EmployerPhone" type="hidden" value="22960055 (021)" />
+                    <span style="margin-right:auto;margin-right:40px;"> نمـابر : </span><span class="text-info" style="font-size:12px;" dir="rtl">-</span><input id="EmployerFax" name="EmployerFax" type="hidden" value="-" />
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+
+        </table>
+    </div>
+
+    <div class="thead" style="border:1px solid #262525;font-size:17px;margin-top:1px;background-color:#ffd800;font-weight:300;">
+        <p class="text-center"> مشخصات کالا یا خدمات مورد معامله </p>
+    </div>
+    <div style="border:1px solid #a9a9a9;margin-top:1px;margin-bottom:1px;">
+        <table id="" class="print-friendly" style="text-align:center;vertical-align:middle;font-size:14px;overflow:auto;width:100%;border:1px solid silver;">
+            <thead style="border:1px solid silver;border-radius:7px 6px;background-color:#ffe971">
+                <tr class="thead">
+                    <th style="font-size:12px;border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;"> ردیف </th>
+                    <th style="font-size:12px;border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;"> کد کالا </th>
+                    <th style="font-size:12px;border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;"> شرح کالا یا خدمات </th>
+                    <th style="font-size:12px;border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;"> تعداد / مقدار </th>
+                    <th style="font-size:12px;border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;"> واحد اندازه گیری </th>
+                    <th style="font-size:11px;border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;"> مبلغ واحد (ریال) </th>
+                    <th style="font-size:11px;border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;"> مبلغ کل (ریال) </th>
+                    <th style="font-size:12px;border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;">  مبلغ تخفیف (ریال) </th>
+                    <th style="font-size:12px;border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;">  مبلغ کل پس از تخفیف (ریال)</th>
+                    <th style="font-size:12px;border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;">  جمع مالیات و عوارض (ریال) </th>
+                    <th style="font-size:12px;border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;">  جمع مبلغ کل و مالیات و عوارض (ریال) </th>
+                </tr>
+            </thead>
+
+
+            <tbody>
+                @{
+                    int rowNum = 0;
+                }
+                @foreach (var invoice in Model)
+                {
+                    <tr class="p-price">
+                        <td style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;">@(rowNum += 1)</td>
+                        <td style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;">@invoice.ServiceCode</td>
+                        <td style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;text-align:right;">@invoice.ServiceDesc</td>
+                        <td style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;">@invoice.Number</td>
+                        <td style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;">@invoice.UnitofMeasurement</td>
+                        <td style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;">@invoice.UnitAmount.ToString("#,##")</td>
+                        <td style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;">@invoice.TotalAmount.Value.ToString("#,##")</td>
+                        <td style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;">@(invoice.DiscountAmount.HasValue ? invoice.DiscountAmount.Value.ToString("#,##") : "0")</td>
+                        <td style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;">@invoice.TotalAmountafterDiscount.Value.ToString("#,##")</td>
+                        <td style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;">@invoice.AmountTaxandComplications.Value.ToString("#,##")</td>
+                        <td style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;">@invoice.TotalAmountTaxandComplications.Value.ToString("#,##")</td>
+                    </tr>
+                }
+            </tbody>
+            <tr style="font-weight:bold;background-color:#ffe971" ">
+                <td colspan="6" style="text-align:right;"> جمع کل قابل پرداخت: @ViewBag.AmounttoLetter   ریال </td>
+                <td style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;"> @(ViewBag.TotalAmount == null ? "0" : ViewBag.TotalAmount.ToString("#,##.##")) </td>
+                <td style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;"> @(ViewBag.DiscountAmount == null ? "0" : ViewBag.DiscountAmount.ToString("#,##.##")) </td>
+                <td style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;"> @(ViewBag.TotalAmountafterDiscount == null ? "0" : ViewBag.TotalAmountafterDiscount.ToString("#,##.##")) </td>
+                <td style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;"> @(ViewBag.AmountTaxandComplications == null ? "0" : ViewBag.AmountTaxandComplications.ToString("#,##.##")) </td>
+                <td style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;"> @(ViewBag.TotalAmountTaxandComplications == null ? "0" : ViewBag.TotalAmountTaxandComplications.ToString("#,##.##")) </td>
+            </tr>
+            <tr>
+                <td colspan="6" style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;text-align:right;">
+                    <span style="font-family:'B Titr';font-size:12px;margin-right:5px;"> شرایط و نحوه فروش : </span>
+                    <span style="margin-right:15px;"> @ViewBag.SaleCondition </span>
+                </td>
+                <td colspan="5" rowspan="2" style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;text-align:right;">
+                    <strong> توضیحات: </strong>
+                    <span> @ViewBag.Description </span>
+                    @*<span> @ViewBag.Comment </span>*@
+                </td>
+            </tr>
+            @*<tr>
+                    <td colspan="6" style="text-align:right;">
+                        <span style="font-family:'B Titr';font-size:12px;margin-right:auto;"> توضیحات : </span>
+                    </td>
+                </tr>*@
+        </table>
+    </div>
+    <br />
+    <table width="100%" class="text-center">
+        <tr>
+            <td width="30%">
+                <span> مهر و امضای کارگاه  </span>
+            </td>
+            <td width="40%"></td>
+            <td width="30%"> <span> مهر و امضای  </span><strong class="text-info"> شرکت فن آوران پارسیان</strong> </td>
+        </tr>
+    </table>
+</div>

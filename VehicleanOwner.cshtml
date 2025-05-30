@@ -1,0 +1,97 @@
+﻿@model cngfapco.Models.VehicleRegistration
+
+@try
+{
+    <input type="hidden" id="txtowner" value="@(Model.OwnerName + " " + Model.OwnerFamily)" />
+    <input type="hidden" id="txtworkshop" value="@(Model.Workshop.Title)" />
+    <input type="hidden" id="txtdate" value="@(Model.CreateDate.ToShortDateString())" />
+    <input type="hidden" id="txttime" value="@(Model.CreateDate.ToShortTimeString())" />
+
+    <table class="table table-advance table-bordered" width="100%">
+        <thead>
+            <tr>
+                <td style="text-align:center;color:#000000;font-weight:bold;">  مشخصات مالک و خودرو (خدمات گیرنده) </td>
+            </tr>
+        </thead>
+    </table>
+    <table class="table table-bordered" width="100%">
+        <tr>
+            <td width="20%"> نام و نام خانوادگی</td>
+            <td width="30%" class="text-info">@(Model.OwnerName + " " + Model.OwnerFamily)</td>
+            <td width="20%"> شماره تماس</td>
+            <td width="30%" class="text-info">@(Model.MobileNumber)</td>
+        </tr>
+        <tr>
+            <td> نوع خودرو</td>
+            <td class="text-info">@(Model.VehicleType.Type)</td>
+            <td> شماره پلاک</td>
+            <td class="text-info">@(" ایران " + Model.IranNumberPlate + " | " + Model.RightNumberPlate + Model.AlphaPlate + Model.LeftNumberPlate)</td>
+        </tr>
+        <tr>
+            <td> شماره شاسی</td>
+            <td class="text-info">@(Model.ChassisNumber)</td>
+            <td> شماره موتور </td>
+            <td class="text-info">@(Model.EngineNumber)</td>
+
+        </tr>
+        @*<tr>
+                <td> کارگاه تبدیل</td>
+                <td class="text-info">@(Model.Workshop.Title)</td>
+                <td> تاریخ تبدیل </td>
+                <td class="text-info">@(Model.CreateDate)</td>
+
+            </tr>*@
+    </table>
+}
+catch
+{
+    foreach (var item in ViewBag.tableOut)
+    {
+        <input type="hidden" id="txtowner" value="@item.EmployerEconomicalnumber" />
+        <input type="hidden" id="txtworkshop" value="@item.Workshops.Title" />
+        <input type="hidden" id="txtdate" value="@item.CreatedDate.ToShortDateString()" />
+        <input type="hidden" id="txttime" value="@(item.CreatedDate.ToShortTimeString())" />
+
+        <table class="table table-advance table-bordered" width="100%">
+            <thead>
+                <tr>
+                    <td style="text-align:center;color:#000000;font-weight:bold;">  مشخصات مالک و خودرو (خدمات گیرنده) </td>
+                </tr>
+            </thead>
+        </table>
+        <table class="table table-bordered" width="100%">
+            <tr>
+                <td width="20%"> نام و نام خانوادگی</td>
+                <td width="30%" class="text-info">@item.EmployerEconomicalnumber</td>
+                <td width="20%"> شماره تماس</td>
+                <td width="30%" class="text-info">@(item.EmployerPhone)</td>
+            </tr>
+            <tr>
+                <td> نوع خودرو</td>
+                <td class="text-info">@(item.EmployerPostalcode)</td>
+                <td> شماره پلاک</td>
+                <td class="text-info">@(item.EmployerState)</td>
+            </tr>
+            <tr>
+                <td> شماره شاسی</td>
+                <td class="text-info">@(item.EmployerFax)</td>
+                <td> شماره موتور </td>
+                <td class="text-info">
+                    @if (!string.IsNullOrEmpty(item.EmployerAddress))
+                    {
+                        @(item.EmployerAddress.Replace("، undefined", ""))
+                    }
+
+                </td>
+
+            </tr>
+            @*<tr>
+                    <td> کارگاه تبدیل</td>
+                    <td class="text-info">@(Model.Workshop.Title)</td>
+                    <td> تاریخ تبدیل </td>
+                    <td class="text-info">@(Model.CreateDate)</td>
+
+                </tr>*@
+        </table>
+    }
+}

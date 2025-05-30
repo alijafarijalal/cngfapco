@@ -1,0 +1,525 @@
+﻿
+@model IEnumerable<cngfapco.Models.RequestFreeSale>
+
+@{
+    ViewBag.Title = "RequestFreeSale";
+    Layout = "~/Views/Shared/_ExportLayout.cshtml";
+    string InCode = (string)ViewBag.InvoiceCode;
+    int? WorkshopId = (int?)ViewBag.WorkshopId;
+}
+
+@*<script src="~/js/jquery-1.8.3.min.js"></script>
+<script src="~/js/json2.js"></script>*@
+
+<div id="DivIdToPrint">
+    <div class="widget" id="allitems">
+        <div class="widget-body">
+            <div class="row-fluid">
+                <table class="table" width="100%">
+                    <tr>
+                        <td width="20%" style="text-align:center;vertical-align:middle;"><img src="~/img/faplogo.png" width="100" alt="لوگوی شرکت" style="position:inherit;color:#a9a9a9" class="center" /></td>
+                        <td width="60%" style="font-family:Vazir;font-size:25px;text-align:center;vertical-align:middle;">افزودن ردیف جدید به درخواست خرید کالا</td>
+                        <td width="20%">
+                            <br />
+                            <p>
+                                <span class="text-warning"> شماره سریال : </span><span> @ViewBag.invoiceCode <input value=@ViewBag.invoiceCode type="hidden" id="InvoiceCode" name="InvoiceCode" style="width:100px;border:none;font-family:'B Yekan' ;" required /></span>
+                            </p>
+                            <p>
+                                <span class="text-warning"> تاریخ : </span><span> @DateTime.Now.ToShortDateString() <input type="hidden" id="CreatedDate" name="CreatedDate" value="@ViewBag.date" style="width:100px;border:none;font-family:'B Yekan';" /> </span>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div style="border:1px solid #262525;font-size:15px;margin-top:7px;background-color:#ffd800;">
+                <p class="text-center">
+                    <span> مشخصات خریدار </span>
+                    <strong class="text-info"> @cngfapco.Helper.Helpers.GetWorkshops(WorkshopId).Title </strong>
+                </p>
+            </div>
+            <div style="border:1px solid #a9a9a9;margin-top:1px;margin-bottom:2px;" id="CustomerInfo">
+                @try
+                {
+                    @Html.Action("Workshops", new { id = WorkshopId })
+                }
+                catch { }
+            </div>
+
+            <div style="border:1px solid #262525;font-size:15px;margin-top:7px;background-color:#ffd800;">
+                <p class="text-center"> مشخصات کالای مورد معامله </p>
+            </div>
+            <div style="border:1px solid #a9a9a9;margin-top:1px;margin-bottom:2px;">
+                <table id="tblInvoices" class="table table-bordered table-advance" style="text-align:center;vertical-align:central;font-size:12px;">
+                    <thead>
+                        <tr>
+                            <th> ردیف </th>
+                            <th> کد کالا </th>
+                            <th> شرح کالا یا خدمات </th>
+                            <th> تعداد / مقدار </th>
+                            <th> واحد اندازه گیری </th>
+                            <th> مبلغ واحد (ریال) </th>
+                            <th> مبلغ کل (ریال) </th>
+                            <th>  مبلغ تخفیف (ریال) </th>
+                            <th><i class="icon-cog"></i>  </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int rowNum = 0;
+                        }
+                        @foreach (cngfapco.Models.RequestFreeSale invoice in Model)
+                        {
+                            <tr>
+                                <td>@(rowNum += 1)</td>
+                                <td>@(invoice.ServiceCode)</td>
+                                <td>@invoice.ServiceDesc</td>
+                                <td>@invoice.Number</td>
+                                <td>@invoice.UnitofMeasurement</td>
+                                <td>@invoice.UnitAmount.ToString("#,##")</td>
+                                <td class="amount">@(invoice.TotalAmount.HasValue?invoice.TotalAmount.Value.ToString("#,##"):"0") </td>
+                                <td>@(invoice.DiscountAmount)</td>
+                                <td style="color:#ffffff;">@invoice.InvoiceID</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td><input class="cho" type="text" id="txtrowNum" style="width:5px; text-align:center;" value="#" /></td>
+                            <td><input type="text" id="txtServiceDesc" style="width:50px;resize:both;font-family:'B Yekan';" rows="2" /><input type="hidden" id="txtServiceCode2" style="width:30px;text-align:center;" /></td>
+                            <td style="font-size:12px;">@Html.DropDownList("ServicesID", null, "--بدون انتخاب--", htmlAttributes: new { @id = "txtServiceCode", @style = "width:100%;font-family:Vazir;", @class = "chosen" })</td>
+                            <td><input id="txtNumber" type="text" maxlength="22" style="width:30px;text-align:center;font-family:'B Yekan';" required="required"></td>
+                            <td><input type="text" id="txtUnitofMeasurement" style="width:40px;text-align:center;font-family:'B Yekan';" required="required" /></td>
+                            <td><input id="txtUnitAmount" type="text" data-type="number" style="width:100%;text-align:center;font-family:'B Yekan';" disabled="disabled" required="required"></td>
+                            <td><input id="txtTotalAmount" type="text" data-type="number" style="width:100%;text-align:center;font-family:'B Yekan';" disabled /></td>
+                            <td><input id="txtDiscountAmount" type="text" data-type="number" style="width:100%;text-align:center;resize:horizontal;font-family:'B Yekan';"></td>
+                            <td><input class="" type="button" id="btnAdd" value="افزودن" style="text-align:center;font-family:Vazir;" /></td>
+                        </tr>
+                    </tfoot>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-center"> جمع کل </td>
+                            <td colspan="3"></td>
+                            <td>
+                                <strong class="txtSumAmount" id="txtSumAmount"></strong>
+                                <input class="Amount" type="hidden" name="Amount" id="Amount" style="border:0px;text-align:center;font-family:'B Yekan';" />
+                                <input class="SumAmount" type="hidden" name="SumAmount" id="SumAmount" style="border:0px;text-align:center;font-family:'B Yekan';" />
+                                <input class="SumAllAmount" type="hidden" name="SumAllAmount" id="SumAllAmount" style="border:0px;text-align:center;font-family:'B Yekan';" />
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                
+                <div class="row-fluid" style="border:0px solid #a9a9a9;margin-top:7px;">
+                    <table width="100%">
+                        <tr>
+                            <td colspan="2" style="text-align:right;">
+                                <span style="font-size:12px;margin-right:5px;" class="text-warning"> شرایط و نحوه فروش : </span>
+                                @if (Model.FirstOrDefault().SaleCondition.Equals("نقدی"))
+                                {
+                                    <span style="margin-right:15px;"> <input type="radio" id="SaleCondition" name="SaleCondition" class="SaleCondition1" value="نقدی" style="font-family:'B Nazanin';font-size:15px;margin-right:15px;color:#222222" checked="checked" /> نقدی </span>
+                                    <span style="margin-right:15px;"> <input type="radio" id="SaleCondition" name="SaleCondition" class="SaleCondition2 text-muted" value="غیر نقدی" style="font-family:'B Nazanin';font-size:15px;margin-right:15px;color:#222222" /> غیر نقدی</span>
+                                }
+                                else
+                                {
+                                    <span style="margin-right:15px;"> <input type="radio" id="SaleCondition" name="SaleCondition" class="SaleCondition1" value="نقدی" style="font-family:'B Nazanin';font-size:15px;margin-right:15px;color:#222222" /> نقدی </span>
+                                    <span style="margin-right:15px;"> <input type="radio" id="SaleCondition" name="SaleCondition" class="SaleCondition2 text-muted" value="غیر نقدی" style="font-family:'B Nazanin';font-size:15px;margin-right:15px;color:#222222" checked="checked" /> غیر نقدی</span>
+                                }
+                            </td>
+                        </tr>
+
+                        <tr>
+                            @*<td style="text-align:right;" width="10%">
+                        <span style="font-size:12px;margin-right:5px;" class="text-warning"> توضیحات : </span>
+                    </td>*@
+                            <td colspan="2" style="width:100%;">
+                                <textarea id="Description" name="Description" type="text" style="width:98%;border:1px solid silver;font-family:'B Nazanin';font-size:15px;margin-right:0px;color:#222222" placeholder="توضیحات ..."></textarea><br />
+                                @try
+                                {
+                                    @Html.Action("CheckSalaryRem", new { WorkshopID = WorkshopId })
+
+                                }
+                                catch { }
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span12">
+            <button class="ladda-button btn btn-success" id="btnSave" style="font-family:Vazir;width:100%;"> <i class="icon-save"></i> ذخیره اطلاعات و صدور درخواست </button>
+        </div>
+        <div class="span6">
+            @if (Model.Count() > 0)
+            {
+                <a href="/Financials/InvoicetoPrint?InvoiceCode=@InCode" data-toggle="modal" data-target="#modal-large" onclick="SelectPrintType(@InCode)">
+                    <i class="icon-print" style="color:#00ff21;font-size:30px;"></i>
+                </a>
+            }
+
+        </div>
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+                        debugger;
+                        $(document).ready(function () {
+                            $("#txtServiceCode").change(function () {
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: '@Url.Action("GetFreeSaleEquipment")',
+                                        dataType: 'json',
+                                        data: { id: $("#txtServiceCode").val(),type:"1" },
+                                        success: function (services) {
+                                            $.each(services, function (i, service) {
+                                                 //alert(service.Title )
+                                                $("#txtServiceDesc").val(service.Title);
+                                                $("#txtUnitofMeasurement").val("عدد");
+                                                $("#txtServiceCode2").val(service.FinancialCode);//
+                                                 $("#txtUnitAmount").val(service.Value);//
+                                                 $("#txtNumber").val("1");
+                                            });
+                                        },
+                                        error: function (ex) {
+                                            alert('خطا در انطباق اطلاعات' + ex);
+                                        }
+                                });
+                                return false;
+                            });
+                        });
+</script>
+
+<script type="text/javascript">
+                        $("body").on("click", "#btnAdd", function () {
+                            if ($("#txtUnitAmount").val() == "")
+                                alert("حتما اطلاعات مربوط به ستونهای تعداد/ مقدار و مبلغ واحد باید پر شود، برای این کار کافی است کالای مورد نظر را از لیست مجدد انتخاب کنید!");
+                            else if ($("#txtUnitAmount").val()=="0")
+                                alert("مبلغ واحد نمی تواند صفر باشد!");
+                            else {
+                                //Reference the Name and Country TextBoxes.
+                            var txtrowNum = $("#txtrowNum");
+                            var txtServiceCode = $("#txtServiceCode2");
+                            var txtServiceDesc = $("#txtServiceDesc");
+                            var txtNumber = $("#txtNumber");
+                            var txtUnitofMeasurement = $("#txtUnitofMeasurement");
+                            var txtUnitAmount = $("#txtUnitAmount");
+                            var txtTotalAmount = $("#txtTotalAmount");
+                            var txtDiscountAmount = $("#txtDiscountAmount");
+                            var SumAmount = $("#txtTotalAmount");
+                            $("#SumAllAmount").val(parseFloat($("#Amount").val()) + parseFloat($("#SumAmount").val()));
+                            //Get the reference of the Table's TBODY element.
+                            var tBody = $("#tblInvoices > TBODY")[0];
+
+                            //Add Row.
+                            var row = tBody.insertRow(-1);
+
+                            //Add txtrowNum cell.
+                            var cell = $(row.insertCell(-1));
+                            cell.html(txtrowNum.val());
+                                //document.getElementById(id).innerHTML = "<input type = 'text' name = 'txtNewInput' id = 'txtNewInput' value = '" + content + "'/>";
+                            //Add txtServiceCode cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtServiceCode.val());
+
+                            //Add txtServiceDesc cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtServiceDesc.val());
+
+                            //Add txtNumber cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtNumber.val());
+                                //cell.html("<input type = 'text' name = 'Number' id = 'Number' value = '" + txtNumber.val() + "'/>");
+
+                            //Add txtUnitofMeasurement cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtUnitofMeasurement.val());
+
+                            //Add txtUnitAmount cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtUnitAmount.val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+
+                            //Add txtTotalAmount cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtTotalAmount.val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+
+                            //Add txtDiscountAmount cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtDiscountAmount.val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+
+                            //Add Button cell.
+                            cell = $(row.insertCell(-1));
+                            var btnRemove = $("<input />");
+                            btnRemove.attr("type", "button");
+                            btnRemove.attr("onclick", "Remove(this);");
+                            btnRemove.val("حذف");
+                            cell.append(btnRemove);
+
+                            //Clear the TextBoxes.
+                            txtrowNum.val("");
+                            txtServiceCode.val("");
+                            txtServiceDesc.val("");
+                            txtNumber.val("");
+                            txtUnitofMeasurement.val("");
+                            txtUnitAmount.val("");
+                            txtTotalAmount.val("");
+                            txtDiscountAmount.val("");
+                            };
+                        });
+
+                        function Remove(button) {
+                            //Determine the reference of the Row using the Button.
+                            var row = $(button).closest("TR");
+                            var name = $("TD", row).eq(2).html();
+                            var reduceAmount = $("TD", row).eq(6).html().split(',').join('');
+                            var TotalAmount=$("#SumAllAmount").val();
+                            if (confirm("آیا از حذف ردیف مطمئن هستید؟: " + name)) {
+                                //Get the reference of the Table.
+                                //alert("reduceAmount is:" + reduceAmount + " and TotalAmount is: " + TotalAmount + "and diff: "+ (TotalAmount - reduceAmount));
+                                //TotalAmount= reduceAmount;
+                                $('#SumAmount').val(TotalAmount - reduceAmount);
+                                $("#SumAllAmount").val(TotalAmount - reduceAmount);
+                                var table = $("#tblInvoices")[0];
+
+                                //Delete the Table row using it's Index.
+                                table.deleteRow(row[0].rowIndex);
+                            }
+                        };
+
+                        $("body").on("click", "#btnSave", function () {
+                            //Loop through the Table rows and build a JSON array.
+                            var invoices = new Array();
+                            $("#tblInvoices TBODY TR").each(function () {
+                                var row = $(this);
+                                var invoice = {};
+                                invoice.InvoiceID = row.find("TD").eq(8).html();
+                                invoice.ServiceCode = row.find("TD").eq(1).html();
+                                invoice.ServiceDesc = row.find("TD").eq(2).html();
+                                invoice.Number = row.find("TD").eq(3).html();
+                                invoice.UnitofMeasurement = row.find("TD").eq(4).html();
+                                invoice.UnitAmount = row.find("TD").eq(5).html().split(',').join('').split('.').join('/');
+                                invoice.TotalAmount = row.find("TD").eq(6).html().split(',').join('').split('.').join('/');
+                                invoice.DiscountAmount = row.find("TD").eq(7).html().split(',').join('').split('.').join('/');
+                                invoice.InvoiceCode = $('#InvoiceCode').val();// row.find("TD").eq(11).html();
+                                invoice.CreatedDate = $('#CreatedDate').val();//row.find("TD").eq(12).html();
+                                invoice.EmployerEconomicalnumber = $('#EmployerEconomicalnumber').val();//row.find("TD").eq(13).html();
+                                invoice.EquipmentsID = row.find("TD").eq(1).html();//row.find("TD").eq(14).html();
+                                invoice.WorkshopsID = @WorkshopId;//row.find("TD").eq(14).html();
+                                invoice.Employerregistrationnumber = $('#Employerregistrationnumber').val();//row.find("TD").eq(15).html();
+                                invoice.EmployerState = $('#EmployerState').val();//row.find("TD").eq(16).html();
+                                invoice.EmployerAddress =$('#EmployerAddress').val();// row.find("TD").eq(17).html();
+                                invoice.EmployerPostalcode = $('#EmployerPostalcode').val();//row.find("TD").eq(18).html();
+                                invoice.EmployerPhone = $('#EmployerPhone').val();//row.find("TD").eq(19).html();
+                                invoice.EmployerFax = $('#EmployerFax').val();//row.find("TD").eq(20).html();
+                                invoice.Description = $('#Description').val();//row.find("TD").eq(21).html();
+                                invoice.SaleCondition = $('input[name="SaleCondition"]:checked').val(); //row.find("TD").eq(22).html();
+                                invoice.Comment = $('#Comment').val();//row.find("TD").eq(23).html();
+                                invoice.Description = $('#Description').val(); //row.find("TD").eq(24).html();
+                                invoice.Insurance = $('#Insurance').val();
+                                invoice.ContractID = $('#ContractID').val();
+                                invoice.CurrencyTypeID = $('#CurrencyTypeID').val();
+                                invoice.Owners=$('#Owners').val();
+                                invoices.push(invoice);
+                            });
+
+                            //Send the JSON array to Controller using AJAX.
+                            $.ajax({
+                                type: "POST",
+                                url: "/Financials/AddNewItems?InvoiceCode=@InCode",
+                                data: JSON.stringify(invoices),
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                success: function (response) {
+                                    if (response.success) {
+                                        alert(response.responseText);
+                                        $("#btnSave").attr('disabled', true);
+                                        $("#btnSave").text('لطفا چند لحظه صبر نمایید تا به صورت خودکار به پیش فاکتور مربوطه ارجاع داده شوید!');
+                                        window.location.href = '/Financials/PreFreeSaleInvoice?InvoiceCode=@InCode';
+                                    } else {
+                                        // DoSomethingElse()
+                                        alert(response.responseText);
+                                    }
+                                },
+                                error: function (response) {
+                                    alert("ثبت اطلاعات با خطا مواجه شد!"); //
+                                }
+                            });
+                        });
+</script>
+
+<script>
+    $(document).ready(function () {        
+        var table = $('#tblInvoices').DataTable({
+            dom: '',
+            paging: false,
+            "footerCallback": function (row, data, start, end, display) {
+                var api = this.api(), data;
+                // Remove the formatting to get integer data for summation
+                var intVal = function (i) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '') * 1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+
+                // Total over all pages
+                total = api
+                    .column(6)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0); 
+                $("#SumAmount").val(total);
+                // Total over this page
+                pageTotal = api
+                    .column(6, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+                //alert("total is:" + total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+            }      
+        });       
+    });
+    //
+</script>
+
+<script>
+    //مبلغ کل
+    $("#txtNumber,#txtUnitAmount").keyup(function () {
+        $('#txtTotalAmount').val(parseFloat($('#txtNumber').val()) * $('#txtUnitAmount').val().split(',').join(''));
+
+    });
+    //مبلغ کل پس از تخفیف
+    $("#txtTotalAmount,#txtDiscountAmount").keyup(function () {
+
+        $('#txtTotalAmountafterDiscount').val($('#txtTotalAmount').val() - $('#txtDiscountAmount').val().split(',').join(''));
+        //محاسبه مبلغ تخفیف برای کارگاه های 0.05
+        $('#txtDiscountAmount').val($('#txtTotalAmount').val() * 0);
+
+    });
+    //
+    $(function () {
+        $('#allitems').mousemove(function () {
+            // 
+            document.getElementById("permitNonCash").innerHTML = $("#salaryRem").val().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            var permitNonCash = ($("#salaryRem").val().split(',').join(''));
+            var TotalAmount = ($("#SumAmount").val().split(',').join(''));
+            document.getElementById("txtSumAmount").innerHTML = $("#SumAmount").val().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            if ($("#SumAllAmount").val() > 0) {
+                $("#SumAmount").val($("#SumAllAmount").val());
+            }
+            else {
+
+            }
+            //مبلغ کل
+            $('#txtTotalAmount').val($('#txtNumber').val().split(',').join('') * $('#txtUnitAmount').val().split(',').join(''));
+            //محاسبه مبلغ تخفیف برای کارگاه های 0.05
+            $('#txtDiscountAmount').val($('#txtTotalAmount').val() * 0);
+            //مبلغ کل پس از تخفیف
+            $('#txtTotalAmountafterDiscount').val($('#txtTotalAmount').val() - $('#txtDiscountAmount').val().split(',').join(''));
+            //
+            $('#Amount').val($('#txtTotalAmount').val().split(',').join(''));
+            //
+            //
+            var saleCondition = $('input[name="SaleCondition"]:checked').val();
+            $("#permitSaleCondition").val(saleCondition);
+            //if ($("#permitNonCashStatus").val() == 'false') {
+            if (permitNonCash < TotalAmount) {
+                $("#permitNonCashStatus").val("false");
+                $("#permitSaleCondition").val("نقدی");
+                if ($("#permitSaleCondition").val() == "غیر نقدی") {
+                    $("#btnSave").attr('disabled', 'disabled');
+                    $("#btnSave").text("مبلغ فاکتور بیش از مبلغ مجاز خرید غیر نقدی می باشد!")
+                    document.getElementById("btnSave").style.background='red';
+                    $('.SaleCondition1').attr('checked', 'checked');
+                    $('.SaleCondition2').attr('disabled', 'disabled');
+                }
+                if ($("#permitSaleCondition").val() == "نقدی") {
+                    $("#btnSave").removeAttr('disabled', 'disabled');
+                    $("#btnSave").text("ذخیره اطلاعات و صدور درخواست")
+                    document.getElementById("btnSave").style.background='green';
+                    $('.SaleCondition1').attr('checked', 'checked');
+                    $('.SaleCondition2').attr('disabled', 'disabled');
+                }
+            };
+        });
+    });
+
+</script>
+
+<script>
+    $(document).ready(function () {
+        var saleCondition = $('input[name="SaleCondition"]:checked').val();
+        $('#Amount').val($("#txtTotalAmount").val());
+        $("#permitSaleCondition").val(saleCondition);
+        var permitNonCash = ($("#salaryRem").val().split(',').join(''));
+        var TotalAmount = ($("#SumAmount").val().split(',').join(''));
+        var sum = 0;
+        var salaryRem = $('#salaryRem').val(); //Math.round((parseFloat($('#salaryRem').val().split(',').join('')) * 0.7));
+        document.getElementById("permitNonCash").innerHTML = salaryRem.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        $("body").on("click", "#btnAdd", function () {
+            sum += parseFloat($("#Amount").val());
+            $('#SumAmount').val(Math.round(sum));
+            document.getElementById("txtSumAmount").innerHTML = $("#SumAllAmount").val().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            //
+            if (TotalAmount < permitNonCash)
+                //alert("sum is great than talab ... !");
+                $("#permitNonCashStatus").val("true");
+            else
+                $("#permitNonCashStatus").val("false");
+            //
+            //if ($("#permitNonCashStatus").val() == 'false') {
+
+            //if (permitNonCash < TotalAmount) {
+            //    //$('.SaleCondition1').is(":checked")
+            //    // $('.SaleCondition2').attr('checked', false);
+            //    if ($("#permitSaleCondition").val() == "غیر نقدی") {
+            //        $("#btnSave").attr('disabled', 'disabled');
+            //        $("#btnSave").text("مبلغ فاکتور بیش از مبلغ مجاز خرید غیر نقدی می باشد!")
+            //        document.getElementById("btnSave").style.background='red';
+            //        $("#SaleCondition1").attr('checked', 'checked');
+            //        $("#SaleCondition1").attr('disabled', 'disabled');
+            //    }
+
+            //};
+
+        });
+    });
+</script>
+
+<table id="sample"></table>
+
+<script>
+    var n = 1;
+    var column = 5;
+function addRow(sample,5) {
+    var table = document.getElementById(sample);
+    var rowCount = table.rows.length;
+    var row = table.insertRow(rowCount);
+
+    for(i=0;i<5;i++){
+
+        var cell = row.insertCell(i);
+        var element = document.createElement("input");
+        element.type = "text";
+        element.name = n+"0"+i;
+        element.size = "12";
+        element.id = n+"0"+i;
+        element.value = element.id;
+        if(element.id == n+"00"){
+            element.contenteditable = "false";
+            element.value = "false";
+            //alert("false");
+        }
+        cell.appendChild(element);
+    }
+    n++;
+}
+</script>

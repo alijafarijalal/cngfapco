@@ -1,0 +1,285 @@
+﻿@model cngfapco.Models.RequestFreeSale
+
+@{
+    ViewBag.Title = "RequestFreeSaleDelete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!-- BEGIN PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href="/Users/SubSideBarItems?parentId=86">مدیریت فروش</a> <span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href="/Financials/RequestFreeSaleList?parentId=86&itemId=85">درخواست های خرید</a> <span class="divider">&nbsp;</span>
+            </li>
+            <li><a href="/Financials/RequestFreeSaleDetails?InvoiceCode=@Model.InvoiceCode"> جزئیات درخواست خرید اقلام </a><span class="divider">&nbsp;</span></li>
+            <li><a href="#"> حذف اطلاعات </a><span class="divider-last">&nbsp;</span></li>
+
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+
+<div class="widget">
+    <div class="widget-body">
+        <div class="row-fluid">
+
+            <h3>آیا از حذف موارد انتخاب شده اطمینان دارید؟</h3>
+            <div>
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CurrencyType.Title)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.CurrencyType.Title)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Equipments.Title)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Equipments.Title)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Workshops.Title)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Workshops.Title)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Owners)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Owners)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ServiceCode)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ServiceCode)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.InvoiceCode)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.InvoiceCode)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CreatedDate)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.CreatedDate)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.EmployerEconomicalnumber)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.EmployerEconomicalnumber)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Employerregistrationnumber)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Employerregistrationnumber)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.EmployerState)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.EmployerState)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.EmployerAddress)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.EmployerAddress)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.EmployerPostalcode)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.EmployerPostalcode)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.EmployerPhone)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.EmployerPhone)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.EmployerFax)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.EmployerFax)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ServiceDesc)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ServiceDesc)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Number)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Number)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.UnitofMeasurement)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.UnitofMeasurement)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.UnitAmount)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.UnitAmount)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.TotalAmount)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.TotalAmount)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.DiscountAmount)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.DiscountAmount)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Description)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.SaleCondition)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.SaleCondition)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Comment)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Comment)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Status)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CreatorUser)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.CreatorUser)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ViewStatus)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ViewStatus)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.ViewDate)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.ViewDate)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Viewer)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Viewer)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.FinalStatus)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.FinalStatus)
+                    </dd>
+
+                </dl>
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-actions no-color">
+                        <input type="submit" value="حذف" class="btn btn-danger" />
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

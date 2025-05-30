@@ -1,0 +1,267 @@
+﻿@model IEnumerable<cngfapco.Models.InvoicesFapa_DamagesCylinder>
+
+@{
+    ViewBag.Title = "InvoicesFapa_DamagesCylinder";
+    Layout = "~/Views/Shared/_ExportLayout.cshtml";
+    bool? Permission = (bool?)ViewBag.Permission;
+    int? workshopId = (int?)ViewBag.workshopId;
+    string roleName = cngfapco.Helper.Helpers.GetCurrentUserRole();
+}
+
+<!-- BEGIN PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href="/Financials/WorkshopPage5?parentId=0&itemId=0"> لیست مراکز خدمات CNG </a> <span class="divider">&nbsp;</span>
+            </li>
+            <li><a href="#">فاکتور دستمزد تعویض</a><span class="divider-last">&nbsp;</span></li>
+
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+
+<div class="widget" dir="rtl">
+    <div class="widget-title">
+        <h4><i class="icon-reorder"></i>لیست فاکتورهای دستمزد تعویض</h4>
+        <span class="tools">
+            <a href="javascript:;" class="icon-chevron-down"></a>
+            <a href="javascript:;" class="icon-remove"></a>
+        </span>
+    </div>
+    <div class="widget-body">
+        <div style="overflow-x:auto;overflow-y:auto;">
+            @try
+            {
+                <table id="sample_editable_1" class="table table-striped table-hover table-bordered table-advance text-center">
+                    <thead>
+                        <tr>
+                            <th>ردیف</th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.InvoiceCode)
+                            </th>
+                            <th>
+                                فروشنده
+                            </th>
+                            <th>
+                                از تاریخ
+                            </th>
+
+                            <th>
+                                تا تاریخ
+                            </th>
+                            <th>
+                                تعداد تبدیل
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.TotalAmount)
+                            </th>
+                            <th> مبلغ کل با ارزش افزوده </th>
+
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th>مشاهده صورتحساب</th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Status)
+                            </th>
+                            <th>@Html.DisplayNameFor(model => model.CheckStatus)</th>
+                            <th>@Html.DisplayNameFor(model => model.FinancialStatus)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int rowNum = 0;
+                        }
+                        @foreach (var item in ViewBag.TableOut)
+                        {
+                        <tr>
+                            <td>@(rowNum += 1)</td>
+                            <td>
+                                @item.InvoiceCode
+                            </td>
+                            <td>
+                                @item.Title
+                            </td>
+                            <td>
+                                @item.FromDate
+                            </td>
+
+                            <td>
+                                @item.CreatedDate
+                            </td>
+                            <td>
+                                @item.TotalCount
+                            </td>
+                            <td>
+                                @item.TotalAmount <span>ریال</span>
+                            </td>
+                            <td>
+                                @item.TotalAmount2 <span>ریال</span>
+                            </td>
+
+                            <td>
+                                @item.DepartmentTitle
+                            </td>
+
+                            <td>
+                                <a href="/Financials/PrintInvoicesFapa_DamagesCylinder?workshopId=@workshopId&InvoiceCode=@item.InvoiceCode&fromDate=@item.FromDate&toDate=@item.CreatedDate" target="_blank">
+                                    <button type="submit" class="icon-search" style="color:#00ff21;font-size:15px;border:0px;"></button>
+                                </a>
+                            </td>
+                            <td>
+                                @if (item.ReciveStatus.Equals("صورتحساب دریافت شد"))
+                                {
+                                    <strong class="text-success">
+                                        @item.ReciveStatus
+                                    </strong>
+                                }
+                                else
+                                {
+                                    <span class="text-danger"> @item.ReciveStatus</span>
+                                }
+                                @if (roleName.Contains("مدیر تبدیل ناوگان") || roleName.Equals("admin") || roleName.Equals("کارشناس ناظر"))
+                                {
+                                    <a href="#" data-toggle="modal" data-target="#modal-large" onclick="ReciveStatus(@item.InvoiceCode)"> <i class="icon-edit icon-white"></i> </a>
+                                }
+                               
+                            </td>
+                            <td>
+                                @if (item.CheckStatus.Equals("صورتحساب تایید کارشناسی شد"))
+                                {
+                                    <strong class="text-success">
+                                        @item.CheckStatus
+                                    </strong>
+                                }
+                                else
+                                {
+                                    <span class="text-danger"> @item.CheckStatus</span>
+                                }
+                                @if (roleName.Contains("مدیر تبدیل ناوگان") || roleName.Equals("admin") || roleName.Equals("کارشناس ناظر"))
+                                {
+                                    <a href="#" data-toggle="modal" data-target="#modal-large" onclick="CheckStatus(@item.InvoiceCode)"> <i class="icon-edit icon-white"></i> </a>
+                                }
+                            </td>
+                            <td>
+                                @if (item.FinancialStatus.Equals("صورتحساب تایید مالی شد"))
+                                {
+                                    <strong class="text-success">
+                                        @item.FinancialStatus
+                                    </strong>
+                                }
+                                else
+                                {
+                                    <span class="text-danger"> @item.FinancialStatus</span>
+                                }
+                                @if (roleName.Contains("مدیر تبدیل ناوگان") || roleName.Equals("admin") || roleName.Equals("کارشناس مالی"))
+                                {
+                                    <a href="#" data-toggle="modal" data-target="#modal-large" onclick="FinancialStatus(@item.InvoiceCode)"> <i class="icon-edit icon-white"></i> </a>
+                                }
+                            </td>
+
+                        </tr>
+                        }
+                    </tbody>
+                    <tr>
+                        <td class="text-center" colspan="5"> <strong> جمع کل </strong> </td>
+                        <td class="text-center"> <strong> @ViewBag.SumTotalCount </strong></td>
+                        <td class="text-center"> <strong> @ViewBag.SumTotalAmount </strong> <span>ریال</span></td>
+                        <td class="text-center"> <strong> @ViewBag.SumTotalAmount2 </strong> <span>ریال</span></td>
+                        <td class="text-center" colspan="4"></td>
+                    </tr>
+                </table>
+            }
+            catch
+            {
+                <div class="row-fluid">
+                    <span>صورتحسابی صادر نشده است!</span>
+                </div>
+            }
+
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function CheckStatus(id) {
+        $.get("/Financials/CheckStatus_DamagesCylinder?workshopId=@workshopId&InvoiceCode=" + id, function (res) {
+            $("#modal-large").modal();
+            $("#myModalLabel").html("کنترل صورتحساب دستمزد تعویض");
+            $("#myModalBody").html(res);
+
+        });
+    }
+    //
+</script>
+
+<script>
+    function ReciveStatus(id) {
+        $.get("/Financials/ReciveStatus_DamagesCylinder?workshopId=@workshopId&InvoiceCode=" + id, function (res) {
+            $("#modal-large").modal();
+            $("#myModalLabel").html("تایید دریافت نسخه چاپی صورتحساب دستمزد تعویض");
+            $("#myModalBody").html(res);
+
+        });
+    }
+    //
+</script>
+
+<script>
+    function FinancialStatus(id) {
+        $.get("/Financials/FinancialStatus_DamagesCylinder?workshopId=@workshopId&InvoiceCode=" + id, function (res) {
+            $("#modal-large").modal();
+            $("#myModalLabel").html("تایید مالی صورتحساب دستمزد تعویض");
+            $("#myModalBody").html(res);
+
+        });
+    }
+    //
+</script>
+
+
+<script>
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+        history.go(1);
+    };
+</script>
+<script>
+    $(document).ready(function () {
+        var table = $('#sample_editable_1').DataTable({
+            paging: false,
+            dom: 'lBfrtip',
+            buttons: [
+                {
+                    extend: 'csv',
+                    text: 'Export csv',
+                    charset: 'utf-8',
+                    extension: '.csv',
+                    fieldSeparator: ';',
+                    fieldBoundary: '',
+                    filename: 'InvoicesFapa_DamagesCylinder_csv',
+                    bom: true
+                },
+                {
+                    extend: 'excel',
+                    text: 'Export excel',
+                    charset: 'utf-8',
+                    extension: '.xlsx',
+                    fieldSeparator: ';',
+                    fieldBoundary: '',
+                    filename: 'InvoicesFapa_DamagesCylinder',
+                    bom: true
+                }
+            ]
+
+        });
+    });
+</script>
+

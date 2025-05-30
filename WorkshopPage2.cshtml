@@ -1,0 +1,134 @@
+﻿@model IEnumerable<cngfapco.Models.Workshop>
+
+@{
+    ViewBag.Title = "WorkshopPage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- BEGIN PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href="#">مدیریت مالی</a> <span class="divider">&nbsp;</span>
+            </li>
+            <li><a href="#">فاکتور فروش خدمات</a><span class="divider-last">&nbsp;</span></li>
+
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+<span class="text-warning">مجموع فاکتورهای صادر شده: </span>
+<strong class="">
+    @cngfapco.Controllers.FinancialsController.GetInvoicValueTotal() ریال
+</strong>
+
+
+<div class="widget">
+    <div class="widget-title">
+        <h4><i class="icon-reorder"></i>لیست مراکز خدمات CNG</h4>
+        <span class="tools">
+            <a href="javascript:;" class="icon-chevron-down"></a>
+            <a href="javascript:;" class="icon-remove"></a>
+        </span>
+    </div>
+    <div class="widget-body">
+        <div class="row-fluid">
+            <div class="span12">
+                @{ int row = 0;}
+                @foreach (var item in Model)
+                {
+                    <span class="hidden">@(row += 1)</span>
+                    if ((Convert.ToDouble(row) % 4) == 0)
+                    {
+                        <div class="row-fluid">
+                            <div class="">
+                                <div class="icon-btn span3" style="border:1px solid #0094ff;border-radius:4px 5px;font-family:Vazir-Medium-FD;">
+                                    <p>
+                                        <a href="/Financials/InvoicesListTotal?workshopId=@item.ID&workshopTitle=@item.Title">
+                                            @if (item.closedServices.HasValue ? item.closedServices.Value == true : false)
+                                            {
+                                                <label style="font-size:12px;background-color:red;color:white;">
+                                                    @("توقف فعالیت در تاریخ: " + " " + item.closedDate.Value.ToShortDateString())
+                                                </label>
+                                                <div>
+                                                    @item.Title.Replace("مرکز خدمات CNG ", "") - @item.City.Title
+                                                    <h5 class="text-info">
+                                                        @cngfapco.Controllers.FinancialsController.GetInvoiceFapaValue(item.ID) ریال
+                                                    </h5>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <label class="text-warning">
+                                                    @(item.OwnerName + " " + item.OwnerFamily)
+                                                </label>
+                                                <div>
+                                                    @item.Title.Replace("مرکز خدمات CNG ", "") - @item.City.Title
+                                                    <h5 class="text-info">
+                                                        @cngfapco.Controllers.FinancialsController.GetInvoiceFapaValue(item.ID) ریال
+                                                    </h5>
+                                                </div>
+                                            }
+                                        </a>
+                                    </p>
+                                    @*<p> @cngfapco.Controllers.FinancialPaymentsController.GetSumofPayment(item.ID) </p>*@
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                    else
+                    {
+                        <div class="icon-btn span3" style="border:1px solid #0094ff;border-radius:4px 5px;font-family:Vazir-Medium-FD;">
+                            <p>
+                                <a href="/Financials/InvoicesListTotal?workshopId=@item.ID&workshopTitle=@item.Title">
+                                    @if (item.closedServices.HasValue ? item.closedServices.Value == true : false)
+                                    {
+                                    <label style="font-size:12px;background-color:red;color:white;">
+                                        @if (item.closedDate.HasValue == true)
+                                        {
+                                            <span>
+                                                @("توقف فعالیت در تاریخ: " + " " + item.closedDate.Value.ToShortDateString())
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span>توقف فعالیت</span>
+                                        }
+                                    </label>
+                                        <div>
+                                            @item.Title.Replace("مرکز خدمات CNG ", "") - @item.City.Title
+                                            <h5 class="text-info">
+                                                @cngfapco.Controllers.FinancialsController.GetInvoiceFapaValue(item.ID) ریال
+                                            </h5>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <label class="text-warning">
+                                            @(item.OwnerName + " " + item.OwnerFamily)
+                                        </label>
+                                        <div>
+                                            @item.Title.Replace("مرکز خدمات CNG ", "") - @item.City.Title
+                                            <h5 class="text-info">
+                                                @cngfapco.Controllers.FinancialsController.GetInvoiceFapaValue(item.ID) ریال
+                                            </h5>
+                                        </div>
+                                    }
+                                </a>
+                            </p>
+                            @*<p> @cngfapco.Controllers.FinancialPaymentsController.GetSumofPayment(item.ID) </p>*@
+                        </div>
+                    }
+
+                }
+            </div>
+        </div>
+    </div>
+</div>

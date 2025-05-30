@@ -1,0 +1,679 @@
+﻿@model List<Dictionary<string, object>>
+
+@{
+    ViewBag.Title = "LatestFinancialStatusDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string fchecked = (string)ViewBag.fchecked;
+    string fcheckedControl = (string)ViewBag.fcheckedControl;
+    string fromDate = (string)ViewBag.fromDate;
+    string toDate = (string)ViewBag.toDate;
+}
+
+
+<style>
+    .negative-number {
+        color: red;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $("table td, table tfoot td").each(function () {
+            var cellValue = $(this).text().trim();
+            if (cellValue.startsWith("-")) {
+                var positiveValue = cellValue.substring(1); // حذف علامت منفی
+                $(this).text("(" + positiveValue + ")"); // نمایش داخل پرانتز
+                $(this).addClass("negative-number"); // رنگ قرمز
+            }
+        });
+    });
+</script>
+
+<style>
+    .table-responsive-container {
+        max-height: 70vh;
+        overflow-y: auto;
+        position: relative;
+    }
+
+    .table-sticky-header {
+        width: 100%;
+    }
+
+    .sticky-header-row th {
+        position: sticky;
+        top: 0;
+        background-color: #f8f9fa;
+        z-index: 100;
+        padding: 12px 8px;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .table-sticky-header tbody tr:hover {
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+</style>
+
+<!-- BEGIN PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href="/Financials/LatestFinancialStatus?fcheckedControl=@fcheckedControl&fromDate=@fromDate&toDate=@toDate">آخرین وضعیت مالی کارگاه‌ها</a> <span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href="#">گزارش تفصیلی</a> <span class="divider-last">&nbsp;</span>
+            </li>
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+
+<div class="widget">
+    <div class="widget-title">
+        <h4><i class="icon-reorder"></i>جزئیات بیشتر از آخرین وضعیت مالی کارگاه‌ها</h4>
+        <span class="tools">
+            <a href="javascript:;" class="icon-chevron-down"></a>
+            <a href="javascript:;" class="icon-remove"></a>
+        </span>
+    </div>
+    <div class="widget-body">
+        <div class="row-fluid">
+            <div class="row-border" style="border:1px solid #d0cfcf;border-radius:3px 4px;padding:4px 7px 2px 4px;">
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="span4">
+                            <label class="control-label" for="inputWarning">تایید مالی</label>
+                            <input type="checkbox" class="checkbox" id="fcheckedControl" name="fcheckedControl" value="true" @fchecked disabled="disabled" />
+                            <input type="hidden" class="checkbox" id="fcheckedControl" name="fcheckedControl" value="false" />
+                        </div>
+                        <div class="span3">
+                            <label class="control-label" for="pcal1">از تاریخ </label>
+                            <input class="" id="" name="fromDate" value="@fromDate" disabled="disabled" />
+                        </div>
+                        <div class="span3">
+                            <label class="control-label" for="pcal2">تا تاریخ </label>
+                            <input class="" id="" name="toDate" value="@toDate" disabled="disabled" />
+                        </div>
+                        <div class="span2 hidden">
+                            <label class="control-label" for="filter">فیلتر </label>
+                            <button type="submit" value="" class="icon-filter" id="filter"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @try
+            {
+                <div class="table-responsive-container">
+                    <table class="table table-sticky-header" id="LatestFinancialStatus">
+                        <thead>
+                            <tr class="sticky-header-row">
+                                @foreach (var col in Model.FirstOrDefault())
+                                {
+                                    <th>@col.Key</th>
+                                }
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var row in Model)
+                            {
+                                <tr>
+                                    @foreach (var column in row)
+                                    {
+                                        <td>
+                                            @*@(string.Format("{0:#,###0}", column.Value))*@
+                                            @column.Value
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" dir="ltr">
+                                    : جمع کل
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            }
+            catch { }
+
+            <div style="text-align:center;">
+                <h3 class="text-danger">@ViewBag.errorMesage</h3>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        var table = $('#LatestFinancialStatus').DataTable({
+            "order": [[0, "asc"]],
+            dom: 'lBfrtip',
+            buttons: [
+                {
+                    extend: 'csv',
+                    text: 'Export csv',
+                    charset: 'utf-8',
+                    extension: '.csv',
+                    fieldSeparator: ';',
+                    fieldBoundary: '',
+                    filename: 'LatestFinancialStatus_csv',
+                    bom: true
+                },
+                {
+                    extend: 'excel',
+                    text: 'Export excel',
+                    charset: 'utf-8',
+                    extension: '.xlsx',
+                    fieldSeparator: ';',
+                    fieldBoundary: '',
+                    filename: 'LatestFinancialStatus_excel',
+                    bom: true
+                }],
+            //fixedHeader: true,
+            paging: true,
+            responsive: true,
+            "footerCallback": function (row, data, start, end, display) {
+                var api = this.api(), data;
+
+                // Remove the formatting to get integer data for summation
+                var intVal = function (i) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '') * 1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+
+                // Total over all pages
+                total = api
+                    .column(3)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total1 = api
+                    .column(4)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total2 = api
+                    .column(5)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total3 = api
+                    .column(6)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total4 = api
+                    .column(7)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total5 = api
+                    .column(8)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total6 = api
+                    .column(9)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total7 = api
+                    .column(10)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total8 = api
+                    .column(11)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total9 = api
+                    .column(12)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total10 = api
+                    .column(13)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total11 = api
+                    .column(14)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total12 = api
+                    .column(15)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total13 = api
+                    .column(16)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total14 = api
+                    .column(17)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total15 = api
+                    .column(18)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total15 = api
+                    .column(19)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total15 = api
+                    .column(20)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total15 = api
+                    .column(21)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total15 = api
+                    .column(22)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total15 = api
+                    .column(23)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total16 = api
+                    .column(24)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total17 = api
+                    .column(25)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                total18 = api
+                    .column(26)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                // Total over this page
+                pageTotal = api
+                    .column(3, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal1 = api
+                    .column(4, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal2 = api
+                    .column(5, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal3 = api
+                    .column(6, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal4 = api
+                    .column(7, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal5 = api
+                    .column(8, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal6 = api
+                    .column(9, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal7 = api
+                    .column(10, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal8 = api
+                    .column(11, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal9 = api
+                    .column(12, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal10 = api
+                    .column(13, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal11 = api
+                    .column(14, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal12 = api
+                    .column(15, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+
+                pageTotal13 = api
+                    .column(16, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal14 = api
+                    .column(17, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal15 = api
+                    .column(18, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal16 = api
+                    .column(19, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal17 = api
+                    .column(20, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal18 = api
+                    .column(21, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal19 = api
+                    .column(22, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal20 = api
+                    .column(23, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal21 = api
+                    .column(24, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal22 = api
+                    .column(25, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                pageTotal23 = api
+                    .column(26, { page: 'current' })
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                // Update footer
+                $(api.column(3).footer()).html(
+                    pageTotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(4).footer()).html(
+                    pageTotal1.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(5).footer()).html(
+                    pageTotal2.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(6).footer()).html(
+                    pageTotal3.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(7).footer()).html(
+                    pageTotal4.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(8).footer()).html(
+                    pageTotal5.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(9).footer()).html(
+                    pageTotal6.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(10).footer()).html(
+                    pageTotal7.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(11).footer()).html(
+                    pageTotal8.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(12).footer()).html(
+                    pageTotal9.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(13).footer()).html(
+                    pageTotal10.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(14).footer()).html(
+                    pageTotal11.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(15).footer()).html(
+                    pageTotal12.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(16).footer()).html(
+                    pageTotal13.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(17).footer()).html(
+                    pageTotal14.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(18).footer()).html(
+                    pageTotal15.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(19).footer()).html(
+                    pageTotal16.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(20).footer()).html(
+                    pageTotal17.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(21).footer()).html(
+                    pageTotal18.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(22).footer()).html(
+                    pageTotal19.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(23).footer()).html(
+                    pageTotal20.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(24).footer()).html(
+                    pageTotal21.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(25).footer()).html(
+                    pageTotal22.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                $(api.column(26).footer()).html(function () {
+                    var calculatedValue = parseFloat(pageTotal22) - parseFloat(pageTotal21);
+
+                    // فرمت‌دهی عدد با جداکننده هزارگان
+                    var formattedNumber = Math.abs(calculatedValue)
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                    // بررسی علامت عدد
+                    if (calculatedValue < 0) {
+                        return '<span class="negative-number">(' + formattedNumber + ')</span>';
+                    } else {
+                        return formattedNumber;
+                    }
+                });
+
+            }
+        });
+        new $.fn.dataTable.FixedHeader(table);
+
+    });
+
+</script>
+
+
+

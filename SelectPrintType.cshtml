@@ -1,0 +1,19 @@
+﻿@{
+    int? InvoiceCode = (int?)ViewBag.InvoiceCode;
+}
+<div class="row" dir="rtl" style="border:0px solid silver;margin-left:20px;margin-right:20px;">
+    <div class="form-group">       
+        <a href="/Financials/InvoicetoPrint?InvoiceCode=@InvoiceCode&Type=1">
+            <i class="icon-print" style="color:#00ff21;font-size:35px;margin-left:10px;margin-right:10px;"><span style="color:black;font-family:'B Yekan';font-size:15px; "> همراه با اعشار</span>  </i>
+        </a>
+        <br />
+        <br />
+        <a href="/Financials/InvoicetoPrint?InvoiceCode=@InvoiceCode&Type=2">
+            <i class="icon-print" style="color:#00ff21;font-size:35px;margin-left:10px;margin-right:10px;"><span style="color:black;font-family:'B Yekan';font-size:15px; "> بدون اعشار</span>  </i>
+        </a>
+        <br />
+    </div>
+</div>
+
+
+

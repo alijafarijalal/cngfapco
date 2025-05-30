@@ -1,0 +1,58 @@
+﻿@model cngfapco.Models.VehicleRegistration
+
+
+
+<table class="table table-borderless RegisteredCustomer" width="100%" style="border:0px;">
+    <tr>
+        <th width="40%">
+            <span style="margin-right:5px;"> نام شخص حقیقی / حقوقی : </span>
+            @try
+            {
+                <span class="text-info" style="font-size:12px;">@(Model.OwnerName + " " + Model.OwnerFamily) </span><input id="OwnersID" name="OwnersID" type="hidden" value="@Model.ID" />
+            }
+            catch { }
+
+        </th>
+        <th width="30%"><span style="margin-right:auto;"> شماره اقتصادی : </span><span class="text-info" style="font-size:12px;" dir="rtl">  </span> <input id="EmployerEconomicalnumber1" name="EmployerEconomicalnumber" type="hidden" value="" /></th>
+        @try
+        {
+            <th width="30%"><span style="margin-right:auto;"> شماره ثبت / شماره ملی : </span><span class="text-info" style="font-size:12px;" dir="rtl">@Model.NationalCode </span><input id="Employerregistrationnumber" name="Employerregistrationnumber" type="hidden" value="@Model.NationalCode" /></th>
+        }
+        catch { }
+
+    </tr>
+    <tr>
+        @try
+        {
+            <th colspan="2">
+                <span style="margin-right:5px;"> نشانی کامل | </span><span> استان : </span><span class="text-info" style="font-size:12px;"> @Model.Workshop.City.State.Title </span><input id="EmployerState" name="EmployerState" type="hidden" value="@Model.Workshop.City.State.Title" />
+                <span> شهرستان : </span><span class="text-info" style="font-size:12px;">@Model.Workshop.City.Title</span><input id="EmployerAddress1" name="EmployerAddress1" type="hidden" value="@Model.Workshop.City.Title" />
+                <span class="text-info" style="font-size:12px;"> @Model.Address </span><input id="EmployerAddress2" name="EmployerAddress2" type="hidden" value="@Model.Address" />
+
+            </th>
+        }
+        catch { }
+
+        <th><span style="margin-right:auto;"> کد پستی (10 رقمی) : </span><span class="text-info" style="font-size:12px;" dir="rtl"> </span> <input id="EmployerPostalcode1" name="EmployerPostalcode" type="hidden" value="-" /></th>
+    </tr>
+    <tr>
+        @try
+        {
+            <th>
+                <span style="margin-right:auto;"> تلفن : </span><span class="text-info" style="font-size:12px;" dir="rtl"> @Model.PhoneNumber</span><input id="EmployerPhone" name="EmployerPhone" type="hidden" value="@Model.PhoneNumber" />
+                <span style="margin-right:auto;margin-right:40px;"> نمـابر : </span><span class="text-info" style="font-size:12px;" dir="rtl">-</span><input id="EmployerFax" name="EmployerFax" type="hidden" value="-" />
+            </th>
+        }
+        catch { }
+
+        <th></th>
+        <th></th>
+    </tr>
+
+</table>
+
+
+
+
+
+

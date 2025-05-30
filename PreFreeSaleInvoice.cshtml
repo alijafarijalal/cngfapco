@@ -1,0 +1,1151 @@
+﻿@model IEnumerable<cngfapco.Models.RequestFreeSale>
+
+@{
+    ViewBag.Title = "Invoice";
+    Layout = "~/Views/Shared/_Layout_SideClosed.cshtml";
+    string InCode = (string)ViewBag.InvoiceCode;
+    int? WorkshopId = (int?)ViewBag.WorkshopId;
+    string PreInCode = (string)ViewBag.PreinvoiceCode;
+}
+
+<script src="~/js/jquery-1.8.3.min.js"></script>
+<script src="~/js/json2.js"></script>
+<div id="DivIdToPrint">
+    <div class="widget" id="allitems">
+        <div class="widget-body">
+            <div class="row-fluid">
+                <table class="table" width="100%">
+                    <tr>
+                        <td width="20%" style="text-align:center;vertical-align:middle;"><img src="~/img/faplogo.png" width="100" alt="لوگوی شرکت" style="position:inherit;color:#a9a9a9" class="center" /></td>
+                        <td width="60%" style="font-family:Vazir;font-size:25px;text-align:center;vertical-align:middle;">پیش فاکتور فروش کالا</td>
+                        <td width="20%">
+                            <br />
+                            <p>
+                                <span class="text-warning"> شماره درخواست : </span><span> @ViewBag.invoiceCode <input value=@ViewBag.invoiceCode type="hidden" id="InvoiceCode" name="InvoiceCode" style="width:70px;border:none" required /></span>
+                            </p>
+                            <p>
+                                <span class="text-warning"> تاریخ : </span><span> @DateTime.Now.ToShortDateString() <input type="hidden" id="CreatedDate" name="CreatedDate" value="@DateTime.Now.ToShortDateString()" style="width:70px;border:none" /> </span>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div style="border:1px solid #262525;font-size:15px;margin-top:7px;background-color:#ffd800;">
+                <p class="text-center"> مشخصات فروشنده </p>
+            </div>
+            <div style="border:1px solid #a9a9a9;margin-top:1px;margin-bottom:2px;" id="CustomerInfo">
+                <table class="table table-borderless" width="100%" style="border:0px">
+                    <tr>
+                        <td width="40%"><span style="margin-right:5px;"> نام شخص حقیقی / حقوقی : </span><span class="text-info" style="font-size:11px;"> شرکت توسعه طرحهای صنعتی فن آوران پارسیان </span><input id="OwnersID" name="OwnersID" type="hidden" value="شرکت توسعه طرحهای صنعتی فن آوران پارسیان" /></td>
+                        <td width="30%"><span style="margin-right:auto;"> شماره اقتصادی : </span><span class="text-info" style="font-size:12px;" dir="rtl"> 411154346447 </span> <input id="EmployerEconomicalnumber" name="EmployerEconomicalnumber" type="hidden" value="411154346447" /></td>
+                        <td width="30%"><span style="margin-right:auto;"> شماره ثبت / شماره ملی : </span><span class="text-info" style="font-size:12px;" dir="rtl"> 192588 </span><input id="Employerregistrationnumber" name="Employerregistrationnumber" type="hidden" value="192588" /></td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <span style="margin-right:5px;"> نشانی کامل | </span><span> استان : </span><span class="text-info" style="font-size:12px;"> تهران </span><input id="EmployerState" name="EmployerState" type="hidden" value="تهران" />
+                            <span> شهرستان : </span><span class="text-info" style="font-size:12px;">تهران</span><input id="EmployerAddress1" name="EmployerAddress1" type="hidden" value="تهران" />
+                            <span class="text-info" style="font-size:12px;"> میدان نوبنیاد، خیابان شهید لنگری، کوچه تیموری، پلاک 3 </span><input id="EmployerAddress2" name="EmployerAddress2" type="hidden" value=" میدان نوبنیاد، خیابان شهید لنگری، کوچه تیموری، پلاک 3" />
+
+                        </td>
+                        <td><span style="margin-right:auto;"> کد پستی (10 رقمی) : </span><span class="text-info" style="font-size:12px;" dir="rtl">1693713441 </span>  <input id="EmployerPostalcode" name="EmployerPostalcode" type="hidden" value="1693713441" /></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span style="margin-right:auto;"> تلفن : </span><span class="text-info" style="font-size:12px;" dir="rtl"> 22960055 (021) </span><input id="EmployerPhone" name="EmployerPhone" type="hidden" value="22960055 (021)" />
+                            <span style="margin-right:auto;margin-right:40px;"> نمـابر : </span><span class="text-info" style="font-size:12px;" dir="rtl">-</span><input id="EmployerFax" name="EmployerFax" type="hidden" value="-" />
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                </table>
+            </div>
+
+            <div style="border:1px solid #262525;font-size:15px;margin-top:7px;background-color:#ffd800;">
+                <p class="text-center"> مشخصات خریـدار </p>
+            </div>
+            <div style="border:1px solid #a9a9a9;margin-top:1px;margin-bottom:2px;">
+
+                @try
+                {
+                    @Html.Action("GetWorkshopInfo", new { id = WorkshopId })
+                }
+                catch { }
+
+            </div>
+
+            <div style="border:1px solid #262525;font-size:15px;margin-top:7px;background-color:#ffd800;">
+                <p class="text-center"> مشخصات کالای مورد معامله </p>
+            </div>
+            <div style="border:1px solid #a9a9a9;margin-top:1px;margin-bottom:2px;">
+                <div class="">
+                    <div class="">
+                        <table id="tblInvoices" class="table table-bordered table-advance" style="text-align:center;vertical-align:middle;font-size:12px;">
+                            <thead>
+                                <tr>
+                                    <th> ردیف </th>
+                                    <th> کد کالا </th>
+                                    <th> شرح کالا یا خدمات </th>
+                                    <th> تعداد / مقدار </th>
+                                    <th> واحد اندازه گیری </th>
+                                    <th> مبلغ واحد (ریال) </th>
+                                    <th> مبلغ کل (ریال) </th>
+                                    <th>  مبلغ تخفیف (ریال) </th>
+                                    <th>  مبلغ کل پس از تخفیف (ریال)</th>
+                                    <th>  جمع مالیات و عوارض (ریال) </th>
+                                    <th>  جمع مبلغ کل و مالیات و عوارض (ریال) </th>
+                                    <th hidden> code </th>
+                                    <th hidden> date </th>
+                                    <th hidden> EmployerEconomicalnumber </th>
+                                    <th hidden> EmployerID </th>
+                                    <th hidden> Employerregistrationnumber </th>
+                                    <th hidden> EmployerState </th>
+                                    <th hidden> EmployerAddress </th>
+                                    <th hidden> EmployerPostalcode </th>
+                                    <th hidden>  EmployerPhone </th>
+                                    <th hidden> EmployerFax </th>
+                                    <th hidden> Description </th>
+                                    <th hidden> SaleCondition </th>
+                                    <th hidden> Comment </th>
+                                    <th hidden> EquipmentsID </th>
+                                    <th hidden> InvoiceID </th>
+                                    <th><i class="icon-cog"></i>  </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @{
+                                    int rowNum = 0;
+                                }
+                                @foreach (cngfapco.Models.RequestFreeSale invoice in Model)
+                                {
+                                    <tr class="package-row">
+                                        <td>@(rowNum += 1)</td>
+                                        <td>@invoice.ServiceCode</td>
+                                        <td>@invoice.ServiceDesc</td>
+                                        <td><input type="number" name="txtNumber" id="txtNumber" class="form-control" onkeyup="getValues()" value="@invoice.Number" style="width:80%;text-align:center;" /></td>
+                                        <td>@invoice.UnitofMeasurement</td>
+                                        <td><input type="text" data-type="number" name="txtUnitAmount" id="txtUnitAmount" class="form-control" onkeyup="getValues()" value="@invoice.UnitAmount.ToString("#,##")" style="font-family:'B Yekan';width:80%;text-align:center;" disabled="disabled" /></td>
+                                        <td name="txtTotalAmount" id="txtTotalAmount" type="text" data-type="number"></td>
+                                        <td><input type="text" data-type="number" name="txtDiscountAmount" id="txtDiscountAmount" class="form-control" onkeyup="getValues()" style="font-family:'B Yekan';width:80%;text-align:center;" /></td>
+                                        <td name="txtTotalAmountafterDiscount" id="txtTotalAmountafterDiscount" type="text" data-type="number"></td>
+                                        <td name="txtAmountTaxandComplications" id="txtAmountTaxandComplications" type="text" data-type="number"></td>
+                                        <td name="txtTotalAmountTaxandComplications" id="txtTotalAmountTaxandComplications" type="text" data-type="number"></td>
+                                        <td hidden>@invoice.InvoiceCode</td>
+                                        <td hidden>@invoice.CreatedDate</td>
+                                        <td hidden>@invoice.EmployerEconomicalnumber</td>
+                                        <td hidden>@invoice.WorkshopsID</td>
+                                        <td hidden>@invoice.Employerregistrationnumber</td>
+
+                                        <td hidden>@invoice.EmployerState</td>
+                                        <td hidden>@invoice.EmployerAddress</td>
+                                        <td hidden>@invoice.EmployerPostalcode</td>
+                                        <td hidden>@invoice.EmployerPhone</td>
+                                        <td hidden>@invoice.EmployerFax</td>
+
+                                        <td hidden>@invoice.Description</td>
+                                        <td hidden>@invoice.SaleCondition</td>
+                                        <td hidden>@invoice.Comment</td>
+                                        <td hidden>@invoice.EquipmentsID</td>
+                                        <td hidden>@invoice.InvoiceID</td>
+                                        <td><input class="btn btn-danger btn--icon-text" type="button" value="حـذف کامل" onclick="Remove(this)" style="width:100%;text-align:center;font-family:Vazir;" /></td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td> جمع کل </td>
+                                    <td class="column6">@ViewBag.TotalAmount</td>
+                                    @*<td>
+                                            <strong class="txtSumAmount" id="txtSumAmount"></strong>
+                                            <input class="Amount" type="hidden" name="Amount" id="Amount" style="border:0px;text-align:center;font-family:'B Yekan';" />
+                                            <input class="SumAmount" type="hidden" name="SumAmount" id="SumAmount" style="border:0px;text-align:center;font-family:'B Yekan';" />
+                                            <input class="SumAllAmount" type="hidden" name="SumAllAmount" id="SumAllAmount" style="border:0px;text-align:center;font-family:'B Yekan';" />
+                                        </td>*@
+                                    <td>0</td>
+                                    <td>@ViewBag.TotalAmountafterDiscount</td>
+                                    <td>@ViewBag.AmountTaxandComplications</td>
+                                    <td>@ViewBag.TotalAmountTaxandComplications</td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    @*<button type="button" class="btn btn-success btn--icon-text" id="btnSave" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> در حال ثبت اطلاعات">ذخیره اطلاعات</button>*@
+                    @*<input type="button" id="btnSave" value="ذخیره اطلاعات" class="btn btn-success btn--icon-text" />*@
+
+                    <script src="~/js/jquery-1.8.3.min.js"></script>
+                    <script src="~/js/json2.js"></script>
+                    <script type="text/javascript">
+                        debugger;
+                        $(document).ready(function () {
+                            $("#txtServiceCode").change(function () {
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: '@Url.Action("GetFreeSaleEquipment")',
+                                        dataType: 'json',
+                                        data: { id: $("#txtServiceCode").val(),type:"1"},
+                                        success: function (services) {
+                                            $.each(services, function (i, service) {
+                                                 //alert(service.Title )
+                                                 $("#txtServiceDesc").val(service.Title);
+                                                $("#txtUnitofMeasurement").val("عدد");
+                                                $("#txtServiceCode2").val(service.FinancialCode);//
+                                                 $("#txtUnitAmount2").val(service.Value);//
+                                                $("#txtNumber").val("1");
+                                                $("#txtEquipmentsID").val(service.ID);
+                                            });
+                                            //$.each(users, function (i, user) {
+                                            //    $("#DepartmentUnitsID").append('<option value="' + user.Value + '">' +
+                                            //        user.Text + '</option>');
+                                            //});
+                                        },
+                                        error: function (ex) {
+                                            alert('خطا در انطباق اطلاعات' + ex);
+                                        }
+                                });
+                                return false;
+                            });
+                        });
+                    </script>
+                    <script type="text/javascript">
+                        $("body").on("click", "#btnAdd", function () {
+                            //Reference the Name and Country TextBoxes.
+                            var txtrowNum = $("#txtrowNum");
+                            var txtServiceCode = $("#txtServiceCode2");
+                            var txtServiceDesc = $("#txtServiceDesc");
+                            var txtNumber = $("#txtNumber");
+                            var txtUnitofMeasurement = $("#txtUnitofMeasurement");
+                            var txtUnitAmount = $("#txtUnitAmount");
+                            var txtTotalAmount = $("#txtTotalAmount");
+                            var txtDiscountAmount = $("#txtDiscountAmount");
+                            var txtTotalAmountafterDiscount = $("#txtTotalAmountafterDiscount");
+                            var txtAmountTaxandComplications = $("#txtAmountTaxandComplications");
+                            var txtTotalAmountTaxandComplications = $("#txtTotalAmountTaxandComplications");
+                            var txtInvoiceCode = $("#txtInvoiceCode");
+                            var txtCreatedDate = $("#txtCreatedDate");
+                            var txtEmployerEconomicalnumber = $("#txtEmployerEconomicalnumber");
+                            var txtOwnersID = $("#txtOwnersID");
+                            var txtEmployerregistrationnumber = $("#txtEmployerregistrationnumber");
+
+                            var txtEmployerState = $("#txtEmployerState");
+                            var txtEmployerAddress = $("#txtEmployerAddress");
+                            var txtEmployerPostalcode = $("#txtEmployerPostalcode");
+                            var txtEmployerPhone = $("#txtEmployerPhone");
+                            var txtEmployerFax = $("#txtEmployerFax");
+
+                            var txtDescription = $("#txtDescription");
+                            var txtSaleCondition = $("#txtSaleCondition");
+                            var txtComment = $("#txtComment"); //InCode;//
+
+                            var txtEquipmentsID = $("#txtEquipmentsID");
+                            var txtInvoiceID = $("#txtInvoiceID");
+                            //Get the reference of the Table's TBODY element.
+                            var tBody = $("#tblInvoices > TBODY")[0];
+
+                            //Add Row.
+                            var row = tBody.insertRow(-1);
+
+                            //Add txtrowNum cell.
+                            var cell = $(row.insertCell(-1));
+                            cell.html(txtrowNum.val());
+
+                            //Add txtServiceCode cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtServiceCode.val());
+
+                            //Add txtServiceDesc cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtServiceDesc.val());
+
+                            //Add txtNumber cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtNumber.val());
+
+                            //Add txtUnitofMeasurement cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtUnitofMeasurement.val());
+
+                            //Add txtUnitAmount cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtUnitAmount.val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+
+                            //Add txtTotalAmount cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtTotalAmount.val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+
+                            //Add txtDiscountAmount cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtDiscountAmount.val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+
+                            //Add txtTotalAmountafterDiscount cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtTotalAmountafterDiscount.val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+
+                            //Add txtAmountTaxandComplications cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(Math.round(txtAmountTaxandComplications.val()).replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                            //cell.html(Math.round(txtAmountTaxandComplications.val()));
+
+                            //Add txtTotalAmountTaxandComplications cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtTotalAmountTaxandComplications.val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                            //cell.html(Math.round(txtTotalAmountTaxandComplications.val()));
+
+                            //Add txtInvoiceCode cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtInvoiceCode.val()).hide();
+
+                            //Add txtCreatedDate cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtCreatedDate.val()).hide();
+
+                            //Add txtEmployerEconomicalnumber cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtEmployerEconomicalnumber.val()).hide();
+
+                            //Add txtOwners cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtOwnersID.val()).hide();
+
+                            //Add txtEmployerregistrationnumber cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtEmployerregistrationnumber.val()).hide();
+
+                            //Add txtEmployerState cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtEmployerState.val()).hide();
+
+                            //Add txtEmployerAddress cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtEmployerAddress.val()).hide();
+
+                            //Add txtEmployerPostalcode cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtEmployerPostalcode.val()).hide();
+
+                            //Add txtEmployerPhone cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtEmployerPhone.val()).hide();
+
+                            //Add txtEmployerFax cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtEmployerFax.val()).hide();
+
+                            //Add txtDescription cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtDescription.val()).hide();
+
+                            //Add txtSaleCondition cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtSaleCondition.val()).hide();
+
+                            //Add txtComment cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtComment.val()).hide();
+
+                            //Add txtEquipmentsID cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtEquipmentsID.val()).hide();
+
+                            //Add txtInvoiceID cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtInvoiceID.val()).hide();
+
+                            //Add Button cell.
+                            cell = $(row.insertCell(-1));
+                            var btnRemove = $("<input />");
+                            btnRemove.attr("type", "button");
+                            btnRemove.attr("onclick", "Remove(this);");
+                            btnRemove.val("حذف");
+                            cell.append(btnRemove);
+
+                            //Clear the TextBoxes.
+                            txtrowNum.val("");
+                            txtServiceCode.val("");
+                            txtServiceDesc.val("");
+                            txtNumber.val("");
+                            txtUnitofMeasurement.val("");
+                            txtUnitAmount.val("");
+                            txtTotalAmount.val("");
+                            txtDiscountAmount.val("");
+                            txtTotalAmountafterDiscount.val("");
+                            txtAmountTaxandComplications.val("");
+                            txtTotalAmountTaxandComplications.val("");
+                            txtInvoiceCode.val("");
+                            txtCreatedDate.val("");
+                            txtEmployerEconomicalnumber.val("");
+                            txtOwnersID.val("");
+                            txtEmployerregistrationnumber.val("");
+
+                            txtEmployerState.val("");
+                            txtEmployerAddress.val("");
+                            txtEmployerPostalcode.val("");
+                            txtEmployerPhone.val("");
+                            txtEmployerFax.val("");
+
+                            txtDescription.val("");
+                            txtSaleCondition.val("");
+                            txtComment.val("");
+                            txtEquipmentsID.val("");
+                            txtInvoiceID.val("");
+                        });
+
+                        function Remove(button) {
+                            //Determine the reference of the Row using the Button.
+                            var row = $(button).closest("TR");
+                            var name = $("TD", row).eq(2).html();
+                            var reduceAmount = $("TD", row).eq(6).html().split(',').join('');
+                            var TotalAmount=$("#SumAllAmount").val();
+                            if (confirm("آیا از حذف ردیف مطمئن هستید؟: " + name)) {
+                                //Get the reference of the Table.
+                                $('#SumAmount').val(TotalAmount - reduceAmount);
+                                $("#SumAllAmount").val(TotalAmount - reduceAmount);
+                                var table = $("#tblInvoices")[0];
+
+                                //Delete the Table row using it's Index.
+                                table.deleteRow(row[0].rowIndex);
+                            }
+                        };
+
+                        $("body").on("click", "#btnSave", function () {
+                            //Loop through the Table rows and build a JSON array.
+                            var invoices = new Array();
+                            $("#tblInvoices TBODY TR").each(function () {
+                                var row = $(this);
+                                var invoice = {};
+                                invoice.rowNum = row.find("TD").eq(0).html();
+                                invoice.ServiceCode = row.find("TD").eq(1).html();
+                                invoice.ServiceDesc = row.find("TD").eq(2).html();
+                                invoice.Number =  row.find("td:eq(3) input[type='number']").val();//row.find("TD").eq(3).html();
+                                invoice.UnitofMeasurement = row.find("TD").eq(4).html();
+                                invoice.UnitAmount =  row.find("td:eq(5) input[type='text']").val().split(',').join('').split('.').join('/');//row.find("TD").eq(5).html().split(',').join('').split('.').join('/');
+                                invoice.TotalAmount = row.find("TD").eq(6).html().split(',').join('').split('.').join('/');
+                                invoice.DiscountAmount = row.find("td:eq(7) input[type='text']").val().split(',').join('').split('.').join('/');//row.find("TD").eq(7).html().split(',').join('').split('.').join('/');
+                                invoice.TotalAmountafterDiscount = row.find("TD").eq(8).html().split(',').join('').split('.').join('/');
+                                invoice.AmountTaxandComplications = row.find("TD").eq(9).html().split(',').join('').split('.').join('/');
+                                invoice.TotalAmountTaxandComplications = row.find("TD").eq(10).html().split(',').join('').split('.').join('/');
+                                invoice.InvoiceCode = $('#InvoiceCode').val();// row.find("TD").eq(11).html();
+                                invoice.CreatedDate = $('#CreatedDate').val();//row.find("TD").eq(12).html();
+                                invoice.EmployerEconomicalnumber = $('#EmployerEconomicalnumber').val();//row.find("TD").eq(13).html();
+                                invoice.EquipmentsID = row.find("TD").eq(1).html();//row.find("TD").eq(14).html();
+                                invoice.WorkshopsID = @WorkshopId;//row.find("TD").eq(14).html();
+                                invoice.Employerregistrationnumber = $('#Employerregistrationnumber').val();//row.find("TD").eq(15).html();
+                                invoice.EmployerState = $('#EmployerState').val();//row.find("TD").eq(16).html();
+                                invoice.EmployerAddress = row.find("TD").eq(17).html();
+                                invoice.EmployerPostalcode = $('#EmployerPostalcode').val();//row.find("TD").eq(18).html();
+                                invoice.EmployerPhone = $('#EmployerPhone').val();//row.find("TD").eq(19).html();
+                                invoice.EmployerFax = $('#EmployerFax').val();//row.find("TD").eq(20).html();
+                                invoice.Description = $('#Description').val();//row.find("TD").eq(21).html();
+                                invoice.SaleCondition = $('input[name="SaleCondition"]:checked').val(); //row.find("TD").eq(22).html();
+                                invoice.Comment = $('#Comment').val();//row.find("TD").eq(23).html();
+                                invoice.Description = $('#Description').val(); //row.find("TD").eq(24).html();
+                                invoice.Insurance = $('#Insurance').val();
+                                invoice.EquipmentsID = row.find("TD").eq(24).html()
+                                invoice.CurrencyTypeID = $('#CurrencyTypeID').val();
+                                invoice.OwnersID = $('#Owners').val();
+                                invoice.InvoiceID = row.find("TD").eq(25).html()
+                                invoices.push(invoice);
+                            });
+
+                            //Send the JSON array to Controller using AJAX.
+                            $.ajax({
+                                type: "POST",
+                                url: "/Financials/PreFreeSaleInvoice",
+                                data: JSON.stringify(invoices),
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                success: function (response) {
+                                    if (response.success) {
+                                        alert(response.responseText);
+                                        $("#btnSave").attr('disabled', true);
+                                        $("#btnSave").text('لطفا چند لحظه صبر نمایید تا به صورت خودکار به لیست مربوطه ارجاع داده شوید!');
+                                        window.location.href = '/Financials/RequestFreeSaleList';
+                                    } else {
+                                        // DoSomethingElse()
+                                        alert(response.responseText);
+                                    }
+                                },
+                                error: function (response) {
+                                    alert("ثبت اطلاعات با خطا مواجه شد!"); //
+                                }
+                            });
+                        });
+    //
+     function Remove(button) {
+                                    //Determine the reference of the Row using the Button.
+                                    var row = $(button).closest("TR");
+                                    var InvoiceID = $("TD", row).eq(25).html();
+                                    var ServiceDesc =row.find("TD").eq(2).html();// row.find("td:eq(2)").val();
+                                    if (confirm("آیا از حذف ردیف با موضوع :  " + ServiceDesc + " " + "مطمئن هستید؟  ")) {
+                                        //Get the reference of the Table.
+                                        var table = $("#tblInvoices")[0];
+                                        var row = $(this);
+
+                                        //Delete the Table row using it's Index.
+                                        //table.deleteRow(row[0].rowIndex);
+                                        $.ajax({
+                                            type: "GET",
+                                            url: "/Financials/DeleteInvoice?id=" + InvoiceID,
+                                            data: JSON.stringify(InvoiceID),
+                                            contentType: "application/json; charset=utf-8",
+                                            dataType: "json",
+                                            success: function (response) {
+                                                if (response.success) {
+                                                    //window.location.href = "/Financials/PreFreeSaleInvoice?InvoiceCode=" + @InCode;
+                                                    alert(response.responseText);
+                                        } else {
+                                            // DoSomethingElse()
+                                               // alert(response.responseText);
+                                               // alert("با توجه به وجود تنها یک ردیف از صورتحساب شما مجاز به حذف ردیف فعلی نمی باشید!"); //
+                                        }
+                                    },
+                                        error: function (response) {
+                                            alert("حذف اطلاعات با موفقیت انجام شد."); //
+                                            window.location.href = "/Financials/PreFreeSaleInvoice?InvoiceCode=" + @InCode;
+                                    }
+                                });
+
+                                }
+                            };
+                    </script>
+                    <script>
+                        function getValues() {
+                            var rows = document.querySelectorAll("tr.package-row");
+                            rows.forEach(function (currentRow) {
+
+                                var Number1 = Number(currentRow.querySelector('#txtNumber').value);
+                                var UnitAmount = Number(currentRow.querySelector('#txtUnitAmount').value.split(',').join('').split('.').join('/'));
+                                var DiscountAmount = Number(currentRow.querySelector('#txtDiscountAmount').value.split(',').join('').split('.').join('/'));
+
+                                var TotalAmount = 0.0;
+                                var TotalAmountafterDiscount = 0.0;
+                                var AmountTaxandComplications = 0.0
+                                var TotalAmountTaxandComplications = 0.0;
+
+                                document.querySelectorAll('Number1');
+
+                                if (Number1 == "") {
+                                    if (isNaN(Number1) || isNaN(UnitAmount)) {
+                                        return;
+                                    }
+                                    TotalAmount = UnitAmount * Number1;
+                                }
+                                else {
+                                    if (isNaN(Number1) || isNaN(UnitAmount)) {
+                                        return;
+                                    }
+                                    TotalAmount = UnitAmount * Number1;
+                                }
+                                //
+                                TotalAmountafterDiscount = TotalAmount - DiscountAmount;
+                                if ($("#ValueAddedCondition").is(':checked'))
+                                    AmountTaxandComplications = TotalAmountafterDiscount * 0;
+                                else
+                                    AmountTaxandComplications = Math.round(TotalAmountafterDiscount * 0.09);
+
+                                TotalAmountTaxandComplications = TotalAmountafterDiscount + AmountTaxandComplications;
+                                //Math.round(parseFloat($('#txtTotalAmountTaxandComplications').val(parseFloat($('#txtTotalAmountafterDiscount').val()) + parseFloat($('#txtAmountTaxandComplications').val()))), 0);
+                                //
+                                currentRow.querySelector("#txtTotalAmount").innerHTML = TotalAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                currentRow.querySelector("#txtTotalAmountafterDiscount").innerHTML = TotalAmountafterDiscount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                currentRow.querySelector("#txtAmountTaxandComplications").innerHTML = Math.round(AmountTaxandComplications).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                currentRow.querySelector("#txtTotalAmountTaxandComplications").innerHTML = TotalAmountTaxandComplications.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            });
+
+                        }
+                    </script>
+                    <div class="row-fluid" style="border:0px solid #a9a9a9;margin-top:15px;">
+                        <table width="100%">
+                            <tr>
+                                <td colspan="2" style="text-align:right;">
+                                    <span style="font-size:12px;margin-right:5px;" class="text-warning"> شرایط و نحوه فروش : </span>
+                                    @if (Model.FirstOrDefault().SaleCondition.Equals("نقدی"))
+                                    {
+                                        <span style="margin-right:15px;"> <input type="radio" id="SaleCondition" name="SaleCondition" class="SaleCondition1" value="نقدی" style="font-family:'B Nazanin';font-size:15px;margin-right:15px;color:#222222" checked="checked" /> نقدی </span>
+                                        <span style="margin-right:15px;"> <input type="radio" id="SaleCondition" name="SaleCondition" class="SaleCondition2 text-muted" value="غیر نقدی" style="font-family:'B Nazanin';font-size:15px;margin-right:15px;color:#222222" /> غیر نقدی</span>
+                                    }
+                                    else
+                                    {
+                                        <span style="margin-right:15px;"> <input type="radio" id="SaleCondition" name="SaleCondition" class="SaleCondition1" value="نقدی" style="font-family:'B Nazanin';font-size:15px;margin-right:15px;color:#222222" /> نقدی </span>
+                                        <span style="margin-right:15px;"> <input type="radio" id="SaleCondition" name="SaleCondition" class="SaleCondition2 text-muted" value="غیر نقدی" style="font-family:'B Nazanin';font-size:15px;margin-right:15px;color:#222222" checked="checked" /> غیر نقدی</span>
+                                    }
+
+                                </td>
+                            </tr>
+
+                            <tr>
+                                @*<td style="text-align:right;">
+                                        <span style="font-size:12px;margin-right:auto;" class="text-warning"> توضیحات : </span>
+                                    </td>*@
+                                <td colspan="2" style="width:100%;">
+                                    @*<input id="Description" name="Description" type="text" style="width:98%;border:1px solid silver;font-family:'B Nazanin';font-size:15px;margin-right:0px;color:#222222" />*@
+                                    <textarea id="Description" name="Description" type="text" style="width:98%;border:1px solid silver;font-family:'B Nazanin';font-size:15px;margin-right:0px;color:#222222" placeholder="توضیحات ..."></textarea>
+                                    @try
+                                    {
+                                        @Html.Action("CheckSalaryRem", new { WorkshopID = WorkshopId })
+
+                                    }
+                                    catch { }
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row-fluid">
+                <div class="span6">
+                    <center>
+                        <a class="btn btn-success" style="font-family:Vazir;width:50%;" href="/Financials/AddNewItems?WorkshopId=@WorkshopId&InvoiceCode=@InCode"> <i class="icon-plus icon-white"></i> افزودن ردیف جدید </a>
+                    </center>
+                </div>
+                <div class="span6">
+                    <center>
+                        <button class="ladda-button btn btn-success" id="btnSave" style="font-family:Vazir;width:50%;"> <i class="icon-save"></i> ذخیره اطلاعات و صدور پیش فاکتور</button>
+                    </center>
+                    <strong id="chcomment" class="right"> لطفا با توجه به تاخیر ثبت اطلاعات پرداختی مالی در سامانه و امکان اشتباه در شرایط و نحوه فروش قبل از نهایی نمودن درخواست، مجدد از یکسان بودن اطلاعات سامانه و پرداخت های مدیریت مالی اطمینان حاصل فرمایید و گزینه زیر را انتخاب تا دکمه صدور برای شما فعال شود!</strong>
+                    <br />
+                    <input type="checkbox" class="chbtnSave" name="chbtnSave" id="chbtnSave" onclick="Checked()" /> نسبت به صحت اطلاعات اطمینان دارم.
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#btnSave").hide();
+        $("input[name='chbtnSave']").on("change", function () {
+            //$("#chbtnSave").toggle(this.checked);
+            if (this.checked) {
+                $("#chcomment").hide();
+                $("#chbtnSave").hide();
+                $("#btnSave").show();
+            }
+            else {
+                $("#chcomment").show();
+                $("#chbtnSave").show();
+                $("#btnSave").hide();
+            }
+        });  
+    });
+</script>
+<script>
+    function AddNewItems() {
+        $.get("/Financials/AddNewItems?InCode=@InCode&WorkshopId=@WorkshopId&InvoiceCode=@InCode", function (res) {
+            $("#modal-large").modal();
+            $("#myModalLabel").html("افزودن ردیف جدید");
+            $("#myModalBody").html(res);
+
+        });
+    }
+</script>
+<script>
+    $(function () {
+        $('#allitems').mousemove(function () {
+
+            var rows = document.querySelectorAll("tr.package-row");
+            rows.forEach(function (currentRow) {
+
+                var Number1 = Number(currentRow.querySelector('#txtNumber').value);
+                var UnitAmount = Number(currentRow.querySelector('#txtUnitAmount').value.split(',').join(''));
+                var DiscountAmount = Number(currentRow.querySelector('#txtDiscountAmount').value.split(',').join(''));
+
+                var TotalAmount = 0.0;
+                var TotalAmountafterDiscount = 0.0;
+                var AmountTaxandComplications = 0.0
+                var TotalAmountTaxandComplications = 0.0;
+
+                document.querySelectorAll('Number1');
+
+                if (Number1 == "") {
+                    if (isNaN(Number1) || isNaN(UnitAmount)) {
+                        return;
+                    }
+                    TotalAmount = UnitAmount * Number1;
+                }
+                else {
+                    if (isNaN(Number1) || isNaN(UnitAmount)) {
+                        return;
+                    }
+                    TotalAmount = UnitAmount * Number1;
+                }
+                //
+                TotalAmountafterDiscount = TotalAmount - DiscountAmount;
+                if ($("#ValueAddedCondition").is(':checked'))
+                    AmountTaxandComplications = TotalAmountafterDiscount * 0;
+                else
+                    AmountTaxandComplications = Math.round(TotalAmountafterDiscount * 0.1);
+
+                TotalAmountTaxandComplications = TotalAmountafterDiscount + AmountTaxandComplications;
+                //Math.round(parseFloat($('#txtTotalAmountTaxandComplications').val(parseFloat($('#txtTotalAmountafterDiscount').val()) + parseFloat($('#txtAmountTaxandComplications').val()))), 0);
+                //
+                currentRow.querySelector("#txtTotalAmount").innerHTML = TotalAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                currentRow.querySelector("#txtTotalAmountafterDiscount").innerHTML = TotalAmountafterDiscount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                currentRow.querySelector("#txtAmountTaxandComplications").innerHTML = AmountTaxandComplications.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                currentRow.querySelector("#txtTotalAmountTaxandComplications").innerHTML = TotalAmountTaxandComplications.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            });
+
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        var saleCondition = $('input[name="SaleCondition"]:checked').val();
+        $('#Amount').val($("#txtTotalAmount").val());
+        $("#permitSaleCondition").val(saleCondition);
+        var sum = 0;
+        var salaryRem = $('#salaryRem').val(); //Math.round((parseFloat($('#salaryRem').val().split(',').join('')) * 0.7));
+        document.getElementById("permitNonCash").innerHTML = salaryRem.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        $("body").on("click", "#btnAdd", function () {
+            sum += parseFloat($("#Amount").val());
+            $('#SumAmount').val(Math.round(sum));
+            document.getElementById("txtSumAmount").innerHTML = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            //
+            if (sum < salaryRem)
+                //alert("sum is great than talab ... !");
+                $("#permitNonCashStatus").val("true");
+            else
+                $("#permitNonCashStatus").val("false");
+            //
+            if ($("#permitNonCashStatus").val() == 'false') {
+                //$('.SaleCondition1').is(":checked")
+                // $('.SaleCondition2').attr('checked', false);
+                if ($("#permitSaleCondition").val() == "غیر نقدی") {
+                    $("#btnSave").attr('disabled', 'disabled');
+                    $("#btnSave").text("مبلغ فاکتور بیش از مبلغ مجاز خرید غیر نقدی می باشد!")
+                    $("#SaleCondition1").attr('checked', 'checked');
+                    $("#SaleCondition1").attr('disabled', 'disabled');
+                }
+
+            };
+
+        });
+    });
+</script>
+
+<script>
+    function SelectPrintType(id) {
+        $.get("/Financials/SelectPrintType?InvoiceCode=" + id, function (res) {
+            $("#modal-large").modal();
+            $("#myModalLabel").html("انتخاب نوع پرینت");
+            $("#myModalBody").html(res);
+
+        });
+    }
+</script>
+
+<script>
+        function Getprint() {
+            $.ajax({
+                url: "/Financials/FreeSaleInvoice",
+                type: "Post",
+                data: { InvoiceCode: @ViewBag.invoiceCode}
+            }).done(function (res) {
+                window.location.href = '@Url.Action("FreeSaleInvoice", "Financials", new { InvoiceCode = ViewBag.invoiceCode })';
+            });
+        }
+</script>
+
+<script>
+    $("#InvoiceCode").change(function () {
+        var msg = $('#msg');
+        $.ajax({
+            type: 'GET',
+            url: "/Financials/FreeSaleInvoice",
+            dataType: 'json',
+            data: { InvoiceCode: $("#InvoiceCode").val() },
+            cache: false,
+            success: function () {
+                msg.html(html);
+            }
+        });
+    });
+</script>
+
+<script>
+    $(function () {
+        $('#EmployerID').change(function () {
+            //var value = $('#ContractID').val();
+            $.ajax({
+                url: "/Financials/GetCustomerInfo/",
+                type: "Post",
+                data: { id: $('#EmployerID').val() }
+            }).done(function (res) {
+                $("#CustomerInfo").fadeOut(100);
+                $("#CustomerInfo").fadeIn(100);
+                $("#CustomerInfo").html(res);
+            });
+        }).keyup();
+    });
+</script>
+
+<script>
+    $(function () {
+        $('#EquipmentsID').change(function () {
+            //var value = $('#ContractID').val();
+            $.ajax({
+                url: "/Financials/contractDeductions/",
+                type: "Post",
+                data: { ContractID: $('#ContractID').val() }
+            }).done(function (res) {
+                $("#Deductions").fadeOut(100);
+                $("#Deductions").fadeIn(100);
+                $("#Deductions").html(res);
+            });
+        }).keyup();
+    });
+</script>
+
+<script>
+    //مبلغ کل
+    $("#txtNumber,#txtUnitAmount").keyup(function () {
+        $('#txtTotalAmount').val(parseFloat($('#txtNumber').val()) * $('#txtUnitAmount').val().split(',').join(''));
+
+    });
+    //مبلغ کل پس از تخفیف
+    $("#txtTotalAmount,#txtDiscountAmount").keyup(function () {
+
+        $('#txtTotalAmountafterDiscount').val($('#txtTotalAmount').val() - $('#txtDiscountAmount').val().split(',').join(''));
+        //محاسبه مبلغ تخفیف برای کارگاه های 0.05
+        $('#txtDiscountAmount').val($('#txtTotalAmount').val() * 0);
+    });
+
+    //مبلغ ارزش افزوده
+    $("#txtDiscountAmount").keyup(function () {
+
+        if ($("#ValueAddedCondition").is(':checked'))
+            $('#txtAmountTaxandComplications').val($('#txtTotalAmountafterDiscount').val() * 0);// checked
+        else
+            Math.round(parseFloat($('#txtAmountTaxandComplications').val($('#txtTotalAmountafterDiscount').val() * 0.1)).val(), 0); // unchecked
+
+    });
+
+    //جمع مبلغ کل + جمع مالیات و عوارض
+    $(function () {
+        $("#txtUnitAmount").click(function () {
+            Math.round(parseFloat($('#txtTotalAmountTaxandComplications').val(parseFloat($('#txtTotalAmountafterDiscount').val()) + parseFloat($('#txtAmountTaxandComplications').val()))), 0);
+        });
+        $('#txtUnitAmount,#txtDiscountAmount').keyup(function () {
+            Math.round(parseFloat($('#txtTotalAmountTaxandComplications').val(parseFloat($('#txtTotalAmountafterDiscount').val()) + parseFloat($('#txtAmountTaxandComplications').val()))), 0);
+        }).keyup();
+
+    });
+
+    //کد صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#InvoiceCode').keyup(function () {
+            var value = $(this).val();
+            $('#txtInvoiceCode').val(value);
+        }).keyup();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#InvoiceCode').val();
+            $('#txtInvoiceCode').val(value);
+        }).keyup();
+    });
+    //تاریخ صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#CreatedDate').keyup(function () {
+            var value = $(this).val();
+            $('#txtCreatedDate').val(value);
+        }).keyup();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#CreatedDate').val();
+            $('#txtCreatedDate').val(value);
+        }).keyup();
+    });
+    //اطلاعات کارفرمای صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#Owners').change(function () {
+            var value = $(this).val();
+            $('#txtOwners').val(value);
+            $('#txtOwners').val($('#Owners').val());
+        }).select();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#Owners').val();
+            $('#txtOwners').val(value);
+            $('#txtOwners').val($('#Owners').val());
+        }).keyup();
+    });
+    //شماره اقتصادی خریدار صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#EmployerEconomicalnumber').keyup(function () {
+            var value = $(this).val();
+            $('#txtEmployerEconomicalnumber').val(value);
+        }).keyup();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#EmployerEconomicalnumber').val();
+            $('#txtEmployerEconomicalnumber').val(value);
+        }).keyup();
+    });
+    //شماره ثبت/ ملی خریدار صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#Employerregistrationnumber').keyup(function () {
+            var value = $(this).val();
+            $('#txtEmployerregistrationnumber').val(value);
+        }).keyup();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#Employerregistrationnumber').val();
+            $('#txtEmployerregistrationnumber').val(value);
+        }).keyup();
+    });
+    //اطلاعات آدرس بخش استان کارفرما در صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#EmployerState').change(function () {
+            var value = $(this).val();
+            $('#txtEmployerState').val(value);
+        }).select();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#EmployerState').val();
+            $('#txtEmployerState').val(value);
+        }).keyup();
+    });
+    //اطلاعات آدرس کامل کارفرما در صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#EmployerAddress').change(function () {
+            var value = $(this).val();
+            $('#txtEmployerAddress').val(value);
+        }).select();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#EmployerAddress1').val() + '،' + ' ' + $('#EmployerAddress2').val();
+            $('#txtEmployerAddress').val(value);
+        }).keyup();
+    });
+    //اطلاعات کد پستی کارفرما صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#EmployerPostalcode').change(function () {
+            var value = $(this).val();
+            $('#txtEmployerPostalcode').val(value);
+        }).select();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#EmployerPostalcode').val();
+            $('#txtEmployerPostalcode').val(value);
+        }).keyup();
+    });
+    //اطلاعات شماره تماس کارفرما صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#EmployerPhone').change(function () {
+            var value = $(this).val();
+            $('#txtEmployerPhone').val(value);
+        }).select();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#EmployerPhone').val();
+            $('#txtEmployerPhone').val(value);
+        }).keyup();
+    });
+    //اطلاعات شماره نمابر کارفرما صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#EmployerFax').change(function () {
+            var value = $(this).val();
+            $('#txtEmployerFax').val(value);
+        }).select();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#EmployerFax').val();
+            $('#txtEmployerFax').val(value);
+        }).keyup();
+    });
+    //اطلاعات شرایط و نحوه فروش صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#SaleCondition').change(function () {
+            var value = $('input[name="SaleCondition"]:checked').val();
+            $('#txtSaleCondition').val(value);
+        }).select();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('input[name="SaleCondition"]:checked').val();
+            $('#txtSaleCondition').val(value);
+        }).keyup();
+    });
+    //اطلاعات توضیحات صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#Description').change(function () {
+            var value = $(this).val();
+            $('#txtDescription').val(value);
+        }).select();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#Description').val();
+            $('#txtDescription').val(value);
+        }).keyup();
+    });
+    //
+    $(function () {
+        $('#Comment').change(function () {
+            var value = $(this).val();
+            $('#txtComment').val(value);
+        }).select();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#Comment').val();
+            $('#txtComment').val(value);
+        }).keyup();
+    });
+    //اطلاعات قرارداد مرتبط با صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#EquipmentsID').change(function () {
+            var value = $(this).val();
+            $('#txtEquipmentsID').val(value);
+        }).select();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#EquipmentsID').val();
+            $('#txtEquipmentsID').val(value);
+        }).keyup();
+    });
+</script>
+
+<script>
+    $(function () {
+        $('#allitems').mousemove(function () {
+            //
+            document.getElementById("permitNonCash").innerHTML = $("#salaryRem").val().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            var permitNonCash = ($("#salaryRem").val().split(',').join(''));
+            var TotalAmount = ($("#SumAmount").val().split(',').join(''));
+            document.getElementById("txtSumAmount").innerHTML = $("#SumAmount").val().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            alert("......." + TotalAmount);
+            if ($("#SumAllAmount").val() > 0) {
+                $("#SumAmount").val($("#SumAllAmount").val());
+            }
+            else {
+
+            }
+            //
+            var saleCondition = $('input[name="SaleCondition"]:checked').val();
+            $("#permitSaleCondition").val(saleCondition);
+            //if ($("#permitNonCashStatus").val() == 'false') {
+            if (permitNonCash < TotalAmount) {
+                $("#permitNonCashStatus").val("false");
+                $("#permitSaleCondition").val("نقدی");
+                if ($("#permitSaleCondition").val() == "غیر نقدی") {
+                    $("#btnSave").attr('disabled', 'disabled');
+                    $("#btnSave").text("مبلغ فاکتور بیش از مبلغ مجاز خرید غیر نقدی می باشد!")
+                    document.getElementById("btnSave").style.background = 'red';
+                    $('.SaleCondition1').attr('checked', 'checked');
+                    $('.SaleCondition2').attr('disabled', 'disabled');
+                }
+                if ($("#permitSaleCondition").val() == "نقدی") {
+                    $("#btnSave").removeAttr('disabled', 'disabled');
+                    $("#btnSave").text("ذخیره اطلاعات و صدور درخواست")
+                    document.getElementById("btnSave").style.background = 'green';
+                    $('.SaleCondition1').attr('checked', 'checked');
+                    $('.SaleCondition2').attr('disabled', 'disabled');
+                }
+            };
+            //مبلغ کل
+            $('#txtTotalAmount').val($('#txtNumber').val().split(',').join('') * $('#txtUnitAmount').val().split(',').join(''));
+            //مبلغ کل پس از تخفیف
+            $('#txtTotalAmountafterDiscount').val($('#txtTotalAmount').val() - $('#txtDiscountAmount').val().split(',').join(''));
+            //محاسبه مبلغ تخفیف برای کارگاه های 0.05
+            $('#txtDiscountAmount').val($('#txtTotalAmount').val() * 0).val().split(',').join('');
+            //مبلغ ارزش افزوده
+            if ($("#ValueAddedCondition").is(':checked'))
+                Math.round($('#txtAmountTaxandComplications').val($('#txtTotalAmountafterDiscount').val() * 0));// checked
+            else
+                Math.round($('#txtAmountTaxandComplications').val(Math.round($('#txtTotalAmountafterDiscount').val() * 0.1))); // unchecked
+            //جمع مبلغ کل + جمع مالیات و عوارض
+            Math.round($('#txtTotalAmountTaxandComplications').val(parseFloat($('#txtTotalAmountafterDiscount').val()) + parseFloat($('#txtAmountTaxandComplications').val())));
+            //کد صورت حساب برای ذخیره در دیتا بیس
+            $('#txtInvoiceCode').val('#InvoiceCode');
+            //تاریخ صورت حساب برای ذخیره در دیتا بیس
+            $('#txtCreatedDate').val('#CreatedDate');
+            //اطلاعات کارفرمای صورت حساب برای ذخیره در دیتا بیس
+            $('#txtEmployerID').val('#EmployerID');
+            //شماره اقتصادی خریدار صورت حساب برای ذخیره در دیتا بیس
+            $('#txtEmployerEconomicalnumber').val('#EmployerEconomicalnumber');
+            //شماره ثبت/ ملی خریدار صورت حساب برای ذخیره در دیتا بیس
+            $('#txtEmployerregistrationnumber').val('#Employerregistrationnumber');
+            //اطلاعات آدرس بخش استان کارفرما در صورت حساب برای ذخیره در دیتا بیس
+            $('#txtEmployerState').val('#EmployerState');
+            //اطلاعات آدرس کامل کارفرما در صورت حساب برای ذخیره در دیتا بیس
+            var value = $('#EmployerAddress1').val() + '،' + ' ' + $('#EmployerAddress2').val();
+            $('#txtEmployerAddress').val(value);
+            //اطلاعات کد پستی کارفرما صورت حساب برای ذخیره در دیتا بیس
+            $('#txtEmployerPostalcode').val('#EmployerPostalcode');
+            //اطلاعات شماره تماس کارفرما صورت حساب برای ذخیره در دیتا بیس
+            $('#txtEmployerPhone').val('#EmployerPhone');
+            //اطلاعات شماره نمابر کارفرما صورت حساب برای ذخیره در دیتا بیس
+            $('#txtEmployerFax').val('#EmployerFax');
+            //اطلاعات شرایط و نحوه فروش صورت حساب برای ذخیره در دیتا بیس
+            $('#txtSaleCondition').val('#SaleCondition');
+            //اطلاعات توضیحات صورت حساب برای ذخیره در دیتا بیس
+            $('#txtDescription').val('#Description');
+            $('#txtComment').val('#Comment');
+
+        }).select();
+    });
+</script>
+
+<script>
+    $('.btn').on('click', function () {
+        var $this = $(this);
+        $this.button('loading');
+        setTimeout(function () {
+            $this.button('reset');
+        }, 10000);
+    });
+
+</script>
+
+<script>
+    //جهت نمایش مقادیر نوع ارز/ ریال در هدر جدول
+    $(function () {
+        $('#CurrencyTypeID').change(function () {
+            var value = $('#CurrencyTypeID').find(":selected").text();
+            //var value = $(this).val();
+            $('#txtCurrencyType').val(value);
+            $('#txtCurrencyType2').val(value);
+            $('#txtCurrencyType3').val(value);
+            $('#txtCurrencyType4').val(value);
+            $('#txtCurrencyType5').val(value);
+            $('#txtCurrencyType6').val(value);
+        }).keyup();
+    });
+    //
+    $(function () {
+        $('#allitems').mousemove(function () {
+            var value = $('#CurrencyTypeID').find(":selected").text();
+            //var value = $(this).val();
+            $('#txtCurrencyType').val(value);
+            $('#txtCurrencyType2').val(value);
+            $('#txtCurrencyType3').val(value);
+            $('#txtCurrencyType4').val(value);
+            $('#txtCurrencyType5').val(value);
+            $('#txtCurrencyType6').val(value);
+        });
+    });
+</script>

@@ -1,0 +1,131 @@
+﻿@model cngfapco.Models.RemittanceDetails
+
+@{
+    ViewBag.Title = "Remittance";
+    Layout = "~/Views/Shared/_DataTableLayout.cshtml";
+}
+
+<div class="row-fluid">
+    <div class="widget">
+        <div class="widget-body">
+            <div style="border:1px solid #4f4f4f;padding-right:2em;padding-left:2em;">
+                <h4 class="text-center">شرکت توسعه طرح های صنعتی فن آوران پارسیان (سهامی خاص)</h4>
+                <table class="table text-center" width="100%">
+                    <tr>
+                        <td width="10%" style="text-align:center;">
+                            <img src="~/img/fapcotextless_6.png" />
+                        </td>
+                        <td width="70%" style="text-align:center;">
+                            <h4>حواله انبار</h4>
+                            <span> نام انبار : </span><span>انبار 200 هزار CNG</span>
+                        </td>
+                        <td width="20%">
+                            <p>
+                                <span>شماره : </span><span>@Model.Remittances.Number</span>
+                            </p>
+                            <p>
+                                <span>تاریخ : </span><span>@Model.Date.Value.ToShortDateString() </span>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+                <div>
+                    <br />
+                    <h5>
+                        <span>مرکز مصرف کننده : </span> <span class="text-danger">@Model.Remittances.DivisionPlan.Workshop.Title</span>
+                    </h5>
+                    <hr />
+                    <table class="table table-bordered table-advance" width="100%">
+                        <thead>
+                            <tr>
+                                <th width="5%" style="text-align:center;"> ردیف </th>
+                                <th width="10%" style="text-align:center;"> کد کالا </th>
+                                <th width="40%"> عنوان کالا </th>
+                                <th width="5%" style="text-align:center;"> واحد </th>
+                                <th width="5%" style="text-align:center;"> تعداد </th>
+                                <th width="35%"> توضیحات </th>
+                            </tr>
+                        </thead>
+                        @{ int rowNum = 0;}
+                        @foreach (var item in ViewBag.RemittanceList)
+                        {
+                            <tbody>
+                                <tr>
+                                    <td>@(rowNum+=1)</td>
+                                    <td></td>
+                                    <td>@item.Title</td>
+                                    <td>@item.Unit</td>
+                                    <td>@item.NumberofSend</td>
+                                    <td>@item.Description</td>
+                                </tr>
+                            </tbody>
+                        }
+
+
+                    </table>
+                    <br />
+                    <div style="border:1px solid #808080;padding-right:7px;padding-left:7px;padding-bottom:15px;">
+                        <p>بازرسی</p>
+                        <p>
+                            اقلام مشروحه فوق در تاریخ @Model.CreateDate صحیح و سالم با وسیله نقلیه @Model.Vehicle به شماره پلاک @Model.Plate طی بارنامه شماره @Model.BillofLading جهت کارگاه/ پروژه  @Model.Remittances.DivisionPlan.Workshop.Title تحویل آقای  @Model.Transferee گردید و در ردیف ....... از صفحه ....... دفتر خروج بازرسی ثبت گردید.
+                        </p>
+                        <br />
+                        <table width="100%">
+                            <tr>
+                                <td width="15%"></td>
+                                <td width="70%"></td>
+                                <td width="15%" style="text-align:center;">
+                                    مهر و امضا
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                    <br />
+                    <table class="table table-bordered text-center" width="100%">
+                        <tr>
+                            <td width="20%" style="text-align:center;">
+                                <p>صادر کننده</p>
+                                <br />
+                                <br />
+                                <p>امضا</p>
+                            </td>
+                            <td width="20%" style="text-align:center;">
+                                <p>تحویل گیرنده</p>
+                                <br />
+                                <br />
+                                <p>امضا</p>
+                            </td>
+                            <td width="20%" style="text-align:center;">
+                                <p>انبار دار</p>
+                                <br />
+                                <br />
+                                <p>امضا</p>
+                            </td>
+                            <td width="20%" style="text-align:center;">
+                                <p>مدیر قسمت</p>
+                                <br />
+                                <br />
+                                <p>امضا</p>
+                            </td>
+                            <td width="20%" style="text-align:center;">
+                                <p>مدیر مجتمع/ پروژه</p>
+                                <br />
+                                <br />
+                                <p>امضا</p>
+                            </td>
+
+                        </tr>
+                    </table>
+                    <br />
+                </div>
+            </div>
+          
+        </div>
+    </div>
+</div>
+
+@*<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>*@

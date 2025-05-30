@@ -1,0 +1,41 @@
+﻿@using System.Web.UI.WebControls;
+@using Stimulsoft.Report.Mvc;
+
+@{
+    ViewBag.Title = "InvoicetoPrint";
+    Layout = null;
+    int InvoiceCode = (int)ViewBag.InvoiceCode;
+    int WorkshopID = (int)ViewBag.WorkshopId;
+    int Type = (int)ViewBag.Type;
+
+}
+@*<div>
+        <button id="savePdf" onclick="saveReportPdf()">Save PDF report to file</button>
+    </div>*@
+
+@Html.Stimulsoft().RenderMvcViewerScripts()
+@Html.Stimulsoft().StiMvcViewer("MyViewr", new StiMvcViewerOptions()
+
+{
+    ActionGetReportSnapshot = "GetReport?InvoiceCode=" + InvoiceCode + "&WorkshopID=" + WorkshopID + "&Type=" + Type,
+    ActionViewerEvent = "ViewerEvent",
+    Width = Unit.Percentage(100),
+    Theme = StiTheme.Office2010,
+    ActionPrintReport = "PrintReport",
+    ActionExportReport = "ExportReport",
+    ToolbarBackgroundColor = System.Drawing.Color.Silver,
+    MenuPrintDestination = StiPrintDestination.Direct,
+    ToolbarVisible = false
+});
+
+@*<script>
+        function saveReportPdf() {
+            // Export to PDF
+            report.exportDocumentAsync(function (pdfData) {
+                // Get report file name
+                var fileName = report.reportAlias;
+                // Save data to file
+                Stimulsoft.System.StiObject.saveAs(pdfData, fileName + ".pdf", "application/pdf");
+            }, Stimulsoft.Report.StiExportFormat.Pdf);
+        }
+    </script>*@

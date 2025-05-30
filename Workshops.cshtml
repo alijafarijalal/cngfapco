@@ -1,0 +1,62 @@
+﻿@model cngfapco.Models.Workshop
+
+    <table class="table" width="100%" style="border:0px">
+        <tr>
+            <td style="width:33%;">
+                <span style="margin-right:auto;" class="text-warning"> نام شخص حقیقی / حقوقی : </span>
+                <span>
+                    @(Model.OwnerName + " " + Model.OwnerFamily)
+                    <input id="Owners" name="Owners" type="hidden" value="@(Model.OwnerName + " " + Model.OwnerFamily)" style="width:99%;font-family:'B Yekan';" disabled="disabled" />
+                </span>
+            </td>
+            <td style="width:33%;">
+                <span style="margin-right:auto;" class="text-warning"> شماره اقتصادی : </span>
+                <span>
+                    @Model.Economicalnumber
+                    <input id="EmployerEconomicalnumber" name="EmployerEconomicalnumber" type="hidden" value="@Model.Economicalnumber" style="width:99%;font-family:'B Yekan';" disabled="disabled" />
+                </span>                
+            </td>
+            <td style="width:33%;">
+                <span style="margin-right:auto;" class="text-warning"> شماره ثبت / شماره ملی : </span>
+                <span>
+                    @Model.Registrationnumber
+                    <input id="Employerregistrationnumber" name="Employerregistrationnumber" type="hidden" value="@Model.Registrationnumber" style="width:99%;font-family:'B Yekan';" disabled="disabled" />
+                </span>                
+            </td>
+
+        </tr>
+        <tr>
+            <td colspan="2">
+                <span style="margin-right:5px;" class="text-warning">  نشانی کامل :  </span>
+                <span>
+                    @(Model.City.State.Title + ", " + Model.City.Title + ", " + Model.Address)
+                    <input id="EmployerAddress" name="EmployerAddress" type="hidden" value="@(Model.City.State.Title+ ", " + Model.City.Title+ ", " + Model.Address )" style="width:99%;font-family:'B Yekan';" disabled="disabled" />
+                </span>                
+            </td>
+            <td>
+                <span style="margin-right:auto;" class="text-warning"> کد پستی (10 رقمی) : </span>
+                <span>
+                    @Model.Postalcode
+                    <input id="EmployerPostalcode" name="EmployerPostalcode" type="hidden" value="@Model.Postalcode" style="width:99%;font-family:'B Yekan';" disabled="disabled" />
+                </span>                
+            </td>
+        </tr>
+        <tr dir="rtl">
+            <td>
+                <span style="margin-right:auto;" class="text-warning"> تلفن : </span>
+                <span dir="rtl">
+                    @Model.PhoneNumber
+                    <input id="EmployerPhone" name="EmployerPhone" type="hidden" value="@Model.PhoneNumber" style="width:99%;font-family:'B Yekan';" disabled="disabled" />
+                </span>                
+            </td>
+            <td>
+                <span style="margin-right:auto;" class="text-warning"> نمـابر : </span>
+                <span dir="rtl">
+                    @Model.FaxNumber
+                    <input id="EmployerFax" name="EmployerFax" type="hidden" value="@Model.FaxNumber" style="width:99%;font-family:'B Yekan';" disabled="disabled" />
+                </span>                
+            </td>
+            <td></td>
+        </tr>
+
+    </table>

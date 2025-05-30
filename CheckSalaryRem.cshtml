@@ -1,0 +1,18 @@
+﻿<div>
+    <input type="hidden" value="@ViewBag.value" /><br />
+    <input type="hidden" name="salaryRem" class="salaryRem" id="salaryRem" value="@ViewBag.value" />
+    @*<i class=" icon-hand-left text-warning"></i>
+        <span> طلب از محل دستمزد تبدیل (با ضریب 70%) : </span>
+        <strong>
+            @(Math.Round(Convert.ToDouble(ViewBag.value),0).ToString("#,##"))
+        </strong>
+        <span>ریال</span><br />*@
+    <i class=" icon-hand-left text-warning"></i>
+    <span>حداکثر مبلغ مجاز برای خرید غیر نقدی : </span>
+    <strong class="permitNonCash" id="permitNonCash"></strong>
+    <span>ریال</span>
+    @*<input name="permitNonCash" class="permitNonCash" id="permitNonCash" type="text" value="" style="font-family:'B Yekan'; border:0px;width:20%;font-weight:500;" /> ریال*@
+    <input type="hidden" id="permitNonCashStatus" class="permitNonCashStatus" value="" />
+    <input type="hidden" id="permitSaleCondition" class="permitSaleCondition" value="" />
+</div>
+<br />

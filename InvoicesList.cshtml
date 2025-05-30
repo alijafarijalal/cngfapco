@@ -1,0 +1,172 @@
+﻿@model IEnumerable<cngfapco.Models.Invoice>
+
+@{
+    ViewBag.Title = "InvoicesList";
+    Layout = "~/Views/Shared/_DataTableLayout.cshtml";
+    bool? Permission = (bool?)ViewBag.Permission;
+    string workshopId = (string)ViewBag.workshopId;
+}
+
+<!-- BEGIN PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href="#">مدیریت مالی</a> <span class="divider">&nbsp;</span>
+            </li>
+            <li><a href="#">فاکتور فروش خدمات</a><span class="divider-last">&nbsp;</span></li>
+
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+<div class="widget" dir="rtl">
+    <div class="widget-title">
+        <h4><i class="icon-reorder"></i>لیست فاکتورهای فروش خدمات</h4>
+        <span class="tools">
+            <a href="javascript:;" class="icon-chevron-down"></a>
+            <a href="javascript:;" class="icon-remove"></a>
+        </span>
+        <div class="actions">
+            <a href="/Financials/Invoice" class="btn btn-success"><i class="icon-plus icon-white"></i> صدور فاکتور فروش </a>
+        </div>
+    </div>
+    <div class="widget-body">
+
+        <div style="overflow-x:auto;overflow-y:auto;">
+            @try
+            {
+                <table id="sample_editable_1" class="table table-striped table-hover table-bordered table-advance text-center">
+                    <thead>
+                        <tr>
+                            <th>ردیف</th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.InvoiceCode)
+                            </th>
+                            <th>
+                                فروشنده
+                            </th>
+                            <th>
+                                خریدار
+                            </th>
+
+                            <th>
+                                @Html.DisplayNameFor(model => model.CreatedDate)
+                            </th>
+
+                            <th>
+                                @Html.DisplayNameFor(model => model.TotalAmount)
+                            </th>
+
+                            <th>
+                                @Html.DisplayNameFor(model => model.Status)
+                            </th>
+                            <th><i class="icon-cog"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int rowNum = 0;
+                        }
+                        @foreach (var item in ViewBag.TableOut)
+                        {
+                            <tr>
+                                <td>@(rowNum += 1)</td>
+                                <td>
+                                    <a href="/Financials/InvoicePage?InvoiceCode=@item.InvoiceCode" class="">
+                                        <i class="icon-file" style="color:#ff6a00;"></i> @item.InvoiceCode
+                                    </a>
+                                </td>
+                                <td>
+                                    @item.Title
+                                </td>
+                                <td>
+                                    @item.EmployerTitle
+                                </td>
+
+                                <td>
+                                    @item.CreatedDate
+                                </td>
+                                <td>
+                                    @item.TotalAmount <span>ریال</span>
+                                </td>
+                                <td>
+                                    @if (item.Status != "False")
+                                    {
+                                        if (Permission == true)
+                                        {
+                                            <a href="/Financials/InvoiceStatus?InvoiceCode=@item.InvoiceCode" data-toggle="modal" data-target="#modal-large" onclick="InvoiceStatus(@(item.InvoiceCode))">
+                                                <b><i class="icon-remove warning "></i></b>
+                                            </a>
+                                        }
+                                        <span> تایید شده </span>
+                                    }
+                                    else
+                                    {
+                                        if (Permission == true)
+                                        {
+                                            <a href="/Financials/InvoiceStatus?InvoiceCode=@item.InvoiceCode" data-toggle="modal" data-target="#modal-large" onclick="InvoiceStatus(@(item.InvoiceCode))">
+                                                <b><i class="icon-check warning"></i></b>
+                                            </a>
+                                        }
+
+                                        <span> ابطال شده </span>
+                                    }
+                                </td>
+                                @*<td>
+                                        <a href="/Financials/CopyInvoicePage?InvoiceCode=@item.InvoiceCode&Date=@item.CreatedDate" class="WaitingLoader">
+                                            <i class="icon-copy" style="color:#ff6a00;"></i>
+                                        </a>
+                                    </td>*@
+                                <td>
+                                    @*<a href="/Financials/EditInvoicePage?InvoiceCode=@item.InvoiceCode" class="WaitingLoader">
+                                            <i class="icon-edit" style="color:#ff6a00;"></i>
+                                        </a>*@
+                                    @*<a href="/Financials/SelectPrintType?InvoiceCode=@item.InvoiceCode" data-toggle="modal" data-target="#modal-large" onclick="SelectPrintType(@item.InvoiceCode)">
+                                            <i class="icon-print" style="color:#00ff21;font-size:20px;"></i>
+                                        </a>*@
+                                    <a href="/Financials/InvoiceSimplePrintFixed?InvoiceCode=@item.InvoiceCode&workshopId=@workshopId" target="_blank">
+                                        <i class="icon-print" style="color:#00ff21;font-size:30px;"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            catch
+            {
+                <span>صورتحسابی صادر نشده است!</span>
+            }
+
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function InvoiceStatus(id) {
+        $.get("/Financials/InvoiceStatus/" + id, function (res) {
+            $("#modal-large").modal();
+            $("#myModalLabel").html("تغییر وضعیت فاکتورهای صادر شده");
+            $("#myModalBody").html(res);
+
+        });
+    }
+</script>
+<script>
+    function SelectPrintType(id) {
+        $.get("/Financials/SelectPrintType?InvoiceCode=" + id, function (res) {
+            $("#modal-large").modal();
+            $("#myModalLabel").html("انتخاب نوع نمایش اعداد در چاپ");
+            $("#myModalBody").html(res);
+
+        });
+    }
+</script>

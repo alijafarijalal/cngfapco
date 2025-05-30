@@ -1,0 +1,186 @@
+﻿@model IEnumerable<cngfapco.Models.RequestFreeSale>
+
+@{
+    ViewBag.Title = "FinalStatus";
+    Layout = "~/Views/Shared/_Layout_SideClosed.cshtml";
+    string InvoiceCode = (string)ViewBag.InvoiceCode;
+}
+
+
+<!-- BEGIN PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href="/Users/SubSideBarItems?parentId=86">مدیریت فروش</a> <span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href="/Financials/RequestFreeSaleList?parentId=86&itemId=85">درخواست های خرید</a> <span class="divider">&nbsp;</span>
+            </li>
+            <li><a href="#"> حذف از لیست </a><span class="divider-last">&nbsp;</span></li>
+
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+
+<div class="widget">
+    <div class="widget-body">
+        <div class="row-fluid">
+
+            <div style="overflow:auto;">
+                @using (Html.BeginForm("FinalStatus", "Financials", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.Hidden("InvoiceCode", InvoiceCode)
+                        <div class="control-group">
+                            <div class="controls">
+                                <label class="radio">
+                                    <input type="radio" name="Status" value="false" /> ابطال و حذف از لیست درخواست
+                                </label>
+                                <label class="radio">
+                                    <input type="radio" name="Status" value="true" /> برگردان ابطال و حذف از لیست درخواست
+                                </label>
+                            </div>
+                        </div>
+
+                        <hr />
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <span class="progress-demo">
+                                    <button class="btn btn-success" data-color="mint" data-style="expand-left" data-size="s" id="btnSave" onclick="return handleChange()" style="font-family:Vazir;width:100%;"><i class="icon-ok icon-white"></i> انجام عملیات </button>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                }
+            </div>
+
+            <table class="table table-bordered">
+                <tr>
+                    
+                    <th>
+                        @Html.DisplayNameFor(model => model.Equipments.Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Workshops.Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Owners)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ServiceCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.InvoiceCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreatedDate)
+                    </th>                    
+                    <th>
+                        @Html.DisplayNameFor(model => model.ServiceDesc)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Number)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UnitofMeasurement)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UnitAmount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TotalAmount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DiscountAmount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SaleCondition)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Comment)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </th>                    
+                    <th>
+                        @Html.DisplayNameFor(model => model.FinalStatus)
+                    </th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Equipments.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Workshops.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Owners)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ServiceCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InvoiceCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedDate)
+                        </td>                        
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ServiceDesc)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Number)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UnitofMeasurement)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UnitAmount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TotalAmount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DiscountAmount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SaleCondition)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Comment)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                        
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FinalStatus)
+                        </td>
+                    </tr>
+                }
+
+            </table>
+
+        </div>
+    </div>
+</div>

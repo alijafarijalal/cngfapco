@@ -1,0 +1,62 @@
+﻿<table class="table tabel-border">
+    <thead>
+        <tr style="background-color:#e5e5e5;">
+            <th>دسته بندی</th>
+            <th>تعداد تبدیل</th>
+            <th>جمع صورتحساب صادر شده (بدون  کسورات)</th>
+            <th>جمع صورتحساب صادر شده (با  کسورات)</th>
+            <th>توضیحات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int count = 0;
+            string totalcount = "0";}
+        @foreach (var item in ViewBag.TableOuts)
+        {
+            count += 1;
+            if (item.Type.Equals("فاکتور دستمزد تبدیل"))
+            {
+                if (count == 1)
+                {
+                    totalcount = item.TotalCount;
+                }
+                <tr>
+                    <td>@item.Type</td>
+                    <td>@item.TotalCount</td>
+                    <td>@item.TotalAmount</td>
+                    <td>@item.TotalAmount2</td>
+                    <td>@item.Description</td>
+                </tr>
+
+                if (count > 1)
+                {
+                    <tr class="h4 text-success" style="background-color:#e5e5e5;">
+                        <td>جمع</td>
+                        <td>@(Convert.ToDouble(totalcount).ToString("#,##"))</td>
+                        <td>@item.sumTotalAmount</td>
+                        <td>@item.sumTotalAmount2</td>
+                        <td></td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td><span>دستمزد تبدیل</span></td>
+                    <td>@item.TotalCount</td>
+                    <td>@item.TotalAmount</td>
+                    <td>@(((Convert.ToDouble(item.sumTotalAmount) * 0.09) + Convert.ToDouble(item.TotalAmount)).ToString("#,##"))</td>
+                    
+                    <td>@item.Description</td>
+                </tr>
+                <tr class="h4 text-danger" style="background-color:#e5e5e5;">
+                    <td>مقایسه</td>
+                    <td>@((Convert.ToDouble(totalcount) - Convert.ToDouble(item.TotalCount)).ToString("#,##"))</td>
+                    <td>@((Convert.ToDouble(item.TotalAmount) - Convert.ToDouble(item.sumTotalAmount)).ToString("#,##"))</td>
+                    <td>@((((Convert.ToDouble(item.sumTotalAmount) * 0.09) + Convert.ToDouble(item.TotalAmount)) - Convert.ToDouble(item.sumTotalAmount2)).ToString("#,##"))</td>
+                    <td></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

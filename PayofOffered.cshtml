@@ -1,0 +1,222 @@
+﻿@model IEnumerable<cngfapco.Models.OfferedPrice>
+
+@{
+    ViewBag.Title = "PayofOffered";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string serial = (string)ViewBag.serial;
+}
+
+<!-- BEGIN PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href="/Financials/PayofOfferedList">مدیریت مالی</a> <span class="divider">&nbsp;</span>
+            </li>
+            <li><a href="#">ثبت پرداخت</a><span class="divider-last">&nbsp;</span></li>
+
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+
+<div class="row-fluid">
+    <div class="span12">
+        <div class="widget">
+            <div class="widget-title">
+                <h4><i class="icon-reorder"></i>لیست دستور پرداخت علی الحساب دستمزد تبدیل به کارگاه ها</h4>
+                <span class="tools">
+                    <a href="javascript:;" class="icon-chevron-down"></a>
+                    <a href="javascript:;" class="icon-remove"></a>
+                </span>
+            </div>
+            <div class="widget-body">
+                <table class="table" id="tblOfferedPrice">
+                    <thead>
+                        <tr>
+                            <th>
+                                #
+                            </th>
+                            <th>
+                                @(Html.DisplayNameFor(model => model.Workshops.Title) + "- " + Html.DisplayNameFor(model => model.Workshops.City.Title))
+                            </th>
+                            <th hidden>
+                                @Html.DisplayNameFor(model => model.Number)
+                            </th>
+                            <th hidden>
+                                @Html.DisplayNameFor(model => model.Serial)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Date)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Value)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.PaiedValue)
+                            </th>
+                            <th hidden>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.PayDate)
+                            </th>
+                            <th hidden>
+                                @Html.DisplayNameFor(model => model.Creator)
+                            </th>
+                            <th hidden>
+                                @Html.DisplayNameFor(model => model.StatusPay)
+                            </th>
+                            <th hidden>
+                                @Html.DisplayNameFor(model => model.PayDate)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ int rowNum = 0;}
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@(rowNum += 1)</td>
+                                <td>
+                                    @(Html.DisplayFor(modelItem => item.Workshops.Title) + "- " + Html.DisplayFor(modelItem => item.Workshops.City.Title))
+                                </td>
+                                <td hidden>
+                                    @Html.DisplayFor(modelItem => item.Workshops.ID)
+                                </td>
+                                <td hidden>
+                                    @Html.DisplayFor(modelItem => item.Serial)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Date)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Value)
+                                </td>
+                                <td>
+                                    @if (Convert.ToDouble(item.Value) > 0)
+                                    {
+                                        <input type="text" name="PaiedValue" id="PaiedValue" class="form-control" onkeyup="separateNum(this.value,this);" style="width:100%;font-family:Vazir;" value="@item.Value.ToString("#,##")" />
+                                    }
+                                    else
+                                    {
+                                        <input type="text" name="PaiedValue" id="PaiedValue" class="form-control" onkeyup="separateNum(this.value,this);" style="width:100%;font-family:Vazir;" value="@item.Value" />
+                                    }
+                                </td>
+                                <td hidden>
+                                    @Html.DisplayFor(modelItem => item.Description)
+                                </td>
+                                <td>
+                                    @if (rowNum == 1)
+                                    {
+                                        <input type="text" name="CreateDate" id="pcal1" class="form-control first pdate" style="width:50%;font-family:Vazir;" required />
+                                    }
+                                    else
+                                    {
+                                        <input type="text" name="CreateDate" class="form-control date" style="width:50%;font-family:Vazir;" required />
+                                    }
+                                </td>
+                                <td hidden>
+                                    @Html.DisplayFor(modelItem => item.Creator)
+                                </td>
+                                <td hidden>
+                                    @Html.DisplayFor(modelItem => item.StatusPay)
+                                </td>
+                                <td hidden>
+                                    @Html.DisplayFor(modelItem => item.PayDate)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div>
+                    <input type="submit" id="btnSave" value="ثبت پرداخت" class="btn btn-success" style="font-family:Vazir;width:100%;" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/jquery-1.8.3.min.js"></script>
+<script src="~/js/json2.js"></script>
+
+<script>
+    $('.table').mouseover(function(){
+        var value = $('.first').val();
+        //alert("this is:" + value);
+        var inputArray = document.getElementsByClassName("date");
+          for(var i = 0; i < inputArray.length; i++){
+            if(inputArray[i].getAttribute("type") != "button"){
+                inputArray[i].value = value;
+            }
+          }
+    });
+</script>
+
+<script type="text/javascript">   
+                        $("body").on("click", "#btnSave", function () {
+                            //Loop through the Table rows and build a JSON array.
+                            var OfferedPrice = new Array();
+                            $("#tblOfferedPrice TBODY TR").each(function () {
+                                var row = $(this);
+                                var items = {};
+                                items.WorkshopID = row.find("TD").eq(2).html();
+                                items.Value = row.find("td:eq(6) input[type='text']").val().split(',').join('').split('.').join('/');
+                                items.Description = "پرداخت علی الحساب دستمزد تبدیل";
+                                items.FinancialDescID = "1";
+                                items.FinancialDesc = row.find("TD").eq(3).html();
+                                items.Date = row.find("td:eq(8) input[type='text']").val();
+                                OfferedPrice.push(items);
+                            });
+
+                            //Send the JSON array to Controller using AJAX.
+                            $.ajax({
+                                type: "POST",
+                                url: "/Financials/PayofOffered?serial=@serial",
+                                data: JSON.stringify(OfferedPrice),
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                success: function (response) {
+                                    if (response.success) {
+                                        alert(response.responseText);
+                                         window.location.href = "/Financials/Index";
+                                    } else {
+                                        // DoSomethingElse()
+                                        alert(response.responseText);
+                                    }
+                                },
+                                error: function (response) {
+                                    alert("ثبت اطلاعات با خطا مواجه شد!"); //
+                                }
+                            });
+                        });
+</script>
+
+<script>
+    function separateNum(value, input) {
+        /* seprate number input 3 number */
+        var nStr = value + '';
+        nStr = nStr.replace(/\,/g, "");
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        if (input !== undefined) {
+
+            input.value = x1 + x2;
+        } else {
+            return x1 + x2;
+        }
+    }
+</script>
+
+
+

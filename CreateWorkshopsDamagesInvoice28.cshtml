@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewBag.Title = "CreateWorkshopsDamagesInvoice28";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string message = (string)ViewBag.Message;
+    string InvoiceCode = (string)ViewBag.InvoiceCode;
+}
+
+<!-- BEGIN PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href=""> مدیریت مالی </a> <span class="divider">&nbsp;</span>
+            </li>
+            <li><a href="#">صدور فاکتور فروش مخازن ضایعاتی</a><span class="divider-last">&nbsp;</span></li>
+
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+
+<div class="widget" dir="rtl">
+    <div class="widget-title">
+        <h4><i class="icon-reorder"></i>افزودن مخازن 28 لیتری به فاکتور فروش  </h4>
+        <span class="tools">
+            <a href="javascript:;" class="icon-chevron-down"></a>
+            <a href="javascript:;" class="icon-remove"></a>
+        </span>
+    </div>
+    <div class="widget-body">
+        @using (Html.BeginForm("InserttoWorkshopsDamagesInvoice", "Financials", new { InvoiceCode = InvoiceCode, Year = ViewBag.Year, Month = ViewBag.Month }, FormMethod.Post))
+        {
+            @Html.Hidden("InvoiceCode",InvoiceCode)
+            <center>
+                <strong class="@ViewBag.textClass text-center"> @message </strong> <br />
+            </center>
+            <label>انتخاب کارگاه</label>
+            @Html.DropDownList("WorkshopID", null, "همه", htmlAttributes: new { @class = "chosen", @id = "inputWarning" })@*, @multiple = "multiple" , @onchange="submit();"*@
+            <br />
+            <label>سال</label>
+            <input type="text" class="pdate" id="" name="Year" value="@ViewBag.Year" required="required" />
+            <br />
+            <label>ماه</label>
+            <select name="Month" required="required" style="font-family:Vazir;">
+                <option value="@ViewBag.Month" selected>@ViewBag.MonthTitle</option>
+                <option value="01">فروردین</option>
+                <option value="02">اردیبهشت</option>
+                <option value="03">خرداد</option>
+                <option value="04">تیر</option>
+                <option value="05">مرداد</option>
+                <option value="06">شهریور</option>
+                <option value="07">مهر</option>
+                <option value="08">آبان</option>
+                <option value="09">آذر</option>
+                <option value="10">دی</option>
+                <option value="11">بهمن</option>
+                <option value="12">اسفند</option>
+            </select>
+            <br />
+            <hr />
+            <input type="submit" value="افزودن به فاکتور" class="btn btn-success" style="font-family:Vazir;" />
+        }
+    </div>
+</div>

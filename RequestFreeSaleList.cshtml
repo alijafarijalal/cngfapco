@@ -1,0 +1,254 @@
+﻿
+@{
+    ViewBag.Title = "RequestFreeSaleList";
+    Layout = "~/Views/Shared/_ExportLayout.cshtml";
+    System.Globalization.PersianCalendar pc = new System.Globalization.PersianCalendar();
+}
+
+<!-- BEGIN PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href="/Users/SubSideBarItems?parentId=86">مدیریت فروش</a> <span class="divider">&nbsp;</span>
+            </li>
+            <li><a href="#"> درخواست های خرید </a><span class="divider-last">&nbsp;</span></li>
+
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+<div style="overflow:auto;">
+    <table id="RequestFreSaleList" class="table table-striped table-hover table-bordered table-advance text-center">
+        <thead>
+            <tr>
+                <th rowspan="2">#</th>
+                <th rowspan="2">
+                    نام کارگاه
+                </th>
+                <th rowspan="2">
+                    خریدار
+                </th>
+                <th rowspan="2">
+                    شماره درخواست
+                </th>
+                <th rowspan="2">
+                    تاریخ
+                </th>
+                <th rowspan="2">
+                   تعداد/ مقدار
+                </th>
+                <th rowspan="2">
+                   واحد اندازه‌گیری
+                </th>
+                <th rowspan="2">
+                   مبلغ کل(ریال)
+                </th>
+                <th rowspan="2">
+                    شرایط و نحوه فروش
+                </th>
+                <th colspan="3">
+                    وضعیت در فرآیند خرید
+                </th>
+                <th rowspan="2">
+                    <i class="icon-cog"></i>
+                </th>
+            </tr>
+            <tr>
+                <th>پیش فاکتور</th>
+                <th>پرداخت</th>
+                <th>فاکتور</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @{ int rowNum = 0;}
+            @foreach (var item in ViewBag.TableOuts )
+            {
+                <tr>
+                    <td>@(rowNum += 1)</td>
+                    <td>
+                        @item.Workshops
+                    </td>
+                    <td>
+                        @item.Owners
+                    </td>
+                    <td>
+                        @item.InvoiceCode
+                    <td>
+                        @item.CreatedDate
+                    </td>
+                    <td>
+                        @item.Number
+                    </td>
+                    <td>
+                        @item.UnitofMeasurement
+                    </td>
+                    <td>
+                        @item.TotalAmount
+                    </td>
+                    <td>
+                        @if (!item.RequestSaleCondition.Equals(item.PreSaleCondition))
+                        {
+                            if (!item.PreSaleCondition.Equals("-"))
+                            {
+                                <span class="text-warning">درخواست</span>
+                                <strong class="text-info"> @item.RequestSaleCondition </strong><br />
+                                <span class="text-warning"> در پیش فاکتور تغییر به </span>
+                                <strong> @item.PreSaleCondition </strong>
+                            }
+                            else
+                            {
+                                <strong> @item.RequestSaleCondition </strong>
+                            }
+                        }
+                        else
+                        {
+                            <strong> @item.RequestSaleCondition </strong>
+                        }
+                    </td>
+                    <td>
+                        @if (item.Status == false)
+                        {
+
+                            <span> <img src="/assets/pre-loader/Hourglass.gif" alt="در مرحله بررسی"></span>
+                            <br />
+                            <span>
+                                <a href="/Financials/PreFreeSaleInvoice?InvoiceCode=@item.InvoiceCode&Year=@(pc.GetYear(Convert.ToDateTime(item.CreatedDate)))">
+                                    در انتظار صدور
+                                </a>
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                <a href="/Financials/ViewPreFreeSaleInvoice?InvoiceCode=@item.InvoiceCode&Year=@(pc.GetYear(Convert.ToDateTime(item.CreatedDate)))">
+                                    <i class="icon-ok text-success"></i>
+                                </a>
+                            </span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.PreSaleCondition.Equals("نقدی"))
+                        {
+                            if (item.PaymentStatus.Equals("1"))
+                            {
+                                <span>
+                                    <a href="/Financials/FreeSaleInvoicePaied?FinalCode=@item.FinalCode&PayerCode=@item.PayerCode">
+                                        <strong>نقدی</strong><br />
+                                        <span class="text-success">پرداخت شده</span>
+                                    </a>
+                                </span>
+                            }
+                            else
+                            {
+                                <span> <img src="/assets/pre-loader/Hourglass.gif" alt=""></span>
+                                <br />
+                                <span>
+                                    <span> در انتظار پرداخت </span>
+                                </span>
+                            }
+                        }
+                        @if (item.PreSaleCondition.Equals("غیر نقدی"))
+                        {
+                            if (!item.PreCode.Equals("0"))
+                            {
+                                <strong>اعتباری</strong>
+                            }
+                        }
+
+                    </td>
+                    <td>
+                        @if (item.PreSaleCondition.Equals("نقدی"))
+                        {
+                            if (item.PaymentStatus.Equals("1"))
+                            {
+                                <span>
+                                    <a href="/Financials/FreeSaleInvoice?InvoiceCode=@item.PreCode&checkExist=true&checkPaied=1&SaleCondition=نقدی&Year=@(pc.GetYear(Convert.ToDateTime(item.CreatedDate)))">
+                                        <i class="icon-ok text-success"></i>
+                                    </a>
+                                </span>
+                            }
+                        }
+                        @if (item.PreSaleCondition.Equals("غیر نقدی"))
+                        {
+                            if (!item.PreCode.Equals("0"))
+                            {
+                                <span>
+                                    <a href="/Financials/FreeSaleInvoice?InvoiceCode=@item.PreCode&checkExist=false&checkPaied=1&SaleCondition=@item.PreSaleCondition&Year=@(pc.GetYear(Convert.ToDateTime(item.CreatedDate)))">
+                                        <i class="icon-ok text-success"></i>
+                                    </a>
+                                </span>
+                            }
+                            else
+                            {
+                                <span>
+                                    <a href="/Financials/FreeSaleInvoice?InvoiceCode=@item.PreCode&checkExist=false&checkPaied=1&SaleCondition=@item.PreSaleCondition&Year=@(pc.GetYear(Convert.ToDateTime(item.CreatedDate)))">
+                                        <span> در انتظار صدور </span>
+                                    </a>
+                                </span>
+                            }
+                        }
+                    </td>                    
+                    <td>
+                        <a href="/Financials/RequestFreeSaleDetails?InvoiceCode=@item.InvoiceCode" target="_blank">
+                            <i class="icon-list icon-white"></i>
+                        </a> |
+                        <a href="/Financials/FinalStatus?InvoiceCode=@item.InvoiceCode&Year=@(pc.GetYear(Convert.ToDateTime(item.CreatedDate)))">
+                            <i class="icon-edit icon-white"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+</div>
+<script>
+    function FinalStatus(id) {
+        $.get("/Financials/FinalStatus?id=" + id, function (res) {
+            $("#modal-large").modal();
+            $("#myModalLabel").html("ابطال و حذف از لیست درخواست");
+            $("#myModalBody").html(res);
+
+        });
+    }
+    //
+</script>
+
+<script>
+    $(document).ready(function () {
+
+        var table = $('#RequestFreSaleList').DataTable({
+            "order": [[4, "desc"]],
+            dom: 'Bfrtip',
+            buttons:
+            [
+                {
+                    extend: 'csvHtml5',
+                    title: 'Data export'
+                }
+                ,
+                {
+                    extend: 'copyHtml5',
+                    title: 'Data export'
+                }
+                ,
+                {
+                    extend: 'excelHtml5',
+                    title: 'Data export'
+                }
+
+            ],
+            paging: true,
+            responsive: true
+        });
+    });
+
+</script>

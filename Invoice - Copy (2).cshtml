@@ -1,0 +1,1052 @@
+﻿@model IEnumerable<cngfapco.Models.Invoice>
+
+@{
+    ViewBag.Title = "Invoice";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string InCode = (string)ViewBag.InvoiceCode;
+    int? WorkshopId = (int?)ViewBag.WorkshopId;
+}
+
+
+<script src="~/js/admin/jquery-1.10.2.js"></script>
+<script src="~/js/admin/jquery-common.js"></script>
+<script src="~/js/admin/jquery-ui-1.10.3.custom.min.js"></script>
+<div class="row-fluid">
+    <p>
+        <label class="">
+            <span class="input-error tooltips" data-original-title="لطفا برای صدور فاکتور ابتدا یکی از گزینه های زیر را انتخاب کنید!">
+                <i class="icon-exclamation-sign text-primary"> <span class="h3" style="font-family:Vazir;"> راهنما </span> </i>
+            </span>
+        </label>
+        <label class="radio text-info">
+            <span><input id="RegisteredCustomer" name="RegisteredCustomer" type="radio" onclick="RegisteredCustomer()" checked="checked"></span>
+            خواندن اطلاعات از لیست خودروهای ثبت شده
+        </label>
+        <label class="radio text-info">
+            <span><input id="UnRegisteredCustomer" name="RegisteredCustomer" type="radio" onclick="UnRegisteredCustomer()"></span>
+            ورود اطلاعات به صورت دستی
+        </label>
+    </p>
+</div>
+
+@*<div class="widget Deductionsdiv" id="page">
+        <div class="widget-body">
+            <div class="row-fluid">
+                <div class="col-sm-6 col-md-6">
+                    <label style="font-family:'B Titr';font-size:14px;margin-right:5px;color:#004bff"> قرارداد را انتخاب کنید : </label><span>@@Html.DropDownList("ContractID", new SelectList(string.Empty, "Value", "Text"), "--انتخاب کاربر--", new { style = "width:200px" })</span>
+                    @Html.DropDownList("ContractID", null, "--بدون انتخاب--", htmlAttributes: new { @style = "width:100%;font-family:'B Nazanin';font-size:15px;color:#222222;border:none", @id = "ContractID", onchange = "form.submit();" })
+                    <hr />
+                    <label style="font-family:'B Titr';font-size:12px;margin-right:5px;color:#004bff"> نوع مبالغ را انتخاب کنید : </label>
+                    <select style="font-size:8px;width:100%;" id="CurrencyTypeID" name="CurrencyTypeID">
+                        <option value="1">دلار امریکا</option>
+                        <option value="2">یورو</option>
+                        <option value="3">پوند انگلیس</option>
+                        <option value="4">درهم امارات</option>
+                        <option value="5">دینار عراق</option>
+                        <option value="6" selected>ریال</option>
+                        <option value="7">لیر</option>
+                        <option value="8">یوآن چین</option>
+                    </select>
+                </div>
+                @try
+                {
+                    @Html.Action("contractDeductions")
+                }
+                catch
+                {
+
+                }
+
+            </div>
+        </div>
+        @*<input class="form-control" id="id_step2-number_2" name="step2-number_2" type="text" data-type="number">*
+    </div>*@
+<div id="DivIdToPrint">
+    <div class="widget" id="allitems">
+        <div class="widget-body">
+            <div class="row-fluid">
+                @try
+                {
+                    <table class="table" width="100%">
+                        <tr>
+                            <th width="20%" style="text-align:center;vertical-align:middle;"><img src="" width="100" alt="" style="position:inherit;color:#a9a9a9" class="center" /></th>
+                            <th width="60%" style="font-family:'B Titr';font-size:25px;text-align:center;vertical-align:middle;">صورتحساب خدمات جانبی</th>
+                            <th width="20%">
+                                <p>
+                                    <span class="h6"> شماره سریال : </span><span> <input value="@ViewBag.invoiceCode" type="text" id="InvoiceCode" name="InvoiceCode" style="width:70px;border:none" required /></span>
+                                </p>
+                                <p>
+                                    <span> تاریخ : </span><span> <input type="text" id="CreatedDate" name="CreatedDate" value="@DateTime.Now.ToShortDateString()" style="width:70px;border:none" /> </span>
+                                </p>
+                            </th>
+                        </tr>
+                    </table>
+                }
+                catch
+                {
+                    <table class="table" width="100%">
+                        <tr>
+                            <th width="20%" style="text-align:center;vertical-align:middle;"><img src="" width="100" alt="" style="position:inherit;color:#a9a9a9" class="center" /></th>
+                            <th width="60%" style="font-family:'B Titr';font-size:25px;text-align:center;vertical-align:middle;">صورتحساب خدمات جانبی</th>
+                            <th width="20%">
+                                <p>
+                                    <span class="h6"> شماره سریال : </span><span> <input value="" type="text" id="InvoiceCode" name="InvoiceCode" style="width:70px;border:none" required /></span>
+                                </p>
+                                <p>
+                                    <span> تاریخ : </span><span> <input type="text" id="CreatedDate" name="CreatedDate" value="" style="width:70px;border:none" /> </span>
+                                </p>
+                            </th>
+                        </tr>
+                    </table>
+                }
+
+
+            </div>
+            <div style="border:1px solid #262525;font-family:'B Titr';font-size:15px;margin-top:7px;background-color:#ffd800;" hidden>
+                <p class="text-center"> مشخصات کارگاه </p>
+            </div>
+            <div style="border:1px solid #a9a9a9;margin-top:1px;margin-bottom:2px;" hidden>
+                @try
+                {
+                    @Html.Action("GetWorkshopInfo", new { id = WorkshopId })
+                }
+                catch { }
+
+            </div>
+
+            <div style="border:1px solid #262525;font-family:'B Titr';font-size:15px;margin-top:7px;background-color:#ffd800;">
+                <p class="text-center"> مشخصات خدمات گیرنده </p>
+            </div>
+
+            <script>
+                var value = $('#EmployerEconomicalnumber').val();
+                $('#EmployerEconomicalnumber1').val(value);
+
+                var value = $('#EmployerPostalcode').val();
+                $('#EmployerPostalcode1').val(value);
+            </script>
+            <script>
+                function RegisteredCustomer() {
+                    if ($("#RegisteredCustomer").is(':checked')) {
+                        $('.RegisteredCustomer').show();
+                        $('.UnRegisteredCustomer').hide();
+                        $('.CustomerList').show();
+                    } else {
+                        $('.RegisteredCustomer').hide();
+                        $('.UnRegisteredCustomer').show();
+                        $('.CustomerList').hide();
+                    }
+                }
+                $("#RegisteredCustomer").click(RegisteredCustomer).change(RegisteredCustomer);
+            </script>
+            <script>
+                function UnRegisteredCustomer() {
+                    if ($("#UnRegisteredCustomer").is(':checked')) {
+                        $('.RegisteredCustomer').hide();
+                        $('.UnRegisteredCustomer').show();
+                        $('.CustomerList').hide();
+                    } else {
+                        $('.RegisteredCustomer').show();
+                        $('.UnRegisteredCustomer').hide();
+                        $('.CustomerList').show();
+                    }
+                }
+                $("#UnRegisteredCustomer").click(UnRegisteredCustomer).change(UnRegisteredCustomer);
+
+
+                /**/</script>
+
+            <div style="border:1px solid #a9a9a9;margin-top:1px;margin-bottom:2px;" id="CustomerInfo">
+                @try
+                {
+                    <div class="CustomerList">
+                        @Html.DropDownList("EmployerID", null, "-- جستجو و انتخاب کد ملی مالک خودروی ثبت شده از لیست --", htmlAttributes: new { @class = "chosen span12", @id = "EmployerID", onchange = "form.submit();" })
+                    </div>
+                    @Html.Action("GetCustomerInfo", new { invoiceCode = InCode })
+                }
+                catch
+                {
+
+                }
+                <div class="UnRegisteredCustomer" id="UnRegisteredCustomer">
+                    @*id="EmployerInfo"*@
+                    <span> کد ملی : </span><span><input id="Employerregistrationnumber" name="Employerregistrationnumber" type="text" placeholder=".........." style="width:150px;border:none;font-family:'B Nazanin';font-size:15px;margin-right:5px;color:#222222" value="" required="required" /></span>
+                    <span> نام و نام خانوادگی : </span><span><input id="EmployerEconomicalnumber" name="EmployerEconomicalnumber" class="input-mask" type="text" placeholder=".........." style="width:150px;border:none;font-family:'B Nazanin';font-size:15px;margin-right:5px;color:#222222" value="" required="required" /></span>
+                    <span> نوع خودرو : </span><span> <input id="EmployerPostalcode" name="EmployerPostalcode" class="input-mask" type="text" placeholder=".........." style="width:150px;border:none;font-family:'B Nazanin';font-size:15px;margin-right:5px;color:#222222" value="" required="required" /> </span>
+                    <span> شماره شاسی : </span><span> <input id="EmployerFax" name="EmployerFax" class="input-mask" type="text" placeholder=".........." style="width:150px;border:none;font-family:'B Nazanin';font-size:15px;margin-right:5px;color:#222222" value="" required="required" /> </span>
+                    <br />
+                    <span> شماره موبایل : </span><span> <input id="EmployerPhone" name="EmployerPhone" class="input-mask" type="text" maxlength="14" placeholder="09000000000" style="width:150px;border:none;font-family:'B Nazanin';font-size:15px;margin-right:5px;color:#222222" value="" required="required" /></span>
+                    <span> شماره پلاک : </span><span><input id="EmployerState" name="EmployerState" type="text" placeholder="99 ب 754 ایران 88" value="" style="width:150px;border:none;font-family:'B Nazanin';font-size:15px;margin-right:5px;color:#222222" required="required" /></span>
+                    <span> شماره موتور : </span><span><input id="EmployerAddress" name="EmployerAddress" type="text" placeholder=".........." value="" style="width:150px;border:none;font-family:'B Nazanin';font-size:15px;margin-right:5px;color:#222222" placeholder="..." required="required" /></span>
+
+                </div>
+                <p></p>
+            </div>
+
+            <div style="border:1px solid #262525;font-family:'B Titr';font-size:15px;margin-top:7px;background-color:#ffd800;">
+                <p class="text-center"> جزئیات خدمات ارائه شده </p>
+            </div>
+            <div style="border:1px solid #a9a9a9;margin-top:1px;margin-bottom:2px;">
+                <div class="">
+                    <div class="" style="overflow:auto; ">
+                        <table id="tblInvoices" class="table table-advance" style="text-align:center;vertical-align:middle;font-size:12px;">
+                            <thead>
+                                <tr>
+                                    <th> ردیف </th>
+                                    <th> کد خدمات </th>
+                                    <th> شرح خدمات </th>
+                                    <th> تعداد / مقدار </th>
+                                    <th> واحد اندازه گیری </th>
+                                    <th> مبلغ واحد (ریال) </th>
+                                    <th> مبلغ کل (ریال) </th>
+                                    @*<th>  مبلغ تخفیف (ریال) </th>
+                                        <th>  مبلغ کل پس از تخفیف (ریال)</th>
+                                        <th>  جمع مالیات و عوارض (ریال) </th>*@
+                                    @*<th>  جمع مبلغ کل و مالیات و عوارض (ریال) </th>*@
+                                    <th hidden> code </th>
+                                    <th hidden> date </th>
+                                    <th hidden> EmployerEconomicalnumber </th>
+                                    <th hidden> EmployerID </th>
+                                    <th hidden> Employerregistrationnumber </th>
+                                    <th hidden> EmployerState </th>
+                                    <th hidden> EmployerAddress </th>
+                                    <th hidden> EmployerPostalcode </th>
+                                    <th hidden>  EmployerPhone </th>
+                                    <th hidden> EmployerFax </th>
+                                    <th hidden> Description </th>
+                                    <th hidden> SaleCondition </th>
+                                    <th hidden> Comment </th>
+                                    <th hidden> ContractID </th>
+                                    <th><i class="icon-cog"></i>  </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @{
+                                    int rowNum = 0;
+                                }
+                                @foreach (cngfapco.Models.Invoice invoice in Model)
+                                {
+                                    <tr>
+                                        <td>@(rowNum += 1)</td>
+                                        <td>@invoice.ServiceCode</td>
+                                        <td>@invoice.ServiceDesc</td>
+                                        <td>@invoice.Number</td>
+                                        <td>@invoice.UnitofMeasurement</td>
+                                        <td>@invoice.UnitAmount</td>
+                                        <td>@(invoice.TotalAmount)</td>
+                                        <td hidden>@(invoice.DiscountAmount)</td>
+                                        <td hidden>@(invoice.TotalAmountafterDiscount)</td>
+                                        <td hidden>@(invoice.AmountTaxandComplications)</td>
+                                        <td hidden>@(invoice.TotalAmountTaxandComplications)</td>
+                                        <td hidden>@invoice.InvoiceCode</td>
+                                        <td hidden>@invoice.CreatedDate</td>
+                                        <td hidden>@invoice.EmployerEconomicalnumber</td>
+                                        <td hidden>@invoice.WorkshopsID</td>
+                                        <td hidden>@invoice.Employerregistrationnumber</td>
+
+                                        <td hidden>@invoice.EmployerState</td>
+                                        <td hidden>@invoice.EmployerAddress</td>
+                                        <td hidden>@invoice.EmployerPostalcode</td>
+                                        <td hidden>@invoice.EmployerPhone</td>
+                                        <td hidden>@invoice.EmployerFax</td>
+
+                                        <td hidden>@invoice.Description</td>
+                                        <td hidden>@invoice.SaleCondition</td>
+                                        <td hidden>@invoice.Comment</td>
+                                        <td hidden>@invoice.EquipmentsID</td>
+                                        <td><input class="btn btn-danger btn--icon-text" type="button" value="حـذف از لیست" onclick="Remove(this)" style="width:90px; text-align:center;" /></td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                            <tfoot>
+                                <tr>
+                                    <td><input class="cho" type="text" id="txtrowNum" style="width:20px; text-align:center;" /></td>
+                                    <td>@Html.DropDownList("ServicesID", null, "--بدون انتخاب--", htmlAttributes: new { @id = "txtServiceCode" })<input type="hidden" id="txtServiceCode" style="width:120px;text-align:center;" /></td>
+
+                                    <td><input type="text" id="txtServiceDesc" style="width:200px;resize:both;" rows="2" /></td>
+                                    <td><input id="txtNumber" type="text" maxlength="22" style="width:40px;text-align:center;"></td>
+                                    <td><input type="text" id="txtUnitofMeasurement" style="width:40px;text-align:center;" /></td>
+                                    <td><input id="txtUnitAmount" type="text" data-type="number" style="width:100px;text-align:center;"></td>
+                                    <td><input id="txtTotalAmount" type="text" data-type="number" style="width:100px;text-align:center;" disabled /></td>
+                                    <td hidden><input id="txtDiscountAmount" value="" type="text" data-type="number" style="width:150px;text-align:center;resize:horizontal;"></td>
+                                    <td hidden><input id="txtTotalAmountafterDiscount" type="text" data-type="number" style="width:150px;text-align:center;resize:horizontal;" disabled></td>
+                                    @*<td><input type="text" id="txtTotalAmountafterDiscount" style="width:50px;" disabled /></td>*@
+                                    <td hidden><input id="txtAmountTaxandComplications" type="text" data-type="number" style="width:150px;text-align:center;resize:horizontal;" disabled /></td>
+                                    @*<td><input  id="txtAmountTaxandComplications" type="text" maxlength="22" placeholder="eg: 000,000,000,000" autocomplete="off" data-mask="000,000,000,000" style="width:50px;text-align:center;"></td>*@
+                                    <td hidden><input id="txtTotalAmountTaxandComplications" type="text" data-type="number" style="width:150px;text-align:center;resize:horizontal;" disabled /></td>
+                                    <td hidden><input type="text" id="txtInvoiceCode" style="width:auto; text-align:center;" /></td>
+                                    <td hidden><input type="text" id="txtCreatedDate" style="width:auto; text-align:center;" /></td>
+                                    <td hidden><input type="text" id="txtEmployerEconomicalnumber" style="width:auto; text-align:center;" /></td>
+                                    <td hidden><input type="text" id="txtEmployerID" style="width:auto; text-align:center;" /></td>
+                                    <td hidden><input type="text" id="txtEmployerregistrationnumber" style="width:auto; text-align:center;" /></td>
+
+                                    <td hidden><input type="text" id="txtEmployerState" style="width:auto; text-align:center;" /></td>
+                                    <td hidden><input type="text" id="txtEmployerAddress" style="width:auto; text-align:center;" /></td>
+                                    <td hidden><input type="text" id="txtEmployerPostalcode" style="width:auto; text-align:center;" /></td>
+                                    <td hidden><input type="text" id="txtEmployerPhone" style="width:auto; text-align:center;" /></td>
+                                    <td hidden><input type="text" id="txtEmployerFax" style="width:auto; text-align:center;" /></td>
+
+                                    <td hidden><input type="text" id="txtDescription" style="width:auto; text-align:center;" /></td>
+                                    <td hidden><input type="text" id="txtSaleCondition" style="width:auto; text-align:center;" /></td>
+                                    <td hidden><input type="text" id="txtComment" name="txtComment" style="width:auto; text-align:center;" /></td>
+                                    <td hidden><input type="text" id="txtContractID" style="width:auto; text-align:center;" /></td>
+                                    <td><input class="" type="button" id="btnAdd" value="افزودن به لیست" style="width:90px; text-align:center;" /></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    @*<button type="button" class="btn btn-success btn--icon-text" id="btnSave" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> در حال ثبت اطلاعات">ذخیره اطلاعات</button>*@
+                    @*<input type="button" id="btnSave" value="ذخیره اطلاعات" class="btn btn-success btn--icon-text" />*@
+
+                    <script src="~/js/jquery-1.8.3.min.js"></script>
+                    <script src="~/js/json2.js"></script>
+                    <script type="text/javascript">
+                        debugger;
+                        $(document).ready(function () {
+                            $("#txtServiceCode").change(function () {
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: '@Url.Action("GetServices")',
+                                        dataType: 'json',
+                                        data: { id: $("#txtServiceCode").val() },
+                                        success: function (services) {
+                                            $.each(services, function (i, service) {
+                                                 //alert(service.Title )
+                                                $("#txtServiceDesc").val(service.Title);
+                                                $("#txtUnitofMeasurement").val(service.Unit);
+                                                $("#txtUnitAmount").val(service.ServiceRent);//
+                                                 $("#txtNumber").val("1");
+                                            });
+                                            //$.each(users, function (i, user) {
+                                            //    $("#DepartmentUnitsID").append('<option value="' + user.Value + '">' +
+                                            //        user.Text + '</option>');
+                                            //});
+                                        },
+                                        error: function (ex) {
+                                            alert('خطا در انطباق اطلاعات' + ex);
+                                        }
+                                });
+                                return false;
+                            });
+                        });
+                    </script>
+                    <script type="text/javascript">
+                        $("body").on("click", "#btnAdd", function () {
+                            //Reference the Name and Country TextBoxes.
+                            var txtrowNum = $("#txtrowNum");
+                            var txtServiceCode = $("#txtServiceCode");
+                            var txtServiceDesc = $("#txtServiceDesc");
+                            var txtNumber = $("#txtNumber");
+                            var txtUnitofMeasurement = $("#txtUnitofMeasurement");
+                            var txtUnitAmount = $("#txtUnitAmount");
+                            var txtTotalAmount = $("#txtTotalAmount");
+                            var txtDiscountAmount = $("#txtDiscountAmount");
+                            var txtTotalAmountafterDiscount = $("#txtTotalAmountafterDiscount");
+                            var txtAmountTaxandComplications = $("#txtAmountTaxandComplications");
+                            var txtTotalAmountTaxandComplications = $("#txtTotalAmountTaxandComplications");
+                            var txtInvoiceCode = $("#txtInvoiceCode");
+                            var txtCreatedDate = $("#txtCreatedDate");
+                            var txtEmployerEconomicalnumber = $("#txtEmployerEconomicalnumber");
+                            var txtEmployerID = $("#txtEmployerID");
+                            var txtEmployerregistrationnumber = $("#txtEmployerregistrationnumber");
+
+                            var txtEmployerState = $("#txtEmployerState");
+                            var txtEmployerAddress = $("#txtEmployerAddress");
+                            var txtEmployerPostalcode = $("#txtEmployerPostalcode");
+                            var txtEmployerPhone = $("#txtEmployerPhone");
+                            var txtEmployerFax = $("#txtEmployerFax");
+
+                            var txtDescription = $("#txtDescription");
+                            var txtSaleCondition = $("#txtSaleCondition");
+                            var txtComment = $("#txtComment");
+
+                            var txtContractID = $("#txtContractID");
+                            //Get the reference of the Table's TBODY element.
+                            var tBody = $("#tblInvoices > TBODY")[0];
+
+                            //Add Row.
+                            var row = tBody.insertRow(-1);
+
+                            //Add txtrowNum cell.
+                            var cell = $(row.insertCell(-1));
+                            cell.html(txtrowNum.val());
+
+                            //Add txtServiceCode cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtServiceCode.val());
+
+                            //Add txtServiceDesc cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtServiceDesc.val());
+
+                            //Add txtNumber cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtNumber.val());
+
+                            //Add txtUnitofMeasurement cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtUnitofMeasurement.val());
+
+                            //Add txtUnitAmount cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtUnitAmount.val());
+
+                            //Add txtTotalAmount cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtTotalAmount.val());
+
+                            //Add txtDiscountAmount cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtDiscountAmount.val()).hide();
+
+                            //Add txtTotalAmountafterDiscount cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtTotalAmountafterDiscount.val()).hide();
+
+                            //Add txtAmountTaxandComplications cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtAmountTaxandComplications.val()).hide();
+                            //cell.html(Math.round(txtAmountTaxandComplications.val()));
+
+                            //Add txtTotalAmountTaxandComplications cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtTotalAmountTaxandComplications.val()).hide();
+                            //cell.html(Math.round(txtTotalAmountTaxandComplications.val()));
+
+                            //Add txtInvoiceCode cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtInvoiceCode.val()).hide();
+
+                            //Add txtCreatedDate cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtCreatedDate.val()).hide();
+
+                            //Add txtEmployerEconomicalnumber cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtEmployerEconomicalnumber.val()).hide();
+
+                            //Add txtEmployerID cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtEmployerID.val()).hide();
+
+                            //Add txtEmployerregistrationnumber cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtEmployerregistrationnumber.val()).hide();
+
+                            //Add txtEmployerState cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtEmployerState.val()).hide();
+
+                            //Add txtEmployerAddress cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtEmployerAddress.val()).hide();
+
+                            //Add txtEmployerPostalcode cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtEmployerPostalcode.val()).hide();
+
+                            //Add txtEmployerPhone cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtEmployerPhone.val()).hide();
+
+                            //Add txtEmployerFax cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtEmployerFax.val()).hide();
+
+                            //Add txtDescription cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtDescription.val()).hide();
+
+                            //Add txtSaleCondition cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtSaleCondition.val()).hide();
+
+                            //Add txtComment cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtComment.val()).hide();
+
+                            //Add txtContractID cell.
+                            cell = $(row.insertCell(-1));
+                            cell.html(txtContractID.val()).hide();
+
+                            //Add Button cell.
+                            cell = $(row.insertCell(-1));
+                            var btnRemove = $("<input />");
+                            btnRemove.attr("type", "button");
+                            btnRemove.attr("onclick", "Remove(this);");
+                            btnRemove.val("حذف از لیست");
+                            cell.append(btnRemove);
+
+                            //Clear the TextBoxes.
+                            txtrowNum.val("");
+                            txtServiceCode.val("");
+                            txtServiceDesc.val("");
+                            txtNumber.val("");
+                            txtUnitofMeasurement.val("");
+                            txtUnitAmount.val("");
+                            txtTotalAmount.val("");
+                            txtDiscountAmount.val("");
+                            txtTotalAmountafterDiscount.val("");
+                            txtAmountTaxandComplications.val("");
+                            txtTotalAmountTaxandComplications.val("");
+                            txtInvoiceCode.val("");
+                            txtCreatedDate.val("");
+                            txtEmployerEconomicalnumber.val("");
+                            txtEmployerID.val("");
+                            txtEmployerregistrationnumber.val("");
+
+                            txtEmployerState.val("");
+                            txtEmployerAddress.val("");
+                            txtEmployerPostalcode.val("");
+                            txtEmployerPhone.val("");
+                            txtEmployerFax.val("");
+
+                            txtDescription.val("");
+                            txtSaleCondition.val("");
+                            txtComment.val("");
+                            txtContractID.val("");
+                        });
+
+                        function Remove(button) {
+                            //Determine the reference of the Row using the Button.
+                            var row = $(button).closest("TR");
+                            var name = $("TD", row).eq(2).html();
+                            if (confirm("آیا از حذف ردیف مطمئن هستید؟: " + name)) {
+                                //Get the reference of the Table.
+                                var table = $("#tblInvoices")[0];
+
+                                //Delete the Table row using it's Index.
+                                table.deleteRow(row[0].rowIndex);
+                            }
+                        };
+
+                        $("body").on("click", "#btnSave", function () {
+                            //Loop through the Table rows and build a JSON array.
+                            if ($("#Employerregistrationnumber").val() == "") {
+                                alert("کد ملی نمی تواند خالی باشد!");
+                            }
+                            if ($("#EmployerEconomicalnumber").val() == "") {
+                                alert("نام و نام خانوادگی نمی تواند خالی باشد!");
+                            }
+                            if ($("#EmployerPostalcode").val() == "") {
+                                alert("نوع خودرو نمی تواند خالی باشد!");
+                            }
+                            if ($("#EmployerFax").val() == "") {
+                                alert("شماره شاسی نمی تواند خالی باشد!");
+                            }
+                            
+                            if ($("#EmployerState").val() == "") {
+                                alert("شماره پلاک نمی تواند خالی باشد!");
+                            }
+                            if ($("#EmployerAddress").val() == "") {
+                                alert("شماره موتور نمی تواند خالی باشد!");
+                            }
+                            else {
+                                var invoices = new Array();
+                            $("#tblInvoices TBODY TR").each(function () {
+                                var row = $(this);
+                                var invoice = {};
+                                invoice.rowNum = row.find("TD").eq(0).html();
+                                invoice.ServiceCode = row.find("TD").eq(1).html();
+                                invoice.ServiceDesc = row.find("TD").eq(2).html();
+                                invoice.Number = row.find("TD").eq(3).html();
+                                invoice.UnitofMeasurement = row.find("TD").eq(4).html();
+                                invoice.UnitAmount = row.find("TD").eq(5).html().split(',').join('').split('.').join('/');
+                                invoice.TotalAmount = row.find("TD").eq(6).html().split(',').join('').split('.').join('/');
+                                invoice.DiscountAmount = row.find("TD").eq(7).html().split(',').join('').split('.').join('/');
+                                invoice.TotalAmountafterDiscount = row.find("TD").eq(8).html().split(',').join('').split('.').join('/');
+                                invoice.AmountTaxandComplications = row.find("TD").eq(9).html().split(',').join('').split('.').join('/');
+                                invoice.TotalAmountTaxandComplications = row.find("TD").eq(10).html().split(',').join('').split('.').join('/');
+                                invoice.InvoiceCode = $('#InvoiceCode').val();// row.find("TD").eq(11).html();
+                                invoice.CreatedDate = $('#CreatedDate').val();//row.find("TD").eq(12).html();
+                                invoice.EmployerEconomicalnumber = $('#EmployerEconomicalnumber').val();//row.find("TD").eq(13).html();
+                                invoice.OwnersID = $('#OwnersID').val();//row.find("TD").eq(14).html();
+                                invoice.WorkshopsID = @WorkshopId;//row.find("TD").eq(14).html();
+                                invoice.Employerregistrationnumber = $('#Employerregistrationnumber').val();//row.find("TD").eq(15).html();
+                                invoice.EmployerState = $('#EmployerState').val();//row.find("TD").eq(16).html();
+                                invoice.EmployerAddress = row.find("TD").eq(17).html();
+                                invoice.EmployerPostalcode = $('#EmployerPostalcode').val();//row.find("TD").eq(18).html();
+                                invoice.EmployerPhone = $('#EmployerPhone').val();//row.find("TD").eq(19).html();
+                                invoice.EmployerFax = $('#EmployerFax').val();//row.find("TD").eq(20).html();
+                                invoice.Description = $('#Description').val();//row.find("TD").eq(21).html();
+                                invoice.SaleCondition = $('#SaleCondition').val(); //row.find("TD").eq(22).html();
+                                invoice.Comment = $('#Comment').val();//row.find("TD").eq(23).html();
+                                invoice.Description = $('#Description').val(); //row.find("TD").eq(24).html();
+                                invoice.Insurance = $('#Insurance').val();
+                                invoice.ContractID = $('#ContractID').val();
+                                invoice.CurrencyTypeID = $('#CurrencyTypeID').val();
+                                invoices.push(invoice);
+                            });
+
+                            //Send the JSON array to Controller using AJAX.
+                            $.ajax({
+                                type: "POST",
+                                url: "/Financials/InsertInvoices",
+                                data: JSON.stringify(invoices),
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                success: function (response) {
+                                    if (response.success) {
+                                        alert(response.responseText);
+                                         window.location.href = "/Financials/InvoicesList";
+                                    } else {
+                                        // DoSomethingElse()
+                                        alert(response.responseText);
+                                    }
+                                },
+                                error: function (response) {
+                                    alert("ثبت اطلاعات با خطا مواجه شد!"); //
+                                }
+                            });
+                            }
+                            
+                        });
+                    </script>
+                </div>
+            </div>
+            <div class="widget-body" style="border:0px solid #a9a9a9;margin-top:7px;">
+                @*<div class="col-sm-4">
+                        <span style="font-family:'B Titr';font-size:12px;margin-right:5px;"> شرایط و نحوه فروش : </span>
+                        <br />
+                        <hr />
+                        <input id="SaleCondition" name="SaleCondition" type="radio" value="نقدی" style="font-family:'B Nazanin';font-size:15px;margin-right:15px;color:#222222" /> نقدی
+                        <br />
+                        <input type="radio" id="SaleCondition" name="SaleCondition" value="غیر نقدی" style="font-family:'B Nazanin';font-size:15px;margin-right:15px;color:#222222" /> غیر نقدی
+                    </div>
+                    <br />*@
+                <div class="col-sm-4">
+                    <span style="font-family:'B Titr';font-size:12px;margin-right:auto;"> توضیحات : </span>
+                    <span style="font-family:'B Nazanin';font-size:18px;margin-right:5px;color:#222222">
+
+                    </span>
+                    <input id="Description" name="Description" type="text" style="width:100%;border:1px solid silver;font-family:'B Nazanin';font-size:15px;margin-right:0px;color:#222222" />
+                    <br /> <textarea id="Comment" name="Comment" type="text" style="width:100%;border:1px solid silver;font-family:'B Nazanin';font-size:15px;margin-right:0px;color:#222222"></textarea>
+                </div>
+
+            </div>
+            @*<br />
+                <div class="row-fluid" style="margin-top:10px;">
+                    <table width="100%" class="text-center">
+                        <tr>
+                            <td width="30%">
+                                <span> امضای خریدار / خدمات گیرنده </span>
+                            </td>
+                            <td width="40%"></td>
+                            <td width="30%"> <span> مهر و امضای کارگاه </span> </td>
+                        </tr>
+                    </table>
+                </div>*@
+            <hr />
+            <div class="row-fluid">
+                <div class="span6">
+                    <button class="ladda-button btn btn-success" id="btnSave"><i class="icon-save"></i>ذخیره اطلاعات</button>
+                </div>
+                <div class="span6">
+                    @*<a href="/Financials/InvoicetoPrint?InvoiceCode=@InCode" data-toggle="modal" data-target="#modal-large" onclick="SelectPrintType(@InCode)">
+                            <i class="icon-print" style="color:#00ff21;font-size:30px;"></i>
+                        </a>*@
+                    @if (Model.Count() > 0)
+                    {
+                        <a href="/Financials/InvoiceSimplePrint?InvoiceCode=@InCode">
+                            <i class="icon-print" style="color:#00ff21;font-size:30px;"></i>
+                        </a>
+                    }
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function SelectPrintType(id) {
+        $.get("/Financials/SelectPrintType?InvoiceCode=" + id, function (res) {
+            $("#modal-large").modal();
+            $("#myModalLabel").html("انتخاب نوع پرینت");
+            $("#myModalBody").html(res);
+
+        });
+    }
+</script>
+
+<script>
+        function Getprint() {
+            $.ajax({
+                url: "/Financials/InvoicePage",
+                type: "Post",
+                data: { InvoiceCode: @ViewBag.invoiceCode}
+            }).done(function (res) {
+                window.location.href = '@Url.Action("InvoicePage", "Financials", new { InvoiceCode = ViewBag.invoiceCode })';
+                //$("#showResult").fadeOut(1000);
+                //$("#showResult").html(res);
+                //$("#showResult").fadeIn(1000);
+            });
+        }
+</script>
+
+<script>
+    $("#InvoiceCode").change(function () {
+        //var isTyping = $('#InvoiceCode').val();
+        //var data = 'result=' + isTyping;
+        //var data= $('#InvoiceCode').val();
+        var msg = $('#msg');
+        $.ajax({
+            type: 'GET',
+            url: "/Financials/Invoice",
+            dataType: 'json',
+            data: { InvoiceCode: $("#InvoiceCode").val() },
+            cache: false,
+            success: function () {
+                msg.html(html);
+            }
+        });
+    });
+</script>
+
+
+<script>
+    $(function () {
+        $('#txtNumber').attr('disabled', 'disabled');
+        $('#EmployerID').change(function () {
+            //var value = $('#ContractID').val();
+            $.ajax({
+                url: "/Financials/GetCustomerInfo/",
+                type: "Post",
+                data: { id: $('#EmployerID').val() }
+            }).done(function (res) {
+                $("#CustomerInfo").fadeOut(100);
+                $("#CustomerInfo").fadeIn(100);
+                $("#CustomerInfo").html(res);
+            });
+        }).keyup();
+    });
+</script>
+
+<script>
+    $(function () {
+        $('#ContractID').change(function () {
+            //var value = $('#ContractID').val();
+            $.ajax({
+                url: "/Financials/contractDeductions/",
+                type: "Post",
+                data: { ContractID: $('#ContractID').val() }
+            }).done(function (res) {
+                $("#Deductions").fadeOut(100);
+                $("#Deductions").fadeIn(100);
+                $("#Deductions").html(res);
+            });
+        }).keyup();
+    });
+</script>
+
+<script>
+    //
+    $('.UnRegisteredCustomer').hide();
+    //مبلغ کل
+    $("#txtNumber,#txtUnitAmount").keyup(function () {
+        $('#txtTotalAmount').val(parseFloat($('#txtNumber').val()) * $('#txtUnitAmount').val().split(',').join(''));
+
+    });
+    //مبلغ کل پس از تخفیف
+    $("#txtTotalAmount,#txtDiscountAmount").keyup(function () {
+
+        $('#txtTotalAmountafterDiscount').val($('#txtTotalAmount').val() - $('#txtDiscountAmount').val().split(',').join(''));
+
+    });
+
+    //مبلغ ارزش افزوده
+    $("#txtDiscountAmount").keyup(function () {
+
+        if ($("#ValueAddedCondition").is(':checked'))
+            $('#txtAmountTaxandComplications').val($('#txtTotalAmountafterDiscount').val() * 0);// checked
+        else
+            Math.round(parseFloat($('#txtAmountTaxandComplications').val($('#txtTotalAmountafterDiscount').val() * 0.09)).val(), 0); // unchecked
+
+    });
+
+    //جمع مبلغ کل + جمع مالیات و عوارض
+    $(function () {
+        $("#txtUnitAmount").click(function () {
+            Math.round(parseFloat($('#txtTotalAmountTaxandComplications').val(parseFloat($('#txtTotalAmountafterDiscount').val()) + parseFloat($('#txtAmountTaxandComplications').val()))), 0);
+        });
+        $('#txtUnitAmount,#txtDiscountAmount').keyup(function () {
+            Math.round(parseFloat($('#txtTotalAmountTaxandComplications').val(parseFloat($('#txtTotalAmountafterDiscount').val()) + parseFloat($('#txtAmountTaxandComplications').val()))), 0);
+        }).keyup();
+
+    });
+
+    //کد صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#InvoiceCode').keyup(function () {
+            var value = $(this).val();
+            $('#txtInvoiceCode').val(value);
+        }).keyup();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#InvoiceCode').val();
+            $('#txtInvoiceCode').val(value);
+        }).keyup();
+    });
+    //تاریخ صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#CreatedDate').keyup(function () {
+            var value = $(this).val();
+            $('#txtCreatedDate').val(value);
+        }).keyup();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#CreatedDate').val();
+            $('#txtCreatedDate').val(value);
+        }).keyup();
+    });
+    //اطلاعات کارفرمای صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#EmployerID').change(function () {
+            var value = $(this).val();
+            $('#txtEmployerID').val(value);
+            $('#txtEmployerID').val($('#OwnersID').val());
+        }).select();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#EmployerID').val();
+            $('#txtEmployerID').val(value);
+            $('#txtEmployerID').val($('#OwnersID').val());
+        }).keyup();
+    });
+    //شماره اقتصادی خریدار صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#EmployerEconomicalnumber').keyup(function () {
+            var value = $(this).val();
+            $('#txtEmployerEconomicalnumber').val(value);
+        }).keyup();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#EmployerEconomicalnumber').val();
+            $('#txtEmployerEconomicalnumber').val(value);
+        }).keyup();
+    });
+    //شماره ثبت/ ملی خریدار صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#Employerregistrationnumber').keyup(function () {
+            var value = $(this).val();
+            $('#txtEmployerregistrationnumber').val(value);
+        }).keyup();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#Employerregistrationnumber').val();
+            $('#txtEmployerregistrationnumber').val(value);
+        }).keyup();
+    });
+    //اطلاعات آدرس بخش استان کارفرما در صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#EmployerState').change(function () {
+            var value = $(this).val();
+            $('#txtEmployerState').val(value);
+        }).select();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#EmployerState').val();
+            $('#txtEmployerState').val(value);
+        }).keyup();
+    });
+    //اطلاعات آدرس کامل کارفرما در صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#EmployerAddress').change(function () {
+            var value = $(this).val();
+            $('#txtEmployerAddress').val(value);
+        }).select();
+    });
+    //$(function () {
+    //    $('#txtUnitAmount').keyup(function () {
+    //        var value = $('#EmployerAddress1').val() + '،' + ' ' + $('#EmployerAddress2').val();
+    //        $('#txtEmployerAddress').val(value);
+    //    }).keyup();
+    //});
+    //اطلاعات کد پستی کارفرما صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#EmployerPostalcode').change(function () {
+            var value = $(this).val();
+            $('#txtEmployerPostalcode').val(value);
+        }).select();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#EmployerPostalcode').val();
+            $('#txtEmployerPostalcode').val(value);
+        }).keyup();
+    });
+    //اطلاعات شماره تماس کارفرما صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#EmployerPhone').change(function () {
+            var value = $(this).val();
+            $('#txtEmployerPhone').val(value);
+        }).select();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#EmployerPhone').val();
+            $('#txtEmployerPhone').val(value);
+        }).keyup();
+    });
+    //اطلاعات شماره نمابر کارفرما صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#EmployerFax').change(function () {
+            var value = $(this).val();
+            $('#txtEmployerFax').val(value);
+        }).select();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#EmployerFax').val();
+            $('#txtEmployerFax').val(value);
+        }).keyup();
+    });
+    //اطلاعات شرایط و نحوه فروش صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#SaleCondition').change(function () {
+            var value = $(this).val();
+            $('#txtSaleCondition').val(value);
+        }).select();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#SaleCondition').val();
+            $('#txtSaleCondition').val(value);
+        }).keyup();
+    });
+    //اطلاعات توضیحات صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#Description').change(function () {
+            var value = $(this).val();
+            $('#txtDescription').val(value);
+        }).select();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#Description').val();
+            $('#txtDescription').val(value);
+        }).keyup();
+    });
+    //
+    $(function () {
+        $('#Comment').change(function () {
+            var value = $(this).val();
+            $('#txtComment').val(value);
+        }).select();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#Comment').val();
+            $('#txtComment').val(value);
+        }).keyup();
+    });
+    //اطلاعات قرارداد مرتبط با صورت حساب برای ذخیره در دیتا بیس
+    $(function () {
+        $('#ContractID').change(function () {
+            var value = $(this).val();
+            $('#txtContractID').val(value);
+        }).select();
+    });
+    $(function () {
+        $('#txtUnitAmount').keyup(function () {
+            var value = $('#ContractID').val();
+            $('#txtContractID').val(value);
+        }).keyup();
+    });
+</script>
+
+<script>
+    $(function () {
+        $('#allitems').mousemove(function () {
+            //مبلغ کل
+            $('#txtTotalAmount').val($('#txtNumber').val().split(',').join('') * $('#txtUnitAmount').val().split(',').join(''));
+            //مبلغ کل پس از تخفیف
+            $('#txtTotalAmountafterDiscount').val($('#txtTotalAmount').val() - $('#txtDiscountAmount').val().split(',').join(''));
+            //مبلغ ارزش افزوده
+            if ($("#ValueAddedCondition").is(':checked'))
+                $('#txtAmountTaxandComplications').val($('#txtTotalAmountafterDiscount').val() * 0);// checked
+            else
+                $('#txtAmountTaxandComplications').val($('#txtTotalAmountafterDiscount').val() * 0.09); // unchecked
+            //جمع مبلغ کل + جمع مالیات و عوارض
+            $('#txtTotalAmountTaxandComplications').val(parseFloat($('#txtTotalAmountafterDiscount').val()) + parseFloat($('#txtAmountTaxandComplications').val()));
+            //کد صورت حساب برای ذخیره در دیتا بیس
+            $('#txtInvoiceCode').val('#InvoiceCode');
+            //تاریخ صورت حساب برای ذخیره در دیتا بیس
+            $('#txtCreatedDate').val('#CreatedDate');
+            //اطلاعات کارفرمای صورت حساب برای ذخیره در دیتا بیس
+            $('#txtEmployerID').val('#EmployerID');
+            //شماره اقتصادی خریدار صورت حساب برای ذخیره در دیتا بیس
+            $('#txtEmployerEconomicalnumber').val('#EmployerEconomicalnumber');
+            //شماره ثبت/ ملی خریدار صورت حساب برای ذخیره در دیتا بیس
+            $('#txtEmployerregistrationnumber').val('#Employerregistrationnumber');
+            //اطلاعات آدرس بخش استان کارفرما در صورت حساب برای ذخیره در دیتا بیس
+            $('#txtEmployerState').val('#EmployerState');
+            //اطلاعات آدرس کامل کارفرما در صورت حساب برای ذخیره در دیتا بیس
+            var value = $('#EmployerAddress').val();
+            $('#txtEmployerAddress').val(value);
+            //اطلاعات کد پستی کارفرما صورت حساب برای ذخیره در دیتا بیس
+            $('#txtEmployerPostalcode').val('#EmployerPostalcode');
+            //اطلاعات شماره تماس کارفرما صورت حساب برای ذخیره در دیتا بیس
+            $('#txtEmployerPhone').val('#EmployerPhone');
+            //اطلاعات شماره نمابر کارفرما صورت حساب برای ذخیره در دیتا بیس
+            $('#txtEmployerFax').val('#EmployerFax');
+            //اطلاعات شرایط و نحوه فروش صورت حساب برای ذخیره در دیتا بیس
+            $('#txtSaleCondition').val('#SaleCondition');
+            //اطلاعات توضیحات صورت حساب برای ذخیره در دیتا بیس
+            $('#txtDescription').val('#Description');
+            $('#txtComment').val('#Comment');
+            //اطلاعات قرارداد مرتبط با صورت حساب برای ذخیره در دیتا بیس
+            $('#txtContractID').val('#ContractID');
+
+        }).select();
+    });
+</script>
+
+<script>
+    $('.btn').on('click', function () {
+        var $this = $(this);
+        $this.button('loading');
+        setTimeout(function () {
+            $this.button('reset');
+        }, 10000);
+    });
+
+</script>
+
+<script>
+    //جهت نمایش مقادیر نوع ارز/ ریال در هدر جدول
+    $(function () {
+        $('#CurrencyTypeID').change(function () {
+            var value = $('#CurrencyTypeID').find(":selected").text();
+            //var value = $(this).val();
+            $('#txtCurrencyType').val(value);
+            $('#txtCurrencyType2').val(value);
+            $('#txtCurrencyType3').val(value);
+            $('#txtCurrencyType4').val(value);
+            $('#txtCurrencyType5').val(value);
+            $('#txtCurrencyType6').val(value);
+        }).keyup();
+    });
+    //
+    $(function () {
+        $('#allitems').mousemove(function () {
+            var value = $('#CurrencyTypeID').find(":selected").text();
+            //var value = $(this).val();
+            $('#txtCurrencyType').val(value);
+            $('#txtCurrencyType2').val(value);
+            $('#txtCurrencyType3').val(value);
+            $('#txtCurrencyType4').val(value);
+            $('#txtCurrencyType5').val(value);
+            $('#txtCurrencyType6').val(value);
+        });
+    });
+</script>

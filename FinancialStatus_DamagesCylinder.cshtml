@@ -1,0 +1,42 @@
+﻿@{
+    Layout = null;
+    string InvoiceCode = (string)ViewBag.InvoiceCode;
+    int? workshopId = (int?)ViewBag.workshopId;
+}
+<div class="">
+    <div class="">
+        @using (Html.BeginForm("FinancialStatus_DamagesCylinder", "Financials", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.Hidden("InvoiceCode", InvoiceCode)
+                @Html.Hidden("workshopId", workshopId)
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="radio">
+                            <input type="radio" name="Status" value="true" /> تایید
+                        </label>
+
+                        <label class="radio">
+                            <input type="radio" name="Status" value="false" style="margin-right:20px;" />  رد
+                        </label>
+
+                    </div>
+                </div>
+
+                <hr />
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <span class="progress-demo">
+                            <button class="btn btn-success" data-color="mint" data-style="expand-left" data-size="s" id="btnSave" onclick="return handleChange()" style="font-family:Vazir;width:100%;"><i class="icon-ok icon-white"></i> انجام عملیات </button>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+
+

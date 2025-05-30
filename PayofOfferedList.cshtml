@@ -1,0 +1,97 @@
+﻿@model IEnumerable<cngfapco.Models.OfferedPrice>
+
+@{
+    ViewBag.Title = "PayofOfferedList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- BEGIN PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href="/FinancialPayments/Index?parentId=41&itemId=50">مدیریت مالی</a> <span class="divider">&nbsp;</span>
+            </li>
+            <li><a href="#">ثبت پرداخت</a><span class="divider-last">&nbsp;</span></li>
+
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+
+<div class="row-fluid">
+    <div class="span12">
+        <div class="widget">
+            <div class="widget-title">
+                <h4><i class="icon-reorder"></i>لیست دستور پرداخت علی الحساب دستمزد تبدیل به کارگاه ها</h4>
+                <span class="tools">
+                    <a href="javascript:;" class="icon-chevron-down"></a>
+                    <a href="javascript:;" class="icon-remove"></a>
+                </span>                
+            </div>
+            <div class="widget-body">
+                <table class="table table-advance">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>@Html.DisplayNameFor(model => model.Serial)</th>
+                            <th>@Html.DisplayNameFor(model => model.Date)</th>
+                            <th>@Html.DisplayNameFor(model => model.Value)</th>
+                            <th>@Html.DisplayNameFor(model => model.PaiedValue)</th>
+                            <th><i class="icon-cog"></i></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{ int rowNum = 0;}
+                        @foreach (var item in ViewBag.tableOut)
+                        {
+                            <tr>
+                                <td>@(rowNum+=1)</td>
+                                <td>
+                                    <strong dir="rtl">
+                                        <a href="/Financials/">
+                                            @item.Serial
+                                        </a>
+                                    </strong>
+                                </td>
+                                <td>@item.Date</td>
+                                <td>
+                                    @(item.Sumvalue + "  ریال")
+                                </td>
+                                <td>
+                                    @(item.PaiedValue + "  ریال")
+                                </td>
+                                <td>
+
+                                    @if (String.IsNullOrEmpty(item.PaiedValue) && String.IsNullOrEmpty(item.Sumvalue))
+                                    {
+                                        <span class="input-error" data-original-title="لیست پیشنهادی لغو شده است.">
+                                            <i class="icon-remove text-danger"></i>
+                                        </span>                                        
+                                    }
+                                    @if (String.IsNullOrEmpty(item.PaiedValue) && !String.IsNullOrEmpty(item.Sumvalue))
+                                    {
+                                        <a href="/Financials/PayofOffered?number=@item.Number">ثبت پرداخت</a>
+                                    }
+                                    @if (!String.IsNullOrEmpty(item.PaiedValue) && !String.IsNullOrEmpty(item.Sumvalue))
+                                    {
+                                        <a href="/Financials/PayofOfferedCheck?number=@item.Number" target="_blank">
+                                            <i class="icon-search text-success"></i>
+                                        </a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

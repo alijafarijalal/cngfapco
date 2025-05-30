@@ -1,0 +1,31 @@
+﻿<hr />
+<h4>جزئیات خودروها</h4>
+<table class="table tabel-border">
+    <thead>
+        <tr style="background-color:#e5e5e5;">
+            <th rowspan="2">نوع خودرو</th>
+            <th colspan="2">تعداد</th>
+        </tr>
+        <tr>
+            <th>در صورتحساب</th>
+            <th>تبدیل شده</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.DetailList)
+        {
+            <tr>
+                <td>@item.ServiceDesc</td>
+                <td>@item.InvoiceCount</td>
+                <td>@item.RegisterCount</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td>جمع</td>
+            <td>@ViewBag.SumInvoiceCount </td>
+            <td>@ViewBag.SumRegisterCount</td>
+        </tr>
+    </tfoot>
+</table>

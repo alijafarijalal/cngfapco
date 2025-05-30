@@ -1,0 +1,167 @@
+﻿
+    <div style="overflow:auto;" id="DivIdToPrint3">
+
+        <table class="table table-striped table-bordered table-hover table-advance">
+            <thead>
+                <tr>
+                    <th rowspan="2">ردیف</th>
+                    <th rowspan="2">نام کارگاه</th>
+                    <th colspan="2"> بدهکار </th>
+                    <th> بستانکار </th>
+                    <th rowspan="2"> کسورات (بیمه و حسن انجام کار) </th>
+                    <th rowspan="2"> مانده طلب (خالص) </th>
+                    <th colspan="2"> درصد پرداخت </th>
+                    <th rowspan="2"> پیشنهاد علی الحساب </th>
+                </tr>
+                <tr>
+                    <th> دستمزد تبدیل </th>
+                    <th> خرید اعتباری </th>
+                    <th> دستمزد کل (ناخالص) </th>
+                    <th> ناخالص </th>
+                    <th> خالص </th>
+                </tr>
+            </thead>
+            @{ int rowNum3 = 0;}
+            <tbody>
+                @foreach (var item in ViewBag.TableOuts)
+                {
+                    <tr>
+                        <td>@(rowNum3 += 1)</td>
+                        <td>@item.Title</td>
+                        <td>
+                            @if (item.Debtor > 0)
+                            {
+                                @item.Debtor.ToString("#,##")
+                            }
+                            @if (item.Debtor < 0)
+                            {
+                                <span class="text-danger">@item.Debtor.ToString("#,##")</span>
+                            }
+                            @if (item.Debtor == 0)
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.PreInvoiceHint > 0)
+                            {
+                                <span class="input-error tooltips" data-original-title="@item.PreInvoiceHint.ToString("#,##") ریال">
+                                    <i class="icon-warning-sign text-warning"> </i>
+                                </span>
+                            }
+                            @if (item.NonCash > 0)
+                            {
+                                @item.NonCash.ToString("#,##")
+                            }
+                            @if (item.NonCash < 0)
+                            {
+                                <span class="text-danger">
+                                    @item.NonCash.ToString("#,##")
+                                </span>
+                            }
+                            @if (item.NonCash == 0)
+                            {
+                                <span>0</span>
+                            }
+
+                        </td>
+                        <td>
+                            @if (item.Creditor > 0)
+                            {
+                                @item.Creditor.ToString("#,##")
+                            }
+                            @if (item.Creditor < 0)
+                            {
+                                <span class="text-danger">
+                                    @item.Creditor.ToString("#,##")
+                                </span>
+                            }
+                            @if (item.Creditor == 0)
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.Deductions > 0)
+                            {
+                                @item.Deductions.ToString("#,##")
+                            }
+                            @if (item.Deductions < 0)
+                            {
+                                <span class="text-danger">@item.Deductions.ToString("#,##")</span>
+                            }
+                            @if (item.Deductions == 0)
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.RemWithDeductions > 0)
+                            {
+                                @item.RemWithDeductions.ToString("#,##")
+                            }
+                            @if (item.RemWithDeductions < 0)
+                            {
+                                <span class="text-danger">
+                                    @item.RemWithDeductions.ToString("#,##")
+                                </span>
+                            }
+                            @if (item.RemWithDeductions == 0)
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        <td>
+                            <span>
+                                @item.NetPercent %
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                @item.GrossPercent %
+                            </span>
+                        </td>
+                        <td>
+                            @if (item.OfferedPrice > 0)
+                            {
+                                @item.OfferedPrice.ToString("#,##")
+                            }
+                            @if (item.OfferedPrice < 0)
+                            {
+                                <span class="text-danger">
+                                    @item.OfferedPrice.ToString("#,##")
+                                </span>
+                            }
+                            @if (item.OfferedPrice == 0)
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tr style="font-weight:bold;">
+                <td colspan="2">  جمع کل </td>
+                <td>@ViewBag.sumTDebit</td>
+                <td>@ViewBag.sumNonCash</td>
+                <td>@ViewBag.sumTCredit</td>
+                <td>@ViewBag.sumDeductions</td>
+                <td>@ViewBag.SumRemWithDeductions</td>
+                <td> %</td>
+                <td> %</td>
+                <td>@ViewBag.SumOfferedPrice</td>
+            </tr>
+        </table>
+        <table class="table table-bordered" style="width:100%;">
+            <tr>
+                <td style="padding-bottom:4em;width:33%;"> <strong> صادر کننده: </strong></td>
+                <td style="padding-bottom:4em;width:33%;"> <strong> تایید کننده: </strong></td>
+                <td style="padding-bottom:4em;width:33%;"> <strong> مدیر پروژه: </strong></td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <span class="text-warning"> <i class="icon-calendar icon-white"></i>  تاریخ و زمان صدور: </span> <strong>@DateTime.Now</strong>
+                </td>
+            </tr>
+        </table>
+    </div>

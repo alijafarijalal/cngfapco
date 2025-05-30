@@ -1,0 +1,126 @@
+﻿@model cngfapco.Models.RemittanceDetails
+
+@{
+    ViewBag.Title = "RemittanceDetailsWithBOM";
+    //Layout = "~/Views/Shared/_DataTableLayout.cshtml";
+    Layout = null;
+}
+
+<link href="/assets/bootstrap-rtl/css/bootstrap-rtl.min.css" rel="stylesheet" />
+<link href="/assets/bootstrap-rtl/css/bootstrap-responsive-rtl.min.css" rel="stylesheet" />
+<link href="/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link href="/css/style.css" rel="stylesheet" />
+<link href="/css/style_responsive.css" rel="stylesheet" />
+<link href="/css/style_default.css" rel="stylesheet" id="style_color" />
+
+<div class="widget">
+    <div class="widget-body">
+        <div style="border:1px solid #4f4f4f;padding-right:2em;padding-left:2em;">
+            <h3 class="text-center" style="font-family:Vazir;">شرکت توسعه طرحهای صنعتی فن آوران پارسیان (سهامی خاص)</h3>
+            <table class="table text-center" width="100%">
+                <tr>
+                    <td width="10%" style="text-align:center;">
+                        <img src="~/img/faplogo.png" />
+                    </td>
+                    <td width="70%" style="text-align:center;">
+                        <h4 style="font-weight:bold;font-size:17px;">حواله انبار</h4>
+                        <span> نام انبار: </span><span>انبار 200 هزار CNG</span>
+                    </td>
+                    <td width="20%">
+                        <div style="margin-bottom:10px;text-align:right;">
+                            <span>شماره: </span><strong class="text-info" style="font-family:'B Arabic Style';">@Model.Remittances.Number</strong>
+                        </div>
+                        <div style="margin-bottom:10px;text-align:right;">
+                            <span>تاریخ: </span><strong class="text-info">@(Model.Remittances.CreateDate.ToShortDateString()) </strong>
+                        </div>
+                        <div style="text-align:right;">
+                            <span>پیوست: </span><strong class="text-info">اصل بارنامه </strong>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <div>
+                <h5>
+                    <span>مرکز مصرف کننده : </span> <strong class="text-info">@Model.Remittances.DivisionPlan.Workshop.Title</strong>
+                </h5>
+                <table class="table table-bordered" width="100%" style="border:2px solid #808080;">
+                    <thead style="border:1px solid #4f4f4f;">
+                        <tr>
+                            <th width="5%" style="text-align:center;border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;"> ردیف </th>
+                            <th width="10%" style="text-align:center;border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;"> کد کالا </th>
+                            <th width="40%" style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;"> عنوان کالا </th>
+                            <th width="10%" style="text-align:center;border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;"> واحد </th>
+                            <th width="10%" style="text-align:center;border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;"> تعداد </th>
+                            <th width="25%" style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;"> توضیحات </th>
+                        </tr>
+                    </thead>
+                    @{ int rowNum = 0;}
+                    @foreach (var item in ViewBag.RemittanceList)
+                    {
+                        <tbody style="border-bottom:1px solid #cccccc;">
+                            <tr>
+                                <td style="text-align:center;border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;">@(rowNum += 1)</td>
+                                <td style="text-align:center;border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;">@item.FinancialCode</td>
+                                <td style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;">@item.Title</td>
+                                <td style="text-align:center;border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;">@item.Unit</td>
+                                <td style="text-align:center;border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;">@item.NumberofSend</td>
+                                <td style="border:1px solid silver;border-right:1px solid silver;border-left:1px solid silver;">@item.Description</td>
+                            </tr>
+                        </tbody>
+                    }
+
+
+                </table>
+                <div style="border:1px solid #808080;padding-right:7px;padding-left:7px;padding-bottom:7px;">
+                    <h5 style="line-break:normal;">
+                        <span>اقلام مشروحه فوق در تاریخ </span><strong class="text-info"> @(Model.Date.HasValue ? Model.Date.Value.ToShortDateString() : null)</strong>
+                        <span>صحیح و سالم با وسیله نقلیه </span><strong class="text-info"> @Model.Vehicle</strong>
+                        <span>به شماره پلاک </span><strong class="text-info"> @Model.Plate</strong>
+                        <span>طی بارنامه شماره </span><strong class="text-info"> @Model.BillofLading</strong>
+                        <span>به مبلغ </span><strong class="text-info"> @(Model.CarryFare.HasValue ? Model.CarryFare.Value.ToString("#,##") : "0") </strong>
+                        <span>ریال جهت کارگاه/  </span><strong class="text-info"> @Model.Remittances.DivisionPlan.Workshop.Title </strong>
+                        <span>تحویل آقای   </span><strong class="text-info"> @Model.Transferee </strong>
+                        <span>گردید.</span>
+                    </h5>
+                </div>
+                <table class="table table-bordered text-center" width="100%">
+                    <tr>
+                        @*<td width="33%" style="text-align:center;">
+                                <p>صادر کننده</p>
+                                <br />
+                                <br />
+                                <p>امضا</p>
+                            </td>*@
+                        <td width="33%" style="text-align:center;">
+                            <p> @Model.Remittances.DivisionPlan.Workshop.Title </p>
+                            <p>مهر و امضا مجاز</p>
+                        </td>
+                        @*<td width="20%" style="text-align:center;">
+                                <p>انبار دار</p>
+                                <br />
+                                <br />
+                                <p>امضا</p>
+                            </td>
+                            <td width="20%" style="text-align:center;">
+                                <p>مدیر قسمت</p>
+                                <br />
+                                <br />
+                                <p>امضا</p>
+                            </td>*@
+                        <td width="33%" style="text-align:center;">
+                            <p>کارشناس ناظر</p>
+                            <p>امضا</p>
+                        </td>
+                        <td width="33%" style="text-align:center;">
+                            <p>مدیر پروژه/ مدیر تبدیل</p>
+                            <p>امضا</p>
+                        </td>
+
+                    </tr>
+                </table>
+                <br />
+            </div>
+        </div>
+
+    </div>
+</div>

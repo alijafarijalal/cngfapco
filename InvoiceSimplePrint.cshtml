@@ -1,0 +1,238 @@
+﻿@model IEnumerable<cngfapco.Models.Invoice>
+
+@{
+    ViewBag.Title = "InvoiceSimplePrint";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+    bool isVanet = (bool)ViewBag.isVanet;
+}
+
+<link href="/assets/bootstrap-rtl/css/bootstrap-rtl.min.css" rel="stylesheet" />
+<link href="/assets/bootstrap-rtl/css/bootstrap-responsive-rtl.min.css" rel="stylesheet" />
+<link href="/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link href="/css/style.css" rel="stylesheet" />
+<link href="/css/style_responsive.css" rel="stylesheet" />
+<link href="/css/style_default.css" rel="stylesheet" id="style_color" />
+
+<div class="widget" id="DivIdToPrint" style="border:2px solid #5b5b5b;">
+    <div class="widget-body">
+        <h3 style="text-align:center;background-color:white;font-weight:bold;">
+            صورتحساب خدمات جانبی
+        </h3>
+        <hr />
+        <div class="row-fluid text-center">
+            <table class="table table-bordered" width="100%">
+                @*<tr>
+                        <td colspan="6" class="text-center">
+                            تلفن رسیدگی به شکایات: (021) 22947554
+                        </td>
+                    </tr>*@
+                <tr>
+                    <td>
+                        <span> شماره فاکتور: </span>
+                        <strong class="text-info">@ViewBag.InvoiceCode</strong>
+                    </td>
+                    <td>
+                        <span> تاریخ صدور: </span>
+                        <strong class="text-info">@ViewBag.Date</strong>
+                    </td>
+                    <td>
+                        <span> زمان صدور: </span>
+                        <strong class="text-info">@ViewBag.Time</strong> @*id="time"*@
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+        <hr />
+        <div class="row-fluid">
+            @Html.Action("VehicleanOwner", new { InvoiceCode = ViewBag.InvoiceCode })
+        </div>
+
+        <div class="row-fluid">
+            <hr />
+            <table class="table table-advance table-bordered" width="100%">
+                <thead>
+                    <tr>
+                        <td style="text-align:center;color:#000000;font-weight:bold;"> جزییات صورتحساب </td>
+                    </tr>
+                </thead>
+            </table>
+
+            <table class="table table-bordered" width="100%">
+                <tr style="background-color:#d9d9d9">
+                    <td width="5%" style="text-align:center;">
+                        ردیف
+                    </td>
+                    <td width="50%">
+                        @Html.DisplayNameFor(model => model.ServiceDesc)
+                    </td>
+                    <td width="5%" style="text-align:center;">
+                        <span>تعداد</span>
+                    </td>
+                    <td width="20%" style="text-align:center;">
+                        @Html.DisplayNameFor(model => model.UnitAmount) <span>(ریال)</span>
+                    </td>
+                    <td width="20%" style="text-align:center;">
+                        @Html.DisplayNameFor(model => model.TotalAmount) <span>(ریال)</span>
+                    </td>
+                </tr>
+
+                @{ int rowNum = 0;}
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td style="text-align:center;">
+                                @(rowNum += 1)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ServiceDesc)
+                            </td>
+                            <td style="text-align:center;">
+                                @Html.DisplayFor(modelItem => item.Number) @*+" " + Html.DisplayFor(modelItem => item.UnitofMeasurement)+" ")*@
+                            </td>
+                            <td style="text-align:center;">
+                                @item.UnitAmount.ToString("#,##")
+                            </td>
+                            <td style="text-align:center;">
+                                @(item.TotalAmount.HasValue ? item.TotalAmount.Value.ToString("#,##") : "0")
+                            </td>
+                            @*<td>
+                                    <span>@Html.DisplayFor(modelItem => item.Description)</span><br />
+                                    <span> @Html.DisplayFor(modelItem => item.Comment)</span>
+                                </td>*@
+                        </tr>
+                    }
+                </tbody>
+
+                <tfoot>
+                    <tr style="background-color:#d9d9d9;font-weight:bold;">
+                        <td colspan="4" style="text-align:left;">مجموع</td>
+                        <td style="text-align:center;">@ViewBag.TotalAmount  ریال</td>
+                    </tr>
+                </tfoot>
+
+            </table>
+        </div>
+        @*<br />
+            <div class="row-fluid" style="margin-top:10px;">
+                <table width="100%" class="text-center">
+                    <tr>
+                        <td width="40%">
+                            <span> امضای خریدار / خدمات گیرنده </span>
+                        </td>
+                        <td width="20%"></td>
+                        <td width="40%"> <span> مهر و امضای کارگاه </span> </td>
+                    </tr>
+                </table>
+            </div>*@
+        <div class="widget-body" style="margin-top:10px;border:1px solid #5b5b5b;padding-right:2em;">
+
+            <div class="row-fluid" style="font-size:15px;">
+                <p>1- هزینه خدمات جانبی بصورت کاملا اختیاری و به درخواست اینجانب انجام شده است.</p>
+                <p>2- به ازای خدمات دریافت شده فاکتور مطابق مبالغ مندرج در جدول هزینه های خدمات جانبی دریافت شده است.</p>
+                <p>3- هیچگونه وجهی در داخل و خارج از کارگاه پرداخت ننموده ام.</p>
+                @if (isVanet == true)
+                {
+                    <p>4- ثبت نام، تبدیل خودرو، دریافت بیمه نامه، برچسب سوختگیری و نصب کاور به صورت رایگان انجام شده است.</p>
+                }
+                else
+                {
+                    <p>4- ثبت نام، تبدیل خودرو، دریافت بیمه نامه و برچسب سوختگیری به صورت رایگان انجام شده است.</p>
+                }
+                <p>5- چنانچه مبالغی خارج از جداول فوق از مالک دریافت شود، کارگاه ملزم به استرداد آن به مالک می باشد.</p>
+            </div>
+
+            <div style="margin-top:7px;margin-bottom:7px;font-size:15px;">
+                <p>
+                    <span class="text-warning"> <i class="icon-tag text-info"></i> </span>موارد فوق مطالعه شد و مورد تایید اینجانب  <strong id="owner" class="owner text-info"> </strong> می باشد.
+                </p>
+                <script src="~/js/jquery-1.8.3.min.js"></script>
+                <script src="~/js/json2.js"></script>
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        //alert("dfdfdfdf");
+                        var owner = $('#txtowner').val();
+                        document.getElementById('owner').innerHTML = owner;
+                        //alert(owner);
+                        // $('.ownerFullName').val(owner);
+                        var workshop = $('#txtworkshop').val();
+                        document.getElementById('workshop').innerHTML = workshop;
+                        //$('#workshop').val(workshop);
+                        var date = $('#txtdate').val();
+                        var time = $('#txttime').val();
+                        //$('#date').val(date);
+                        document.getElementById('date').innerHTML = date;
+                        document.getElementById('time').innerHTML = time;
+                        // document.getElementById('workshop').innerHTML = workshop;
+                        //document.getElementById('ownerFullName').innerHTML = owner;
+                    });
+
+/**/</script>
+                <br />
+                <table width="100%" class="text-center">
+                    <tr>
+                        <td width="40%">
+                            <span> مهر و امضا کارگاه </span>
+                        </td>
+                        <td width="20%"></td>
+                        <td width="40%"> <span> امضاو اثر انگشت مالک </span> </td>
+                    </tr>
+                </table>
+
+            </div>
+            <br />
+            <br />
+            <table width="100%" class="text-right table table-bordered">
+                <tr>
+                    <td width="33%">
+                        <span> کارگاه تبدیل: </span>
+                        <span style="font-size:13px;font-weight:bold;" id="workshop" class="workshop text-info">
+                            @*<input id="workshop" class="workshop" style="font-weight:bold;border:0px;text-align:center;font-family:'B Yekan'" />*@
+                        </span>
+                    </td>
+                    <td width="33%">
+                        <span> تاریخ تبدیل: </span>
+                        <span style="font-size:13px;font-weight:bold;" id="date" class="date text-info">
+
+                            @*<input type="text"  style="border:0px;font-family:Vazir;color:#000000;font-weight:300;" />*@
+                        </span>
+                    </td>
+                    <td width="33%">
+                        <span> تلفن ارتباط با مشتری: </span>
+                        <span class="pull-left text-info" style="font-size:13px;font-weight:bold;"> 44984412(021)</span>
+                        <span class="pull-left"> - </span>
+                        <span class="pull-left text-info" style="font-size:13px;font-weight:bold;"> 09197777355</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+@*<br />
+<a onclick='printtag("DivIdToPrint")' class="btn"> <i class="icon-print" style="color:#00ff21;font-size:30px;"></i> </a>*@
+
+<script type="text/javascript">
+    //
+    function printtag(tagid) {
+        var hashid = "#" + tagid;
+        var tagname = $(hashid).prop("tagName").toLowerCase();
+        var attributes = "";
+        var attrs = document.getElementById(tagid).attributes;
+        $.each(attrs, function (i, elem) {
+            attributes += " " + elem.name + " ='" + elem.value + "' ";
+        })
+        var divToPrint = $(hashid).html();
+        var head = "<html><head>" + $("head").html() + "</head>";
+        var allcontent = head + "<body  dir='rtl' onload='window.print()' style='background-color:#ffffff'>" + "<" + tagname + attributes + ">" + divToPrint + "</" + tagname + ">" + "</body></html>";
+        var newWin = window.open('', 'Print-Window');
+        newWin.document.open();
+        newWin.document.write(allcontent);
+        newWin.document.close();
+        setTimeout(function () { newWin.close(); }, 10000);
+    }
+
+</script>

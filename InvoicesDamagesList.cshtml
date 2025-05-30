@@ -1,0 +1,195 @@
+﻿@model IEnumerable<cngfapco.Models.InvoicesDamages>
+
+@{
+    ViewBag.Title = "InvoicesDamagesList";
+    Layout = "~/Views/Shared/_ExportLayout.cshtml";
+    bool? Permission = (bool?)ViewBag.Permission;
+    int? workshopId = (int?)ViewBag.workshopId;
+    List<cngfapco.Models.Role> rolName = cngfapco.Helper.Helpers.GetCurrentUserRoles();
+}
+
+<!-- BEGIN PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href="/ReplacementPlan/WorkshopPage">لیست مراکز خدمات CNG</a> <span class="divider">&nbsp;</span>
+            </li>
+            <li><a href="#">فاکتور فروش کالا و خدمات</a><span class="divider-last">&nbsp;</span></li>
+
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+
+<div class="widget" dir="rtl">
+    <div class="widget-title">
+        <h4><i class="icon-reorder"></i>لیست فاکتورهای فروش کالای ضایعاتی</h4>
+        <span class="tools">
+            <a href="javascript:;" class="icon-chevron-down"></a>
+            <a href="javascript:;" class="icon-remove"></a>
+        </span>
+    </div>
+    <div class="widget-body">
+        <div style="overflow-x:auto;overflow-y:auto;">
+            @try
+            {
+                <table id="sample_editable_1" class="table table-striped table-hover table-bordered table-advance text-center">
+                    <thead>
+                        <tr>
+                            <th>ردیف</th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.InvoiceCode)
+                            </th>
+                            <th>
+                                فروشنده
+                            </th>
+                            <th>
+                                سال
+                            </th>
+
+                            <th>
+                                ماه
+                            </th>
+                            <th>
+                                تعداد مخزن
+                            </th>
+                            <th>
+                                <strong>مبلغ کل</strong><br />
+                                <span>پس از تخفیف</span>
+                            </th>
+                            <th>  
+                                 <strong>مبلغ کل</strong><br />
+                                 <span>پس از تخفیف + ارزش افزوده</span>
+                            </th>
+                            <th>جزئیات</th>
+                            <th>فاکتور</th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </th>
+                            <th> افزودن مخزن 28 لیتری</th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int rowNum = 0;
+                        }
+                        @foreach (var item in ViewBag.TableOut)
+                        {
+                            <tr>
+                                <td>@(rowNum += 1)</td>
+                                <td>
+                                    @item.InvoiceCode                                    
+                                </td>
+                                <td>
+                                    @item.Title
+                                </td>
+                                <td>
+                                    @item.CreatedDate
+                                </td>
+                                <td>
+                                    @item.FromDate                                    
+                                </td>
+                                <td>
+                                    @item.TotalCount
+                                </td>
+                                <td>
+                                    @item.TotalAmount <span>ریال</span>
+                                </td>
+                                <td>
+                                    @item.TotalAmount2 <span>ریال</span>
+                                </td>
+                                <td>
+                                    @using (Html.BeginForm("InvoicesDamagesDetails", "Financials", new { WorkshopId = @workshopId, Year = item.CreatedDate, Month = item.FromDate }, FormMethod.Post, new { target = "_blank" }))
+                                    {
+                                        <button type="submit" class="icon-search" style="color:#00ff21;font-size:15px;border:0px;"></button>
+                                    }                                    
+                                </td>                              
+                                <td>
+                                    @using (Html.BeginForm("PrintInvoicesDamages", "Financials", new { workshopId = workshopId, InvoiceCode = item.InvoiceCode, Year = item.CreatedDate, Month = item.FromDate }, FormMethod.Post, new { target = "_blank" }))
+                                    {
+                                        <button type="submit" class="icon-print" style="border:none;font-size:20px;"></button>
+                                    }
+                                </td>
+                                <td>
+                                    @item.DepartmentTitle
+                                </td>
+                                <td>
+                                    @foreach (var items in rolName)
+                                    {
+                                        if (items.RoleName.Contains("مدیر تبدیل ناوگان") || items.RoleName.Equals("admin"))
+                                        {
+                                            <a href="/Financials/CreateWorkshopsDamagesInvoice28?WorkshopID=@workshopId&InvoiceCode=@item.InvoiceCode&Year=@item.CreatedDate&Month=@item.FromDate" target="_blank">
+                                                <i class="icon-plus-sign"></i>
+                                            </a>
+                                        }
+                                    }
+                                    
+                                </td>                      
+                            </tr>
+                        }
+                    </tbody>
+                    <tr>
+                        <td class="text-center" colspan="5"> <strong> جمع کل </strong> </td>
+                        <td class="text-center"> <strong> @ViewBag.SumTotalCount </strong></td>
+                        <td class="text-center"> <strong> @ViewBag.SumTotalAmount </strong> <span>ریال</span></td>
+                        <td class="text-center"> <strong> @ViewBag.SumTotalAmount2 </strong> <span>ریال</span></td>
+                        <td class="text-center" colspan="4"></td>
+                    </tr>
+                </table>
+            }
+            catch
+            {
+                <div class="row-fluid">
+                    <span>صورتحسابی صادر نشده است!</span>
+                </div>
+            }
+
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+        history.go(1);
+    };
+</script>
+<script>
+    $(document).ready(function () {
+        var table = $('#sample_editable_1').DataTable({
+            paging: false,
+            dom: 'lBfrtip',
+            buttons: [
+                {
+                    extend: 'csv',
+                    text: 'Export csv',
+                    charset: 'utf-8',
+                    extension: '.csv',
+                    fieldSeparator: ';',
+                    fieldBoundary: '',
+                    filename: 'InvoicesFapaListTotal_csv',
+                    bom: true
+                },
+                {
+                    extend: 'excel',
+                    text: 'Export excel',
+                    charset: 'utf-8',
+                    extension: '.xlsx',
+                    fieldSeparator: ';',
+                    fieldBoundary: '',
+                    filename: 'InvoicesFapaListTotal',
+                    bom: true
+                }
+            ]
+
+        });
+    });
+</script>

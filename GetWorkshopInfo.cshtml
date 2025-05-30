@@ -1,0 +1,55 @@
+﻿@model cngfapco.Models.Workshop
+
+    <table class="table" width="100%" style="border:0px;font-size:14px;" cellpadding="0" cellspacing="0">
+        <tr>
+            <td width="40%"><span style="margin-right:5px;"> نام شخص حقیقی / حقوقی : </span><span class="text-info" style="font-size:13px;"> @Model.Title </span><input id="WorkshopsID" name="WorkshopsID" type="hidden" value="@Model.ID" /><input id="txtWorkshops" name="txtWorkshops" type="hidden" value="@Model.Title" class="txtWorkshops" /></td>
+            <td width="30%"><span style="margin-right:auto;"> شماره اقتصادی : </span><span class="text-info" style="font-size:13px;" dir="rtl"> @Model.Economicalnumber </span> </td>
+            <td width="30%"><span style="margin-right:auto;"> شماره ثبت / شماره ملی : </span><span class="text-info" style="font-size:13px;" dir="rtl"> @Model.Registrationnumber </span></td>
+
+        </tr>
+        <tr>
+            <td colspan="2">
+                <span style="margin-right:5px;"> نشانی کامل | </span><span> استان : </span><span class="text-info" style="font-size:13px;">@Model.City.State.Title</span>
+                <span> شهرستان : </span><span class="text-info" style="font-size:13px;">@Model.City.Title</span>
+                <span class="text-info" style="font-size:13px;"> @Model.Address </span>
+
+            </td>
+            <td><span style="margin-right:auto;"> کد پستی (10 رقمی) : </span><span class="text-info" style="font-size:13px;" dir="rtl"> </span>
+        </tr>
+        <tr>
+            <td>
+                <span style="margin-right:auto;"> تلفن : </span><span class="text-info" style="font-size:13px;" dir="rtl"> @Model.PhoneNumber</span>
+                <span style="margin-right:auto;margin-right:40px;"> نمـابر : </span><span class="text-info" style="font-size:13px;" dir="rtl">@Model.FaxNumber</span>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+
+    </table>
+    @*<table class="table table-borderless" width="100%" style="border:0px">
+        <tr>
+            <th width="40%"><span style="margin-right:5px;"> نام شخص حقیقی / حقوقی : </span><span class="text-info" style="font-size:12px;"> @Model.Title </span></th>
+            <th width="30%"><span style="margin-right:auto;"> شماره اقتصادی : </span><span class="text-info" style="font-size:12px;" dir="rtl">  </span> <input id="EmployerEconomicalnumber" name="EmployerEconomicalnumber" type="hidden" value="-"/></th>
+            <th width="30%"><span style="margin-right:auto;"> شماره ثبت / شماره ملی : </span><span class="text-info" style="font-size:12px;" dir="rtl"> </span><input id="Employerregistrationnumber" name="Employerregistrationnumber" type="hidden" value="-"/></th>
+
+        </tr>
+        <tr>
+            <th colspan="2">
+                <span style="margin-right:5px;"> نشانی کامل | </span><span> استان : </span><span class="text-info" style="font-size:12px;">@Model.City.State.Title</span><input id="EmployerState" name="EmployerState" type="hidden" value="@Model.City.State.Title"/>
+                <span> شهرستان : </span><span class="text-info" style="font-size:12px;">@Model.City.Title</span><input id="EmployerAddress1" name="EmployerAddress1" type="hidden" value="@Model.City.Title"/>
+                <span class="text-info" style="font-size:12px;"> @Model.Address </span><input id="EmployerAddress2" name="EmployerAddress2" type="hidden" value="@Model.Address"/>
+
+            </th>
+            <th><span style="margin-right:auto;"> کد پستی (10 رقمی) : </span><span class="text-info" style="font-size:12px;" dir="rtl"> </span> <input id="EmployerPostalcode" name="EmployerPostalcode" type="hidden" value="-"/></th>
+        </tr>
+        <tr>
+            <th>
+                <span style="margin-right:auto;"> تلفن : </span><span class="text-info" style="font-size:12px;" dir="rtl"> @Model.PhoneNumber</span><input id="EmployerPhone" name="EmployerPhone" type="hidden" value="@Model.PhoneNumber"/>
+                <span style="margin-right:auto;margin-right:40px;"> نمـابر : </span><span class="text-info" style="font-size:12px;" dir="rtl">@Model.FaxNumber</span><input id="EmployerFax" name="EmployerFax" type="hidden" value="@Model.FaxNumber"/>
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+
+    </table>*@
+

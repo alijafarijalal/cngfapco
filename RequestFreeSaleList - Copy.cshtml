@@ -1,0 +1,272 @@
+﻿@model IEnumerable<cngfapco.Models.RequestFreeSale>
+
+@{
+    ViewBag.Title = "RequestFreeSaleList";
+    Layout = "~/Views/Shared/_ExportLayout.cshtml";
+    System.Globalization.PersianCalendar pc = new System.Globalization.PersianCalendar();
+}
+
+<!-- BEGIN PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href="/Users/SubSideBarItems?parentId=86">مدیریت فروش</a> <span class="divider">&nbsp;</span>
+            </li>
+            <li><a href="#"> درخواست های خرید </a><span class="divider-last">&nbsp;</span></li>
+
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+<div style="overflow:auto;">
+    <table id="RequestFreSaleList" class="table table-striped table-hover table-bordered table-advance text-center">
+        <thead>
+            <tr>
+                <th rowspan="2">#</th>
+                <th rowspan="2">
+                    @Html.DisplayNameFor(model => model.Workshops.Title)
+                </th>
+                <th rowspan="2">
+                    @Html.DisplayNameFor(model => model.Owners)
+                </th>
+                <th rowspan="2">
+                    @Html.DisplayNameFor(model => model.InvoiceCode)
+                </th>
+                <th rowspan="2">
+                    @Html.DisplayNameFor(model => model.CreatedDate)
+                </th>
+                <th rowspan="2">
+                    @Html.DisplayNameFor(model => model.Number)
+                </th>
+                <th rowspan="2">
+                    @Html.DisplayNameFor(model => model.UnitofMeasurement)
+                </th>
+                <th rowspan="2">
+                    @Html.DisplayNameFor(model => model.TotalAmount) ریال
+                </th>
+                <th rowspan="2">
+                    @Html.DisplayNameFor(model => model.SaleCondition)
+                </th>
+                <th colspan="3">
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th rowspan="2">
+                    <i class="icon-cog"></i>
+                </th>
+            </tr>
+            <tr>
+                <th>پیش فاکتور</th>
+                <th>پرداخت</th>
+                <th>فاکتور</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @{ int rowNum = 0;}
+            @foreach (var item in Model)
+            {
+                //style="background-color:@item.Comment"
+                <tr>
+                    <td>@(rowNum += 1)</td>
+                    <td>
+                        @item.EmployerState
+                    </td>
+                    <td>
+                        @item.Owners
+                    </td>
+                    <td>
+                        @item.InvoiceCode
+                    <td>
+                        @item.CreatedDate.ToShortDateString()
+                    </td>
+                    <td>
+                        @item.Number
+                    </td>
+                    <td>
+                        @item.UnitofMeasurement
+                    </td>
+                    <td>
+                        @item.TotalAmount.Value.ToString("#,##")
+                    </td>
+                    <td>
+                        @if (item.SaleCondition != item.ServiceCode && !string.IsNullOrEmpty(item.SaleCondition))
+                        {
+                            <span class="text-warning">درخواست</span>
+                            <strong class="text-info"> @item.ServiceCode </strong><br />
+                            <span class="text-warning"> در پیش فاکتور تغییر به </span>
+                            <strong> @item.SaleCondition </strong>
+                        }
+                        else
+                        {
+                            <strong> @item.ServiceCode </strong>
+                        }
+
+                        @*@item.DiscountAmount.Value.ToString("#,##")*@
+                        @*@item.Description*@
+                    </td>
+                    <td>
+                        @if (item.Status == false)
+                        {
+
+                            <span> <img src="/assets/pre-loader/Hourglass.gif" alt="در مرحله بررسی"></span>
+                            <br />
+                            <span>
+                                <a href="/Financials/PreFreeSaleInvoice?InvoiceCode=@item.InvoiceCode&Year=@(pc.GetYear(item.CreatedDate))">
+                                    در انتظار صدور
+                                </a>
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                <a href="/Financials/ViewPreFreeSaleInvoice?InvoiceCode=@item.InvoiceCode&Year=@(pc.GetYear(item.CreatedDate))">
+                                    <i class="icon-ok text-success"></i>
+                                </a>
+                            </span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.SaleCondition.Equals("نقدی"))
+                        {
+                            if (cngfapco.Controllers.FinancialsController.GetCheckPreInvoice(item.InvoiceCode) == true && cngfapco.Controllers.FinancialsController.GetCheckInvoicePaied(item.Description, item.CreatedDate) == true)
+                            {
+                                <span>
+                                    <a href="/Financials/FreeSaleInvoicePaied?PreInvoiceCode=@item.Description&Year=@(pc.GetYear(item.CreatedDate))">
+                                        @*<i class="icon-ok text-success"></i>*@
+                                        <strong>نقدی</strong>
+                                    </a>
+                                </span>
+                            }
+                            if (cngfapco.Controllers.FinancialsController.GetCheckPreInvoice(item.InvoiceCode) == true && cngfapco.Controllers.FinancialsController.GetCheckInvoicePaied(item.Description, item.CreatedDate) == false)
+                            {
+                                <span> <img src="/assets/pre-loader/Hourglass.gif" alt=""></span>
+                                <br />
+                                <span>
+                                    <span> در انتظار پرداخت </span>
+                                    @*<a href="/Financials/ViewPreFreeSaleInvoice?InvoiceCode=@item.Description"> </a>*@
+                                </span>
+                            }
+                        }
+                        @if (item.SaleCondition.Equals("غیر نقدی"))
+                        {
+                            if (cngfapco.Controllers.FinancialsController.GetCheckPreInvoice(item.InvoiceCode) == true)
+                            {
+                                <strong>اعتباری</strong>
+                            }
+                        }
+
+                    </td>
+                    <td>
+                        @if (item.SaleCondition.Equals("نقدی"))
+                        {
+                            if (cngfapco.Controllers.FinancialsController.GetCheckInvoicePaied(item.Description, item.CreatedDate) == true && cngfapco.Controllers.FinancialsController.GetCheckFinalInvoice(item.Description) == true)
+                            {
+                                <span>
+                                    <a href="/Financials/FreeSaleInvoice?InvoiceCode=@item.Description&checkExist=true&checkPaied=1&SaleCondition=نقدی&Year=@(pc.GetYear(item.CreatedDate))">
+                                        <i class="icon-ok text-success"></i>
+                                    </a>
+                                </span>
+                            }
+                            if (cngfapco.Controllers.FinancialsController.GetCheckInvoicePaied(item.Description, item.CreatedDate) == true && cngfapco.Controllers.FinancialsController.GetCheckFinalInvoice(item.Description) == false)
+                            {
+                                @*<span> <img src="/assets/pre-loader/Hourglass.gif" alt=""></span><br />*@
+                                <span>
+                                    <a href="/Financials/FreeSaleInvoice?InvoiceCode=@item.Description&checkExist=false&checkPaied=1&SaleCondition=نقدی&Year=@(pc.GetYear(item.CreatedDate))">
+                                        <i class="icon-ok text-success"></i>
+                                    </a>
+                                </span>
+                            }
+                            if (cngfapco.Controllers.FinancialsController.GetCheckInvoicePaied(item.Description, item.CreatedDate) == false && cngfapco.Controllers.FinancialsController.GetCheckFinalInvoice(item.Description) == false)
+                            {
+                                @*<span> <img src="/assets/pre-loader/Hourglass.gif" alt=""></span><br />*@
+                                @*<span>
+                                    در انتظار
+                                </span>*@
+                            }
+                        }
+                        @if (item.SaleCondition.Equals("غیر نقدی"))
+                        {
+                            if (cngfapco.Controllers.FinancialsController.GetCheckFinalInvoice(item.Description) == true)
+                            {
+                                <span>
+                                    <a href="/Financials/FreeSaleInvoice?InvoiceCode=@item.Description&checkExist=false&checkPaied=1&SaleCondition=@item.SaleCondition&Year=@(pc.GetYear(item.CreatedDate))">
+                                        <i class="icon-ok text-success"></i>
+                                    </a>
+                                </span>
+                            }
+                            else
+                            {
+                                <span>
+                                    <a href="/Financials/FreeSaleInvoice?InvoiceCode=@item.Description&checkExist=false&checkPaied=1&SaleCondition=@item.SaleCondition&Year=@(pc.GetYear(item.CreatedDate))">
+                                        <span> در انتظار صدور </span>
+                                    </a>
+                                </span>
+                            }
+                        }
+                    </td>                    
+                    <td>
+                        <a href="/Financials/RequestFreeSaleDetails?InvoiceCode=@item.InvoiceCode" target="_blank">
+                            <i class="icon-list icon-white"></i>
+                        </a> |
+                        @*<a href="#" data-toggle="modal" data-target="#modal-large" onclick="FinalStatus(@item.InvoiceCode)">
+                            <i class="icon-edit icon-white"></i>
+                        </a>*@
+                        <a href="/Financials/FinalStatus?InvoiceCode=@item.InvoiceCode&Year=@(pc.GetYear(item.CreatedDate))">
+                            <i class="icon-edit icon-white"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+</div>
+<script>
+    function FinalStatus(id) {
+        $.get("/Financials/FinalStatus?id=" + id, function (res) {
+            $("#modal-large").modal();
+            $("#myModalLabel").html("ابطال و حذف از لیست درخواست");
+            $("#myModalBody").html(res);
+
+        });
+    }
+    //
+</script>
+
+<script>
+    $(document).ready(function () {
+
+        var table = $('#RequestFreSaleList').DataTable({
+            "order": [[4, "desc"]],
+            dom: 'Bfrtip',
+            buttons:
+            [
+                {
+                    extend: 'csvHtml5',
+                    title: 'Data export'
+                }
+                ,
+                {
+                    extend: 'copyHtml5',
+                    title: 'Data export'
+                }
+                ,
+                {
+                    extend: 'excelHtml5',
+                    title: 'Data export'
+                }
+
+            ],
+            paging: true,
+            responsive: true
+        });
+    });
+
+</script>

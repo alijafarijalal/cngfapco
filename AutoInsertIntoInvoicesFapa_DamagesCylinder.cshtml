@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "AutoInsertIntoInvoicesFapa_DamagesCylinder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- BEGIN PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href=""> مدیریت مالی </a> <span class="divider">&nbsp;</span>
+            </li>
+            <li><a href="#">صدور فاکتور تعویض مخزن</a><span class="divider-last">&nbsp;</span></li>
+
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+
+<div class="widget" dir="rtl">
+    <div class="widget-title">
+        <h4><i class="icon-reorder"></i>صدور صورتحساب تعویض مخزن برای کارگاه‌ها </h4>
+        <span class="tools">
+            <a href="javascript:;" class="icon-chevron-down"></a>
+            <a href="javascript:;" class="icon-remove"></a>
+        </span>
+    </div>
+    <div class="widget-body">
+        @using (Html.BeginForm("AutoInsertIntoInvoicesFapa_DamagesCylinder", "Financials", null, FormMethod.Post))
+        {
+            <h6 class="text-danger">توجه داشته باشید با انتخاب تاریخ و فشردن دکمه صدور فاکتور برای کارگاه‌منتخب، صورتحساب صادر خواهد گردید!</h6>
+            <label>انتخاب کارگاه</label>
+            @Html.DropDownList("WorkshopID", null, "همه", htmlAttributes: new { @class = "chosen", @id = "inputWarning" })@*, @multiple = "multiple" , @onchange="submit();"*@
+            <br />
+            <label>از تاریخ</label>
+            <input type="text" class="pdate" id="pcal1" name="fromDate" value="@ViewBag.fromDate" required="required" />
+            <br />
+            <label>تا تاریخ</label>
+            <input type="text" class="pdate" id="pcal2" name="toDate" value="@ViewBag.toDate" required="required" />
+            <br />
+            <hr />
+            <input type="submit" value="صدور فاکتور" class="btn btn-success" style="font-family:Vazir;" />
+        }
+    </div>
+</div>
+<p>
+    <strong class="@ViewBag.textClass text-center"> @ViewBag.Message </strong>
+</p>

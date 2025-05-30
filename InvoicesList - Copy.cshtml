@@ -1,0 +1,87 @@
+﻿@model IEnumerable<cngfapco.Models.Invoice>
+
+@{
+    ViewBag.Title = "InvoicesList";
+    Layout = "~/Views/Shared/_DataTableLayout.cshtml";
+}
+
+<h2>لیست صورتحساب های کالا و خدمات</h2>
+
+<p>
+    @Html.ActionLink("صدور صورتحساب جدید", "Invoice")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.InvoiceCode)
+        </th>
+        <th>
+            فروشنده
+        </th>
+        <th>
+            خریدار
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.TotalAmount)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.SaleCondition)
+        </th>
+
+        @*<th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatorUser)
+        </th>*@
+        <th><i class="icon-cog"></i></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>   
+         <td>
+            @Html.DisplayFor(modelItem => item.InvoiceCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Workshops.Title)
+        </td>
+        <td>
+            @(Html.DisplayFor(modelItem => item.Owners.OwnerName)+ " " +Html.DisplayFor(modelItem => item.Owners.OwnerFamily))
+        </td>    
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedDate)
+        </td>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.TotalAmount)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.SaleCondition)
+        </td>
+        
+        @*<td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatorUser)
+        </td>*@
+    <td>
+        <a href="/Financials/EditInvoicePage?InvoiceCode=@item.InvoiceCode" class="WaitingLoader">
+            <i class="icon-edit" style="color:#ff6a00;"></i>
+        </a>
+        <a href="/Financials/SelectPrintType?InvoiceCode=@item.InvoiceCode" data-toggle="modal" data-target="#modal-large" onclick="SelectPrintType(@item.InvoiceCode)">
+            <i class="icon-print" style="color:#00ff21;font-size:20px;"></i>
+        </a>
+        @*@Html.ActionLink("مشاهده صورتحساب", "Details", new { id = item.InvoiceID })*@
+    </td>
+    </tr>
+}
+
+</table>

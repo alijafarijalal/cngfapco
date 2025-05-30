@@ -1,0 +1,155 @@
+﻿@model IEnumerable<cngfapco.Models.FinallFreeSaleInvoice>
+
+@{
+    ViewBag.Title = "FinallFreeSaleList";
+    Layout = "~/Views/Shared/_ExportLayout.cshtml";
+    System.Globalization.PersianCalendar pc = new System.Globalization.PersianCalendar();
+}
+
+<!-- BEGIN PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href="/Users/SubSideBarItems?parentId=86">مدیریت فروش</a> <span class="divider">&nbsp;</span>
+            </li>
+            <li><a href="#">فاکتورها </a><span class="divider-last">&nbsp;</span></li>
+
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+<div style="overflow:auto;">
+    <table id="FinallFreSaleList" class="table table-striped table-hover table-bordered table-advance text-center">
+        <thead>
+            <tr>
+                <th rowspan="2">#</th>
+                <th rowspan="2">
+                    @Html.DisplayNameFor(model => model.Workshops.Title)
+                </th>
+                <th rowspan="2">
+                    @Html.DisplayNameFor(model => model.InvoiceCode)
+                </th>
+                <th rowspan="2">
+                    @Html.DisplayNameFor(model => model.CreatedDate)
+                </th>
+                <th rowspan="2">
+                    @Html.DisplayNameFor(model => model.Number)
+                </th>
+                <th rowspan="2">
+                    @Html.DisplayNameFor(model => model.UnitofMeasurement)
+                </th>
+                <th rowspan="2">
+                    @Html.DisplayNameFor(model => model.TotalAmount) ریال
+                </th>
+                <th colspan="2">
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th rowspan="2">
+                    <span>جزئیات</span>
+                </th>
+            </tr>
+            <tr>
+                <th>نوع پرداخت</th>
+                <th>حواله انبار</th>
+                <th hidden>تایید دریافت کالا</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @{ int rowNum = 0;}
+            @foreach (var item in Model)
+            {
+                //style="background-color:@item.Comment"
+                <tr>
+                    <td>@(rowNum += 1)</td>
+                    <td>
+                        @item.EmployerState
+                    </td>
+                    <td>
+                        @item.InvoiceCode
+                    <td>
+                        @(item.CreatedDate.HasValue? item.CreatedDate.Value.ToShortDateString() : null)
+                    </td>
+                    <td>
+                        @item.Number
+                    </td>
+                    <td>
+                        @item.UnitofMeasurement
+                    </td>
+                    <td>
+                        @item.TotalAmount.Value.ToString("#,##")
+                    </td>
+                    <td>
+                        @item.SaleCondition
+                    </td>
+                    <td>
+                        @if (item.Status == false)
+                        {
+                            
+                            <span> <img src="/assets/pre-loader/Hourglass.gif" alt="در مرحله بررسی"></span>
+                            <br />
+                            <span>
+                                <a href="/FreeSaleRemittances/Create?InvoiceCode=@item.InvoiceCode">
+                                    در انتظار صدور
+                                </a>
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                <a href="/FreeSaleRemittances/Remittance?InvoiceCode=@item.InvoiceCode">
+                                    <i class="icon-ok text-success"></i>
+                                </a>
+                            </span>
+                        }
+                    </td>
+                    <td hidden></td>                                        
+                    <td>
+                        <a href="/Financials/FreeSaleInvoice?InvoiceCode=@item.Description&checkExist=false&checkPaied=1&SaleCondition=@item.SaleCondition&Year=@pc.GetYear(item.CreatedDate.Value)" target="_blank">
+                            <i class="icon-list"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        var table = $('#FinallFreSaleList').DataTable({
+            "order": [[3, "desc"]],
+            dom: 'Bfrtip',
+            buttons:
+            [
+                {
+                    extend: 'csvHtml5',
+                    title: 'Data export'
+                }
+                ,
+                {
+                    extend: 'copyHtml5',
+                    title: 'Data export'
+                }
+                ,
+                {
+                    extend: 'excelHtml5',
+                    title: 'Data export'
+                }
+
+            ],
+            paging: true,
+            responsive: true
+        });
+    });
+
+</script>

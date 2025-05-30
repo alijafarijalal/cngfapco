@@ -1,0 +1,101 @@
+﻿@model cngfapco.Models.RemittanceDetails
+
+@{
+    ViewBag.Title = "RemittanceForPay";
+    Layout = "~/Views/Shared/_DataTableLayout.cshtml";
+}
+
+<div class="row-fluid">
+    <div class="widget">
+        <div class="widget-body">
+            <div style="border:1px solid #4f4f4f;padding-right:2em;padding-left:2em;">
+                <h4 class="text-right">به: شرکت فن آوران پارسیان- پروژه CNG</h4>
+                <br />
+                <p>
+                    به پیوست تعداد ............. فقره بارنامه حمل اقلام CNG به شرح جدول زیر که به این کارگاه ارسال شده است، جهت پرداخت کرایه حمل به حساب اینجانب @(Model.Remittances.DivisionPlan.Workshop.OwnerName + " " + Model.Remittances.DivisionPlan.Workshop.OwnerFamily)  ارسال می گردد.
+                </p>
+                <p>
+                    امضا
+                </p>
+                <table width="100%">
+                    <tr>
+                        <td width="15%"></td>
+                        <td width="30%"></td>
+                        <td width="55%" style="text-align:center;">
+                            <span>مهر و امضا </span><br />
+                            <br />
+                            <span>  مدیر @Model.Remittances.DivisionPlan.Workshop.Title</span>
+
+                        </td>
+                    </tr>
+                </table>
+
+                <div>
+                    @*<br />
+            <h5>
+                <span>مرکز مصرف کننده : </span> <span class="text-danger">@Model.Remittances.DivisionPlan.Workshop.Title</span>
+            </h5>*@
+                    <hr />
+                    <table class="table table-bordered table-advance" width="100%">
+                        <thead>
+                            <tr>
+                                <th width="5%" style="text-align:center;"> ردیف </th>
+                                <th width="10%" style="text-align:center;"> کد کالا </th>
+                                <th width="40%"> عنوان کالا </th>
+                                <th width="5%" style="text-align:center;"> واحد </th>
+                                <th width="5%" style="text-align:center;"> تعداد </th>
+                                <th width="35%"> توضیحات </th>
+                            </tr>
+                        </thead>
+                        @{ int rowNum = 0;}
+                        @foreach (var item in ViewBag.RemittanceList)
+                        {
+                            <tbody>
+                                <tr>
+                                    <td>@(rowNum += 1)</td>
+                                    <td></td>
+                                    <td>@item.Title</td>
+                                    <td>@item.Unit</td>
+                                    <td>@item.NumberofSend</td>
+                                    <td>@item.Description</td>
+                                </tr>
+                            </tbody>
+                        }
+
+
+                    </table>
+                  <br />
+                    <table class="table table-bordered text-center" width="100%">
+                        <tr>
+                            <td width="33%" style="text-align:center;">
+                                <p>مدیر کارگاه</p>
+                                <br />
+                                <br />
+                                <p>امضا</p>
+                            </td>
+                            <td width="33%" style="text-align:center;">
+                                <p>کارشناس ناظر</p>
+                                <br />
+                                <br />
+                                <p>امضا</p>
+                            </td>
+                            <td width="33%" style="text-align:center;">
+                                <p>مدیر پروژه</p>
+                                <br />
+                                <br />
+                                <p>امضا</p>
+                            </td>
+
+                        </tr>
+                    </table>
+                </div>
+            </div>
+          
+        </div>
+    </div>
+</div>
+
+@*<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>*@
