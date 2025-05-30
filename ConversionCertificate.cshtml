@@ -1,0 +1,284 @@
+﻿
+@{
+    ViewBag.Title = "ConversionCertificate";
+    Layout = "~/Views/Shared/_Layout_CRM.cshtml";
+}
+
+<script src="~/Scripts/qrjquery.min.js"></script>
+<script src="~/Scripts/qrcode.min.js"></script>
+<link href="~/css/iranplate.css" rel="stylesheet" />
+
+<div class="row-fluid" style="border:2px solid #4f4f4f;border-radius:20px 21px;">
+    <table class="" style="width:100%;border-bottom:5px solid #413f3f;" dir="rtl">
+        @foreach (var item in ViewBag.tableOut)
+        {
+            <tr>
+                <td style="width:15%;vertical-align:top;border:1px solid #4f4f4f;">
+                    <center>
+                        <img src="~/img/faplogo.png" class="thumbnail" style="width:100px;height:auto;" />
+                    </center>
+                </td>
+                <td style="width:65%;text-align:center;vertical-align:middle;font-weight:500;border:1px solid #4f4f4f;">
+                    <h2>گواهی @ViewBag.RegistrationType خودرو</h2>
+                </td>
+                <td style="width:15%;border:1px solid #4f4f4f;">
+                    <p>
+                        <center>
+                            @Html.Action("CertificateQR", "QRs", new { QRCodeText = item.RegisterUniqueCode })
+                        </center>
+                    </p>
+                </td>
+            </tr>
+        }
+    </table>
+    <table class="table table-bordered" style="width:100%;">
+        @foreach (var item in ViewBag.tableOut)
+        {
+            <tr>
+                <td>
+                    <span>تاریخ صدور: </span>
+                    <strong>@item.ConversionDate</strong>
+                </td>
+                <td>
+                    <span>
+                        شماره گواهی:
+                    </span>
+                    <strong style="font-family:Vazir;">@item.RegisterUniqueCode</strong>
+                </td>
+                <td>
+                    <span>
+                        شماره ویرایش:
+                    </span>
+                    <strong>یک</strong>
+                </td>
+            </tr>
+        }
+    </table>
+    <table class="table table-bordered" style="width:100%;" dir="rtl">
+
+        @foreach (var item in ViewBag.tableOut)
+        {
+            <tr style="background-color:#d4d6d9;">
+                <td style="text-align:center;vertical-align:middle;border:1px solid #413f3f;" colspan="3">
+                    <strong>مشخصات مالک خودرو</strong>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:30%;">
+                    <span class="text-warning">نام و نام خانوادگی: </span>
+                    <strong>@item.OwnerFullName</strong>
+                </td>
+                <td style="width:30%;">
+                    <span class="text-warning">کد ملی: </span>
+                    <strong dir="rtl">@item.NationalCode</strong>
+                </td>
+                <td style="width:30%;">
+                    <span class="text-warning">
+                        تلفن همراه:
+                    </span>
+                    <strong>@item.OwnerMobile</strong>
+                </td>
+            </tr>
+            <tr style="background-color:#d4d6d9">
+                <td style="text-align:center;vertical-align:middle;border:1px solid #413f3f;" colspan="3">
+                    <strong>مشخصات خودرو</strong>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="text-warning">سال ساخت: </span>
+                    <strong>@item.ConstructionYear</strong>
+                </td>
+                <td>
+                    <span class="text-warning">نوع/ کاربری: </span>
+                    <strong>@item.VehicleType</strong><span>/</span> <strong> @item.TypeofUse</strong>
+                </td>
+                <td class="">
+                    <span class="text-warning">شماره پلاک: </span>
+                    <div class="codepen-wrapper">
+                        <div class="registration-ui">
+                            <div class="plate-1">
+                                <span>@item.RightNumberPlate</span>
+                                <span>@item.AlphaPlate</span>
+                                <span>@item.LeftNumberPlate</span>
+                            </div>
+                            <span class="plate-2">@item.IranNumberPlate</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="text-warning">شماره موتور: </span>
+                    <strong style="font-family:Vazir;">@item.EngineNumber</strong>
+                </td>
+                <td>
+                    <span class="text-warning">شماره شاسی: </span>
+                    <strong style="font-family:Vazir;">@item.ChassisNumber</strong>
+                </td>
+                <td>
+                    <span class="text-warning" dir="rtl">
+                        شماره VIN:
+                    </span>
+                    <strong dir="rtl" style="font-family:Vazir;">@item.VIN</strong>
+                </td>
+            </tr>
+            <tr style="background-color:#d4d6d9">
+                <td style="text-align:center;vertical-align:middle;border:1px solid #413f3f;" colspan="3">
+                    <strong>مشخصات مخزن و کیت</strong>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <i class="icon-bookmark-empty text-warning"></i> <span class="text-warning">سازنده</span>
+                    <i class="icon-qrcode text-warning" style="margin-right:7px;"></i> <span class="text-warning">شماره سریال مخزن</span>
+                    <br />
+                    <i class="icon-bookmark-empty text-warning"></i> <strong>@item.CylinderConstractor</strong>
+                    <i class="icon-qrcode text-warning" style="margin-right:7px;"></i> <strong>@item.CylinderSerialNumber</strong>
+                </td>
+                <td>
+                    <i class="icon-caret-left text-warning"></i> <span class="text-warning">نوع</span>
+                    <i class="icon-hdd text-warning" style="margin-right:7px;"></i> <span class="text-warning">حجم</span>
+                    <i class="icon-caret-left text-warning" style="margin-right:7px;"></i> <span class="text-warning">رزوه مخزن</span>
+                    <br />
+                    <i class="icon-caret-left text-warning"></i> <strong>@item.CylinderType</strong>
+                    <i class="icon-hdd text-warning" style="margin-right:7px;"></i> <strong>@item.CylinderBulk</strong> <span> لیتری </span>
+                    <i class="icon-caret-left text-warning" style="margin-right:7px;"></i> <strong>@item.rezve</strong>
+                </td>
+                <td>
+                    <i class="icon-caret-left text-warning"></i> <span class="text-warning">حداکثری فشار</span>
+                    <i class="icon-calendar text-warning" style="margin-right:7px;"></i> <span class="text-warning">تاریخ انقضا</span>
+                    <br />
+                    <i class="icon-caret-left text-warning"></i> <strong>@item.CylinderPressure</strong>
+                    <i class="icon-calendar text-warning" style="margin-right:7px;"></i> <strong>@item.CylinderExpireDate</strong>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <i class="icon-bookmark-empty text-warning"></i> <span class="text-warning">سازنده</span>
+                    <i class="icon-qrcode text-warning" style="margin-right:7px;"></i> <span class="text-warning">شماره سریال</span>
+                    <i class="icon-caret-left text-warning" style="margin-right:7px;"></i> <span class="text-warning">نوع</span>
+                    <i class="icon-caret-left text-warning" style="margin-right:7px;"></i> <span class="text-warning">رزوه شیر مخزن</span>
+                    <br />
+                    <i class="icon-bookmark-empty text-warning"></i> <strong dir="rtl">@item.ValveConstractor</strong>
+                    <i class="icon-qrcode text-warning" style="margin-right:7px;"></i> <strong dir="rtl">@item.ValveSerialNumber</strong>
+                    <i class="icon-caret-left text-warning" style="margin-right:7px;"></i> <strong>@item.ValveType</strong>
+                    <i class="icon-caret-left text-warning" style="margin-right:7px;"></i> <strong>@item.ValveRezve</strong>
+                </td>
+                <td>
+                    <i class="icon-bookmark-empty text-warning"></i> <span class="text-warning">سازنده </span>
+                    <i class="icon-qrcode text-warning" style="margin-right:7px;"></i> <span class="text-warning">شماره سریال </span>
+                    <i class="icon-caret-left text-warning" style="margin-right:7px;"></i> <span class="text-warning">نوع </span>
+                    <i class="icon-caret-left text-warning" style="margin-right:7px;"></i> <span class="text-warning">نسل رگلاتور </span>
+                    <br />
+                    <i class="icon-bookmark-empty text-warning"></i> <strong>@item.RegulatorConstractor</strong>
+                    <i class="icon-qrcode text-warning" style="margin-right:7px;"></i> <strong>@item.RegulatorSerialNumber</strong>
+                    <i class="icon-caret-left text-warning" style="margin-right:7px;"></i> <strong>@item.RegulatorType</strong>
+                    <i class="icon-caret-left text-warning" style="margin-right:7px;"></i> <strong>@item.RegulatorGeneration</strong>
+                </td>
+                <td>
+                    <i class="icon-bookmark-empty text-warning"></i> <span class="text-warning">سازنده</span>
+                    <i class="icon-qrcode text-warning" style="margin-right:7px;"></i> <span class="text-warning">شماره سریال</span>
+                    <i class="icon-caret-left text-warning" style="margin-right:7px;"></i> <span class="text-warning">مدل شیر پرکن</span>
+                    <br />
+                    <i class="icon-bookmark-empty text-warning"></i> <strong>@item.FillingValveConstractor</strong>
+                    <i class="icon-qrcode text-warning" style="margin-right:7px;"></i> <strong>@item.FillingValveSerialNumber</strong>
+                    <i class="icon-caret-left text-warning" style="margin-right:7px;"></i> <strong>@item.FillingValveModel</strong>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <i class="icon-bookmark-empty text-warning"></i> <span class="text-warning">سازنده</span>
+                    <i class="icon-qrcode text-warning" style="margin-right:7px;"></i> <span class="text-warning">شماره سریال</span>
+                    <i class="icon-caret-left text-warning" style="margin-right:7px;"></i> <span class="text-warning">مدل شیر قطع کن</span>
+                    <br />
+                    <i class="icon-bookmark-empty text-warning"></i> <strong>@item.CutoffValveConstractor</strong>
+                    <i class="icon-qrcode text-warning" style="margin-right:7px;"></i> <strong>@item.CutoffValveSerialNumber</strong>
+                    <i class="icon-caret-left text-warning" style="margin-right:7px;"></i> <strong>@item.CutoffValveModel</strong>
+                </td>
+                <td>
+                    <i class="icon-bookmark-empty text-warning"></i> <span class="text-warning">سازنده</span>
+                    <i class="icon-qrcode text-warning" style="margin-right:7px;"></i> <span class="text-warning">شماره سریال ریل سوخت</span>
+                    <br />
+                    <i class="icon-bookmark-empty text-warning"></i> <strong>@item.FuelRelayConstractor</strong>
+                    <i class="icon-qrcode text-warning" style="margin-right:7px;"></i> <strong>@item.FuelRelaySerialNumber</strong>
+                </td>
+                <td>
+                    <i class="icon-bookmark-empty text-warning"></i> <span class="text-warning">سازنده</span>
+                    <i class="icon-qrcode text-warning" style="margin-right:7px;"></i> <span class="text-warning">شماره سریال Gas ECU</span>
+                    <br />
+                    <i class="icon-bookmark-empty text-warning"></i> <strong>@item.GasECUConstractor</strong>
+                    <i class="icon-qrcode text-warning" style="margin-right:7px;"></i> <strong>@item.GasECUSerialNumber</strong>
+                </td>
+            </tr>
+            <tr style="background-color:#d4d6d9">
+                <td style="text-align:center;vertical-align:middle;border:1px solid #413f3f;" colspan="3">
+                    <strong>مشخصات کارگاه تبدیل</strong>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="text-warning">نام کارگاه/ مالک: </span><br />
+                    <i class="icon-bookmark-empty text-warning"></i> <strong>@item.Workshop</strong><br />
+                    <i class="icon-user-md text-warning"></i> <strong>@item.WorkshopOwner</strong>
+                </td>
+                <td colspan="2">
+                    <span class="text-warning">نشانی و شماره تماس: </span><br />
+                    <i class="icon-map-marker text-warning"></i> <strong>@item.WorkshopAddress</strong> <br />
+                    <i class="icon-mobile-phone text-warning"></i> <strong dir="rtl">@item.WorkshopOwnerMobile</strong><br />
+                    <i class="icon-phone text-warning"></i> <strong dir="rtl">@item.WorkshopPhone</strong>
+                </td>
+            </tr>
+        }
+
+    </table>
+    <table class="table table-bordered" style="width:100%;" dir="rtl">
+        @foreach (var item in ViewBag.tableOut)
+        {
+            <tr>
+                <td colspan="2">
+                    <ul>
+                        <li>این گواهینامه ............</li>
+                        <li>مالک خودرو ملزم به رعایت کردن ضوابط بهره برداری صحیح.......</li>
+                        <li>هر گونه تغییر در سیستم گازسوز خودرو و محل نصب ... </li>
+                        <li>اجزا و شرایط نصب مخزن بر اساس الزامات استانداردها...</li>
+                        <li>تمامی اجزای کیت دوگانه سوز باید استاندارد و مورد...</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:50%;border:1px solid #808080;height:50px;">
+                    <span class="text-warning">مهر و امضا کارگاه: </span><br />
+                    <strong style="margin-right:0px;">@item.Workshop</strong>
+                </td>
+                <td style="width:50%;border:1px solid #808080;height:50px;">
+                    <span class="text-warning">مهر و امضا: </span><br />
+                    <strong style="margin-right:0px;">شرکت توسعه طرحهای صنعتی فن آوران پارسیان</strong>
+                </td>
+            </tr>
+        }
+
+    </table>
+    <div class="row-fluid">
+        <div class="span12">
+            <table class="table" style="width:100%">
+                @foreach (var item in ViewBag.tableOut)
+                {
+                    <tr>
+                        <td>@Html.Action("CylinderQR", "QRs", new { QRCodeText = item.CylinderSerialNumber })</td>
+                        <td>@Html.Action("ValveQR", "QRs", new { QRCodeText = item.ValveSerialNumber })</td>
+                        <td>@Html.Action("RegulatorQR", "QRs", new { QRCodeText = item.RegulatorSerialNumber })</td>
+                        <td>@Html.Action("FillingValveQR", "QRs", new { QRCodeText = item.FillingValveSerialNumber })</td>
+                        <td>@Html.Action("CutoffValveQR", "QRs", new { QRCodeText = item.CutoffValveSerialNumber })</td>
+                        <td>@Html.Action("FuelRelayQR", "QRs", new { QRCodeText = item.FuelRelaySerialNumber })</td>
+                        <td>@Html.Action("GasECUQR", "QRs", new { QRCodeText = item.GasECUSerialNumber })</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a href="/VehicleRegistrations/PrintConversionCertificate?selectedId=@ViewBag.selectedId" class="btn btn-success" target="_blank"><i class="icon-print text-white"></i> </a>
+</div>

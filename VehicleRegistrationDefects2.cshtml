@@ -1,0 +1,267 @@
+﻿@model IEnumerable<cngfapco.Models.VehicleRegistration>
+
+@{
+    ViewBag.Title = "VehicleRegistrationDefects";
+    Layout = "~/Views/Shared/_DataTableLayout.cshtml";
+    string roleName = cngfapco.Helper.Helpers.GetCurrentUserRole();
+}
+
+<script src="~/js/admin/jquery-1.10.2.js"></script>
+<script src="~/js/admin/jquery-common.js"></script>
+<script src="~/js/admin/jquery-ui-1.10.3.custom.min.js"></script>
+
+<!-- BEGIN PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href="/VehicleRegistrations/WorkshopPage">لیست مراکز خدمات CNG </a> <span class="divider">&nbsp;</span>
+            </li>
+            <li><a href="#">نواقص اطلاعات </a><span class="divider-last">&nbsp;</span></li>
+
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN SAMPLE FORM widget-->
+        <div class="widget">
+            <div class="widget-title">
+                <h4><i class="icon-reorder"></i>لیست بررسی نواقص اطلاعات خودروهای ثبت شده</h4>
+                <span class="tools">
+                    <a href="javascript:;" class="icon-chevron-down"></a>
+                    <a href="javascript:;" class="icon-remove"></a>
+                </span>
+
+            </div>
+            <div class="widget-body form">
+
+                <!-- BEGIN FORM-->
+                <div style="overflow:auto;">
+                    <div class="space15"></div>
+                    <div id="DivIdToPrint">
+
+                        <table class="table table-striped table-bordered table-hover table-advance" id="sample_editable_1">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        #
+                                    </th>
+                                    <th>
+                                        تاریخ ثبت
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.VehicleType.Type)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Workshop.Title)
+                                    </th>
+                                    <th>
+                                        @(Html.DisplayNameFor(model => model.OwnerName) + "  و " + Html.DisplayNameFor(model => model.OwnerFamily))
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.ChassisNumber)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.NationalCard)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.VehicleCard)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.LicenseImage)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.HealthCertificate)
+                                    </th>
+                                    <th>وضعیت بررسی</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @{ int rowNum = 0;}
+                                @foreach (var item in ViewBag.vehicleregistration)
+                                {
+                                    <tr>
+                                        <td>
+                                            @(rowNum+=1)
+                                        </td>
+                                        <td>
+                                            @item.CreateDate
+                                        </td>
+                                        <td>
+                                            @item.Type
+                                        </td>
+                                        <td>
+                                            @item.WorkshopTitle
+                                        </td>
+                                        <td>
+                                            @item.FullName
+                                        </td>
+                                        <td>
+                                            @item.ChassisNumber
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.NationalCard))
+                                            {
+                                                using (Html.BeginForm("UploadImageList", "VehicleRegistrations", new { id = item.ID }, FormMethod.Post, null))
+                                                {
+                                                    <button type="submit" class="icon-search" style="color:#00ff21;font-size:15px;border:0px;"> کارت ملی </button>
+                                                }
+                                                @*<a href="/VehicleRegistrations/UploadImageList?id=@item.ID" target="_blank">
+                                                    <i class="icon-search"> کارت ملی </i>
+                                                </a>*@
+                                                @*<span class="text-success">دارای پیوست</span>*@
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger">فاقد پیوست</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.VehicleCard))
+                                            {
+                                                using (Html.BeginForm("UploadImageList", "VehicleRegistrations", new { id = item.ID }, FormMethod.Post, null))
+                                                {
+                                                    <button type="submit" class="icon-search" style="color:#00ff21;font-size:15px;border:0px;"> کارت خودرو </button>
+                                                }
+                                                @*<a href="/VehicleRegistrations/UploadImageList?id=@item.ID" target="_blank">
+                                                    <i class="icon-search"> کارت خودرو </i>
+                                                </a>*@
+                                                @*<span class="text-success">دارای پیوست</span>*@
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger">فاقد پیوست</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.LicenseImage))
+                                            {
+                                                @*<a href="/VehicleRegistrations/UploadImageList?id=@item.ID" target="_blank">
+                                                    <i class="icon-search"> گواهینامه </i>
+                                                </a>*@
+                                                using (Html.BeginForm("UploadImageList", "VehicleRegistrations", new { id = item.ID }, FormMethod.Post, null))
+                                                {
+                                                    <button type="submit" class="icon-search" style="color:#00ff21;font-size:15px;border:0px;"> گواهینامه </button>
+                                                }
+                                                @*<span class="text-success">دارای پیوست</span>*@
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger">فاقد پیوست</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.HealthCertificate))
+                                            {
+                                                using (Html.BeginForm("UploadImageList", "VehicleRegistrations", new { id = item.ID }, FormMethod.Post, null))
+                                                {
+                                                    <button type="submit" class="icon-search" style="color:#00ff21;font-size:15px;border:0px;"> گواهی سلامت </button>
+                                                }
+                                                @*<a href="/VehicleRegistrations/UploadImageList?id=@item.ID" target="_blank">
+                                                    <i class="icon-search"> گواهی سلامت </i>
+                                                </a>*@
+                                                @*<span class="text-success">دارای پیوست</span>*@
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger">فاقد پیوست</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (!roleName.Equals("مرکز خدمات (کارگاه)"))
+                                            {
+                                                if (item.Checked == "True")
+                                                {
+                                                    <input type="checkbox" class="myCheckbox" name="Blanks" id="chk" value="@item.ID" checked="checked" disabled="disabled" />
+                                                }
+                                                else
+                                                {
+                                                    <input type="checkbox" class="myCheckbox" name="Blanks" id="chk" value="@item.ID" />
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (item.Checked == "True")
+                                                {
+                                                    <input type="checkbox" class="myCheckbox" name="Blanks" id="chk" value="@item.ID" checked="checked" disabled="disabled" />
+                                                }
+                                                else
+                                                {
+                                                    <input type="checkbox" class="myCheckbox" name="Blanks" disabled="disabled" />
+                                                }
+
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+
+                <!-- END FORM-->
+            </div>
+        </div>
+        <!-- END SAMPLE FORM widget-->
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    //
+    function printtag(tagid) {
+        var hashid = "#" + tagid;
+        var tagname = $(hashid).prop("tagName").toLowerCase();
+        var attributes = "";
+        var attrs = document.getElementById(tagid).attributes;
+        $.each(attrs, function (i, elem) {
+            attributes += " " + elem.name + " ='" + elem.value + "' ";
+        })
+        var divToPrint = $(hashid).html();
+        var head = "<html><head>" + $("head").html() + "</head>";
+        var allcontent = head + "<body  dir='rtl' onload='window.print()' style='background-color:#ffffff'>" + "<" + tagname + attributes + ">" + divToPrint + "</" + tagname + ">" + "</body></html>";
+        var newWin = window.open('', 'Print-Window');
+        newWin.document.open();
+        newWin.document.write(allcontent);
+        newWin.document.close();
+        setTimeout(function () { newWin.close(); }, 10000);
+    }
+</script>
+
+<a onclick='printtag("DivIdToPrint")' class="btn"> <i class="icon-print" style="color:#00ff21;font-size:30px;"></i> </a>
+@*<input type="button" id="btn" value="Extract" style="float:right " />*@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.myCheckbox').change(function () {
+            var values = $('input[type="checkbox"].myCheckbox:checked').map(function () {
+                return $(this).val();
+            }).toArray();
+            $.ajax({
+                type: 'POST',
+                url: '/VehicleRegistrations/CheckedOut',
+                data: JSON.stringify({ Items: values }),
+                contentType: 'application/json',
+                success: function (result) {
+                    alert(result.result);
+                },
+                error: function (err, result) {
+                    alert("خطا در تایید" + err.responseText);
+                }
+            });
+
+            return false;
+        });
+
+    });
+</script>

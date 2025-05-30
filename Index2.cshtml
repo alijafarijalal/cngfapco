@@ -1,0 +1,250 @@
+﻿@model IEnumerable<cngfapco.Models.VehicleRegistration>
+
+@{
+    ViewBag.Title = "Index2";
+    Layout = "~/Views/Shared/_DataTableLayout.cshtml";
+}
+
+<h2>Index2</h2>
+
+<table class="table table-striped table-bordered table-hover table-advance" id="sample_editable_1" width="100%">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>
+                @Html.DisplayNameFor(model => model.TypeofUse.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VehicleType.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Workshop.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.System)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OwnerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OwnerFamily)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NationalCard)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NationalCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MobileNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConstructionYear)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LeftNumberPlate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AlphaPlate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RightNumberPlate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IranNumberPlate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VIN)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EngineNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ChassisNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VehicleCard)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SerialSparkPreview)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SerialKit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SerialKey)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SerialRefuelingValve)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RefuelingLable)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TrackingCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.License)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LicenseImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InstallationStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Creator)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreateDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FuelCard)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Editor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EditDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HealthCertificate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    
+    <tbody>
+        @{ int rowNum = 0;}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@(rowNum+=1)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TypeofUse.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VehicleType.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Workshop.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.System)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OwnerName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OwnerFamily)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NationalCard)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NationalCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MobileNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ConstructionYear)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LeftNumberPlate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AlphaPlate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RightNumberPlate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IranNumberPlate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VIN)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EngineNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ChassisNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VehicleCard)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SerialSparkPreview)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SerialKit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SerialKey)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SerialRefuelingValve)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RefuelingLable)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TrackingCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.License)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LicenseImage)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InstallationStatus)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Creator)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreateDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FuelCard)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Editor)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EditDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HealthCertificate)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                </td>
+            </tr>
+        }
+
+    </tbody>
+
+</table>

@@ -1,0 +1,47 @@
+﻿@model cngfapco.Models.VehicleRegistration
+
+
+    <!-- BEGIN PULSATE PORTLET-->
+    <div class="widget">
+        <div class="widget-body ">
+            @using (Html.BeginForm("AddInsuranceCode", "VehicleRegistrations", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("VehicleRegistrationID", Model.ID)
+                
+                <div class="widget-body form">
+                    <div class="row-fluid invoice-list">
+                        <div>
+                            <h5>مشخصات خودرو</h5>
+                            <ul class="list-unstyled">
+                                <li> <span>نوع خودرو : </span>  <strong style="margin-right:7px;color:#0e3ec3;"> @(Model.TypeofUse.Type + "-" + Model.TypeofUse.Description) </strong></li>
+                                <li><span>شماره شاسی : </span>  <strong style="margin-right:7px;color:#0e3ec3;"> @(Model.ChassisNumber) </strong> </li>
+                                <li><span>شماره موتور : </span>  <strong style="margin-right:7px;color:#0e3ec3;"> @(Model.EngineNumber)</strong> </li>
+                                <li>
+                                    <span>شماره پلاک : </span>
+                                    <strong style="margin-right:7px;color:#0e3ec3;">
+                                        @(Model.LeftNumberPlate + "" + Model.AlphaPlate + "" + Model.RightNumberPlate + "- ایران" + Model.IranNumberPlate)
+                                    </strong>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">شماره بیمه نامه</label>
+                        <div class="controls">
+                            <input type="text" name="Number" class="span3 ">                            
+                        </div>
+                    </div>
+                    
+                    <hr />
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="ثبت بیمه نامه" class="btn btn-success" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <!-- END PULSATE PORTLET-->

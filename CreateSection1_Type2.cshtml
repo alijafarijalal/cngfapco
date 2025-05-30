@@ -1,0 +1,710 @@
+﻿
+@{
+    ViewBag.Title = "CreateSection1";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    System.Globalization.PersianCalendar pc = new System.Globalization.PersianCalendar();
+    string status = (string)ViewBag.status;
+    string Type = (string)ViewBag.Type;
+}
+
+<script src="~/js/admin/jquery-1.10.2.js"></script>
+
+<div class="row-fluid">
+    <div class="span12">
+        <h3 class="page-title hide">
+            @*<small>form wizard sample</small>*@
+            Form Wizard
+        </h3>
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href="/VehicleRegistrations/Index"> لیست خودرو ها </a> <span class="divider">&nbsp;</span>
+            </li>
+            <li><a href="#"> ثبت مشخصات خودرو- طرح تعویض </a><span class="divider-last">&nbsp;</span></li>
+        </ul>
+    </div>
+</div>
+
+<div class="row-fluid hidden">
+    <div class="navbar steps">
+        <div class="navbar-inner">
+            <ul class="row-fluid">
+                <li class="span3">
+                    <a href="#tab1" data-toggle="tab" class="step active">
+                        <span class="number">1- </span>
+                        <span class="desc"><strong> ثبت مشخصات خودرو </strong>  </span>
+                    </a>
+                </li>
+                @*<li class="span3">
+                        <a href="#tab2" data-toggle="tab" class="step">
+                            <span class="number">2- </span>
+                            <span class="text-muted"> ثبت فیش های واریزی </span>
+                        </a>
+                    </li>*@
+                <li class="span3">
+                    <a href="#tab3" data-toggle="tab" class="step">
+                        <span class="number">2- </span>
+                        <span class="desc"> ثبت مشخصات مخزن و متعلقات </span>
+                    </a>
+                </li>
+                <li class="span3">
+                    <a href="#tab4" data-toggle="tab" class="step">
+                        <span class="number">3- </span>
+                        <span class="desc"> ثبت مشخصات تکمیلی</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span12">
+        <h2> <i class="icon icon-warning-sign"></i> شما در صفحه ثبت اطلاعات خودرو مربوط به <strong style="color:#ff2121">طرح تعویض </strong>می باشید !</h2>
+        <div class="widget">
+          
+            <form method="post">
+                @*action="/VehicleRegistrations/SaveSection1"*@
+                <div class="widget-body" style="font-family:Vazir;">
+                    <p class="text-danger">@ViewBag.message</p>
+                    <input type="hidden" value="@Type" name="RegistrationType" id="RegistrationType" />
+                    <div class="row-fluid">
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> نوع خودرو  </label>
+                            <div class="controls">
+                                @Html.DropDownList("VehicleTypeID", null, "", htmlAttributes: new { @class = "span12", @tabindex = "", @required = "required", @style = "font-family:Vazir;" })
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> سیستم </label>
+                            <div class="controls">
+                                <select class="span12" tabindex="" data-placeholder="" id="System" name="System" required="required" style="font-family:Vazir;">
+                                    <option value=""></option>
+                                    <option value="دوگانه(بنزین- CNG)" selected>دوگانه(بنزین- CNG)</option>
+                                    <option value="بنزینی">بنزینی</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> نوع کاربری </label>
+                            <div class="controls">
+                                @Html.DropDownList("TypeofUseID", null, "", htmlAttributes: new { @class = "span12", @required = "required", @style = "font-family:Vazir;" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space10"></div>
+
+                    <div class="row-fluid">
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> نام مالک </label>
+                            <div class="controls input-icon left">
+                                <i class="icon-user"></i>
+                                <input type="text" tabindex="" class="span12 PrsianKey" name="OwnerName" id="OwnerName" onkeyup="text(this)" required="required" style="font-family:Vazir;" />
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> نام خانوادگی مالک </label>
+                            <div class="controls input-icon left">
+                                <i class="icon-user"></i>
+                                <input type="text" tabindex="" class="span12 PrsianKey" name="OwnerFamily" id="OwnerFamily" onkeyup="text(this)" required="required" style="font-family:Vazir;" /> @*id="txtn"*@
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> کد ملی مالک </label>
+                            <div class="controls input-icon left">
+                                <i class="icon-credit-card"></i>
+                                <input type="text" tabindex="" class="span12" name="NationalCode" id="NationalCode" data-mask="999-999999-9" placeholder="053-111111-1" required="required" style="font-family:Vazir;" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="space10"></div>
+
+                    <div class="row-fluid">
+
+                        <div class="span4">
+                            <label class="control-label text-warning">تلفن ثابت</label>
+                            <div class="controls input-icon left">
+                                <i class="icon-phone"></i>
+                                <input type="text" tabindex="" class="span12" name="PhoneNumber" id="PhoneNumber" data-mask="(999) 99999999" placeholder="(021) 22222222" />
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> تلفن همراه </label>
+                            <div class="controls input-icon left">
+                                <i class="icon-mobile-phone"></i>
+                                <input type="text" tabindex="" class="span12" name="MobileNumber" id="MobileNumber" data-mask="99999999999" required="required" />
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning">آدرس</label>
+                            <div class="controls input-icon left">
+                                @*<i class="icon-map-marker"></i>*@
+                                <textarea type="text" tabindex="" class="span12 PrsianKey" name="Address" id="Address" onkeyup="text(this)" rows="1" style="font-family:Vazir;"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="space10"></div>
+
+                    <div class="row-fluid">
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> سال ساخت </label>
+                            <div class="controls">
+                                <select class="span12" tabindex="" data-placeholder="" id="ConstructionYear" style="" name="ConstructionYear" required="required">
+                                    <option value=""></option>
+                                    @for (int i = 1300; i <= pc.GetYear(DateTime.Now); i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> پلاک خودرو </label>
+                            <div class="controls" style="border:0px solid #808080;">
+
+                                <div class="span3">
+                                    <input type="text" tabindex="" class="span12 text-center" name="LeftNumberPlate" id="LeftNumberPlate" placeholder="99" data-mask="99" required="required" />
+                                </div>
+
+                                <div class="span3 text-center">
+                                    <select tabindex="" class="span12 PrsianKey" data-placeholder="" id="AlphaPlate" style="font-family:Vazir;" name="AlphaPlate" required="required">
+                                        <option value="ت" selected>ت</option>
+                                        <option value="ع">ع</option>
+                                    </select>
+                                </div>
+
+                                <div class="span3">
+                                    <input type="text" tabindex="" class="span12 text-center" name="RightNumberPlate" id="RightNumberPlate" placeholder="754" data-mask="999" required="required" />
+                                </div>
+
+                                <div class="span3">
+                                    <span class="span8"><input type="text" tabindex="" class="span12 text-center" name="IranNumberPlate" id="IranNumberPlate" placeholder="ایران" data-mask="99" required="required" /></span>
+                                    <span class="span4"><img src="~/img/plateimg.png" class="" width="15" height="20" /></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> شماره VIN </label>
+                            <div class="controls input-icon left">
+                                @*<i class="icon-mobile-phone"></i>*@
+                                <input type="text" tabindex="" class="span12 EnglishKey" name="VIN" id="VIN" placeholder="IRFC901V10O565126" style="text-transform: uppercase" required="required" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="space10"></div>
+
+                    <div class="row-fluid">
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> شماره موتور </label>
+                            <div class="controls input-icon left">
+                                <input type="text" tabindex="" class="span12 EnglishKey" name="EngineNumber" id="EngineNumber" style="text-transform: uppercase" required="required" />
+                                <span id="CheckeEngineNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning">  <span class="help-inline text-danger text-l"> * </span> شماره شاسی </label>
+                            <div class="controls input-icon left">
+                                <input type="text" tabindex="" class="span12 EnglishKey" name="ChassisNumber" id="ChassisNumber" style="text-transform: uppercase" required="required" />
+                                <span id="CheckeChassisNumber" class="text-danger span12"></span>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+                    <div class="row-fluid">
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> نسل کیت </label>
+                            <div class="controls">
+                                @Html.DropDownList("GenerationofRegulatorID", null, "", htmlAttributes: new { @class = "span12", @tabindex = "", @required = "required", @style = "font-family:Vazir;" })
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> سریال کیت  </label>
+                            <div class="controls">
+                                <input type="text" class="span12 group1" name="RegulatorSerial" id="RegulatorSerial" style="text-transform: uppercase" required="required" />
+                                <span id="CheckeRegulatorSerial" class="text-danger span12"></span>
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> سریال و حجم مخزن </label>
+                            <div class="controls">
+                                <input type="text" class="span8" name="Serial" id="Serial" placeholder="" style="text-transform: uppercase" required="required" />
+                                <span id="CheckeSerialNumber" class="text-danger span12"></span>
+                                <input type="text" class="span4" name="BulkType" id="BulkType" disabled="disabled" />
+                                <input type="hidden" class="span12" name="BulkId" id="BulkId" />
+                            </div>
+                            <script>
+                                        $(function () {
+                                            $('#VehicleTypeID').change(function () {
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: '@Url.Action("cylinderBulkType")',
+                                                    dataType: 'json',
+                                                    data: { VehicleTypeID: $("#VehicleTypeID").val() },
+                                                    success: function (result) {
+                                                        //alert(result);
+                                                        $('#BulkType').val(result + " لیتری");
+                                                    }
+                                                });
+
+                                            }).change();
+
+                                        });
+                                //
+                                 $(function () {
+                                            $('#VehicleTypeID').change(function () {
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: '@Url.Action("cylinderBulkId")',
+                                                    dataType: 'json',
+                                                    data: { VehicleTypeID: $("#VehicleTypeID").val() },
+                                                    success: function (result) {
+                                                        //alert(result);
+                                                        $('#BulkId').val(result);
+                                                    }
+                                                });
+
+                                            }).change();
+
+                                        });
+                            </script>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="row-fluid group1">
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> سریال شیر مخزن </label>
+                            <div class="controls">
+                                <input type="text" class="span12" name="SerialTankValve" id="SerialTankValve" style="text-transform: uppercase" required="required" />
+                                <span id="CheckeSerialTankValve" class="text-danger span12"></span>
+                            </div>
+                        </div>
+
+
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> سریال شیر قطع کن </label>
+                            <div class="controls">
+                                <input type="text" class="span12" name="CutofValveSerial" id="CutofValveSerial" style="text-transform: uppercase" required="required" />
+                                <span id="CheckeCutofValveSerial" class="text-danger span12 group1"></span>
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> سریال شیر پر کن </label>
+                            <div class="controls">
+                                <input type="text" class="span12" name="FillingValveSerial" id="FillingValveSerial" style="text-transform: uppercase" required="required" />
+                                <span id="CheckeFillingValveSerial" class="text-danger span12"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row-fluid group2">
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> سریال ریل سوخت </label>
+                            <div class="controls">
+                                <input type="text" class="span12" name="FuelRelaySerial" id="FuelRelaySerial" style="text-transform: uppercase" />
+                                <span id="CheckeFuelRelaySerial" class="text-danger span12"></span>
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> سریال Gas ECU </label>
+                            <div class="controls">
+                                <input type="text" class="span12" name="GasECUSerial" id="GasECUSerial" style="text-transform: uppercase" />
+                                <span id="CheckeGasECUSerial" class="text-danger span12"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="space10"></div>
+
+                    <div class="row-fluid">
+                        <input id="savesection1" type="submit" value="ذخیره اطلاعات" class="text-success span12 btnSave button-submit" style="font-family:Vazir;" @status />
+                    </div>
+
+                </div>
+
+                <script>
+                    $(document).ready(function () {
+                        var VehicleTypeID = $('#VehicleTypeID');
+                        var System = $('#System');
+                        var TypeofUseID = $('#TypeofUseID');
+                        var OwnerName = $('#OwnerName');
+                        var OwnerFamily = $('#OwnerFamily');
+                        var NationalCode = $('#NationalCode');
+                        var PhoneNumber = $('#PhoneNumber');
+                        var MobileNumber = $('#MobileNumber');
+                        var Address = $('#Address');
+                        var ConstructionYear = $('#ConstructionYear');
+                        var LeftNumberPlate = $('#LeftNumberPlate');
+                        var AlphaPlate = $('#AlphaPlate');
+                        var RightNumberPlate = $('#RightNumberPlate');
+                        var IranNumberPlate = $('#IranNumberPlate');
+                        var VIN = $('#VIN');
+                        var EngineNumber = $('#EngineNumber');
+                        var ChassisNumber = $('#ChassisNumber');
+                        var FuelCard = $('#FuelCard');
+                        var successMessage = $('.success');
+                        var error = $('.errors-container');
+                        //for vehicle cilynder and other parts
+                        var BulkId = $('#BulkId');
+                        var Serial = $('#Serial');
+                        var SerialTankValve = $('#SerialTankValve');
+                        var RegulatorSerial = $('#RegulatorSerial');
+                        var CutofValveSerial = $('#CutofValveSerial');
+                        var FillingValveSerial = $('#FillingValveSerial');
+                        var FuelRelaySerial = $('#FuelRelaySerial');
+                        var GasECUSerial = $('#GasECUSerial');
+                        var GenarationID = $('#GenerationofRegulatorID :selected');
+                        var RegistrationType = $('#RegistrationType');
+                        /**/
+                        //
+                        function validateForm() {
+                            var required = [VehicleTypeID, System, TypeofUseID, OwnerName, OwnerFamily, NationalCode, MobileNumber, ConstructionYear,
+                                LeftNumberPlate, AlphaPlate, RightNumberPlate, IranNumberPlate, VIN, EngineNumber, ChassisNumber, FuelCard, BulkId,
+                                Serial, SerialTankValve, RegulatorSerial, CutofValveSerial, FillingValveSerial, FuelRelaySerial, GasECUSerial, GenarationID, RegistrationType];
+                            var containsErrors = false;
+
+                            for (i = 0; i < required.length; i++) {
+                                var input = required[i];
+                                if ((input.val() == "")) {
+                                    containsErrors = true;
+                                    input.addClass('error-field');
+                                    error.show();
+                                } else {
+                                    input.removeClass('error-field');
+                                }
+                            }
+                            return !containsErrors;
+                        }
+                        $('.button-submit').click(function (e) {
+                            //function postForm() {
+                            //var formData = { };
+
+                            $.ajax({
+                                type: "POST",
+                                url: "/VehicleRegistrations/SaveSection1",
+                                //data: formData,
+                                data: {
+                                    VehicleTypeID: VehicleTypeID.val(),
+                                    System: System.val(),
+                                    TypeofUseID: TypeofUseID.val(),
+                                    OwnerName: OwnerName.val(),
+                                    OwnerFamily: OwnerFamily.val(),
+                                    NationalCode: NationalCode.val(),
+                                    MobileNumber: MobileNumber.val(),
+                                    ConstructionYear: ConstructionYear.val(),
+                                    LeftNumberPlate: LeftNumberPlate.val(),
+                                    AlphaPlate: AlphaPlate.val(),
+                                    RightNumberPlate: RightNumberPlate.val(),
+                                    IranNumberPlate: IranNumberPlate.val(),
+                                    VIN: VIN.val(),
+                                    EngineNumber: EngineNumber.val(),
+                                    ChassisNumber: ChassisNumber.val(),
+                                    FuelCard: FuelCard.val(),
+                                    PhoneNumber: PhoneNumber.val(),
+                                    Address: Address.val(),
+                                    BulkId: BulkId.val(),
+                                    Serial: Serial.val(),
+                                    SerialTankValve: SerialTankValve.val(),
+                                    RegulatorSerial: RegulatorSerial.val(),
+                                    CutofValveSerial: CutofValveSerial.val(),
+                                    FillingValveSerial: FillingValveSerial.val(),
+                                    FuelRelaySerial: FuelRelaySerial.val(),
+                                    GasECUSerial: GasECUSerial.val(),
+                                    GenarationID: GenarationID.val(),
+                                    RegistrationType: RegistrationType.val()
+                                },
+                                dataType: "json",
+                            }).done(function (response) {
+                                alert(response.message);
+                                if (response.response == "error") {
+                                    alert("ثبت اطلاعات شما با مشکل مواجه شده است!");
+                                    $('.button-submit').removeAttr("disabled", "disabled");
+                                }
+                                else if (response.response == "success") {
+                                    //console.log(response.response);
+                                    alert("اطلاعات خودرو با موفقیت ثبت شد، لطفا چند لحظه صبر نمایید" + response.redirectId);
+                                    window.location = "/VehicleRegistrations/DetailsSection3?id=" + response.redirectId;
+                                    //window.location = "/VehicleRegistrations/DetailsSection1?Goback=true&id=" + response.redirectId;
+                                }
+                            });
+                            //$('.button-submit').attr('disabled', 'disabled');
+                            //$('.button-submit').text('please wait to save information...');
+                            //}
+                        });
+
+
+                    });
+                </script>
+
+                <script>
+                                        $(function () {
+                                            $('.button-next').hide();
+                                            $('#EngineNumber').keyup(function () {
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: '@Url.Action("CheckeEngineNumber")',
+                                                    dataType: 'json',
+                                                    data: { EngineNumber: $("#EngineNumber").val() },
+                                                    success: function (message) {
+                                                        if (message == "true")
+                                                        {
+                                                            $('.button-next').show();
+                                                            $("#CheckeEngineNumber").html("");
+                                                        }
+                                                        else
+                                                        {
+                                                            $("#CheckeEngineNumber").html(message);
+                                                            $('.button-next').hide();
+                                                        }
+                                                        //alert(message);
+                                                    }
+                                                });
+
+                                            }).keyup();
+
+                                        });
+                </script>
+
+                <script>
+                                        $(function () {
+                                            $('.button-next').hide();
+                                            $('#ChassisNumber').keyup(function () {
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: '@Url.Action("CheckeChassisNumber")',
+                                                    dataType: 'json',
+                                                    data: { ChassisNumber: $("#ChassisNumber").val() },
+                                                    success: function (message) {
+                                                        if (message == "true")
+                                                        {
+                                                            $('.button-next').show();
+                                                            $("#CheckeChassisNumber").html("");
+                                                        }
+                                                        else
+                                                        {
+                                                            $("#CheckeChassisNumber").html(message);
+                                                            $('.button-next').hide();
+                                                        }
+                                                        //alert(message);
+                                                    }
+                                                });
+
+                                            }).keyup();
+
+                                        });
+                </script>
+
+                <script>
+                                        $(function () {
+                                            $('.button-next').hide();
+                                            $('#Serial').keyup(function () {
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: '@Url.Action("CheckeSerialNumber")',
+                                                    dataType: 'json',
+                                                    data: { SerialNumber: $("#Serial").val() },
+                                                    success: function (message) {
+                                                        if (message == "true")
+                                                        {
+                                                            $('.button-next').show();
+                                                            $("#CheckeSerialNumber").html("");
+                                                        }
+                                                        else
+                                                        {
+                                                            $("#CheckeSerialNumber").html(message);
+                                                            $('.button-next').hide();
+                                                        }
+                                                        //alert(message);
+                                                    }
+                                                });
+
+                                            }).keyup();
+
+                                        });
+                </script>
+
+                <script>
+                                        $(function () {
+                                            $('.button-next').hide();
+                                            $('#SerialTankValve').keyup(function () {
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: '@Url.Action("CheckeSerialTankValve")',
+                                                    dataType: 'json',
+                                                    data: { SerialTankValve: $("#SerialTankValve").val() },
+                                                    success: function (message) {
+                                                        if (message == "true")
+                                                        {
+                                                            $('.button-next').show();
+                                                            $("#CheckeSerialTankValve").html("");
+                                                        }
+                                                        else
+                                                        {
+                                                            $("#CheckeSerialTankValve").html(message);
+                                                            $('.button-next').hide();
+                                                        }
+                                                        //alert(message);
+                                                    }
+                                                });
+
+                                            }).keyup();
+
+                                        });
+                </script>
+
+                <script>
+                                        $(function () {
+                                            $('.button-next').hide();
+                                            $('#RegulatorSerial').keyup(function () {
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: '@Url.Action("CheckeSerialRegulator")',
+                                                    dataType: 'json',
+                                                    data: { SerialRegulator: $("#RegulatorSerial").val() },
+                                                    success: function (response) {
+                                                        if (response.message == "true")
+                                                        {
+                                                            $('.button-next').show();
+                                                            $("#CheckeRegulatorSerial").html("");
+                                                        }
+                                                        else
+                                                        {
+                                                            $("#CheckeRegulatorSerial").html(response.message);
+                                                            $('.button-next').hide();
+                                                        }
+                                                        if (response.genaration != "false") {
+
+                                                            $("#GenarationVal").val(response.genaration);
+                                                            $("#Genaration").val(response.genaration);
+                                                        }
+                                                        //alert(message);
+                                                    }
+                                                });
+
+                                            }).keyup();
+
+                                        });
+                </script>
+
+                <script>
+                                        $(function () {
+                                            $('.button-next').hide();
+                                            $('#EngineNumber').keyup(function () {
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: '@Url.Action("CheckeEngineNumber")',
+                                                    dataType: 'json',
+                                                    data: { EngineNumber: $("#EngineNumber").val() },
+                                                    success: function (message) {
+                                                        if (message == "true")
+                                                        {
+                                                            $('.button-next').show();
+                                                            $("#CheckeEngineNumber").html("");
+                                                        }
+                                                        else
+                                                        {
+                                                            $("#CheckeEngineNumber").html(message);
+                                                            $('.button-next').hide();
+                                                        }
+                                                        //alert(message);
+                                                    }
+                                                });
+
+                                            }).keyup();
+
+                                        });
+                </script>
+
+                <script>
+                    $(document).ready(function () {
+                        var FuelRelaySerial = $('#FuelRelaySerial');
+                        var GasECUSerial = $('#GasECUSerial');
+                        $('.group2').hide();
+                        var selectedID = $('#GenerationofRegulatorID :selected').val();
+                        $('#GenerationofRegulatorID').on('change', function () {
+                            if (this.value != '4') {
+                                //alert(this.value);
+                                $('.group2').hide();
+                            }
+                            else {
+                                //$('.button-submit').removeAttr('disabled', 'disabled');
+                                $('.group2').show();
+                            }
+                        });
+                    });
+                </script>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function text(name) {
+        var name = $(name).val();
+        if (name.length > 0) {
+            just_persian(name);
+        }
+    }
+
+    //function just_persian(str) {
+    //    var p = /^[\u0600-\u06FF\s]+$/;
+    //    if (!p.test(str)) {
+    //        alert("لطفا صفحه کلید خود را فارسی تغییر دهید!");
+    //    }
+    //}
+
+    $('.EnglishKey').on('keypress', function (event) {
+        var arregex = /^[a-zA-Z0-9_ ]*$/;
+        if (!arregex.test(event.key)) {
+            $(this).val("");
+            alert("لطفا صفحه کلید خود را به لاتین تغییر دهید!");
+        }
+    });
+
+    $('.PrsianKey').on('keypress', function (event) {
+        var arregex = /^[\u0600-\u06FF\s]+$/;
+        if (!arregex.test(event.key)) {
+            $(this).val("");
+            alert("لطفا صفحه کلید خود را به فارسی تغییر دهید!");
+        }
+    });
+</script>
+

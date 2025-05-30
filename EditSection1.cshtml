@@ -1,0 +1,369 @@
+﻿@model cngfapco.Models.VehicleRegistration
+
+@{
+    ViewBag.Title = "EditSection1";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    System.Globalization.PersianCalendar pc = new System.Globalization.PersianCalendar();
+    int? VehicleRegistrationID = (int?)ViewBag.selectedVehicleId;
+    //int? existvehicleTank = (int?)ViewBag.existvehicleTank;
+}
+
+<script src="~/js/admin/jquery-1.10.2.js"></script>
+
+<div class="row-fluid">
+    <div class="span12">
+        <h3 class="page-title hide">
+            @*<small>form wizard sample</small>*@
+            Form Wizard
+        </h3>
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href="/VehicleRegistrations/WorkshopPage2"> لیست خودرو ها </a> <span class="divider">&nbsp;</span>
+            </li>
+            <li><a href="#">ثبت مشخصات خودرو</a><span class="divider-last">&nbsp;</span></li>
+        </ul>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="navbar steps">
+        <div class="navbar-inner">
+            <ul class="row-fluid">
+                <li class="span3">
+                    <a href="#tab1" data-toggle="tab" class="step active">
+                        <span class="number">1- </span>
+                        <span class="desc"><strong> ثبت مشخصات خودرو </strong>  </span>
+                    </a>
+                </li>
+                @*<li class="span3">
+                        <a href="#tab2" data-toggle="tab" class="step">
+                            <span class="number">2- </span>
+                            <span class="text-muted"> ثبت فیش های واریزی </span>
+                        </a>
+                    </li>*@
+                <li class="span3">
+                    <a href="/VehicleRegistrations/DetailsSection1?id=@VehicleRegistrationID&Goback=true">
+                        <span class="number">2- </span>
+                        <span class="desc"> ثبت مشخصات مخزن و متعلقات </span>
+                    </a>
+                </li>
+                <li class="span3">
+                    <a href="/VehicleRegistrations/DetailsSection2?id=@VehicleRegistrationID&Goback=true">
+                        <span class="number">3- </span>
+                        <span class="desc"> ثبت مشخصات تکمیلی</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span12">
+        <div class="widget">
+
+            <form action="/VehicleRegistrations/EditSection1?id=@VehicleRegistrationID" method="post">
+                <div class="widget-body" style="font-family:Vazir;">
+                    @*@Html.Hidden("existvehicleTank", existvehicleTank);*@
+
+                    <p class="text-danger">@ViewBag.message</p>
+                    <div class="row-fluid">
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> نوع خودرو  </label>
+                            <div class="controls">
+                                @Html.DropDownList("VehicleTypeID", null, "", htmlAttributes: new { @class = "span12", @tabindex = "", @required = "required", @style = "font-family:Vazir;" })
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> سیستم </label>
+                            <div class="controls">
+                                <select class="span12" tabindex="" data-placeholder="" id="System" name="System" required="required" style="font-family:Vazir;">
+                                    <option value="@Model.System">@Model.System</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> نوع کاربری </label>
+                            <div class="controls">
+                                @Html.DropDownList("TypeofUseID", null, "", htmlAttributes: new { @class = "span12", @tabindex = "", required = "required", @style = "font-family:Vazir;" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space10"></div>
+
+                    <div class="row-fluid">
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> نام مالک </label>
+                            <div class="controls input-icon left">
+                                <i class="icon-user"></i>
+                                <input type="text" value="@Model.OwnerName" class="span12 PrsianKey" name="OwnerName" id="OwnerName" onkeyup="text(this)" required="required" style="font-family:Vazir;" />
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> نام خانوادگی مالک </label>
+                            <div class="controls input-icon left">
+                                <i class="icon-user"></i>
+                                <input type="text" value="@Model.OwnerFamily" class="span12 PrsianKey" name="OwnerFamily" id="OwnerFamily" onkeyup="text(this)" required="required" style="font-family:Vazir;" /> @*id="txtn"*@
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> کد ملی مالک </label>
+                            <div class="controls input-icon left">
+                                <i class="icon-credit-card"></i>
+                                <input type="text" value="@Model.NationalCode" class="span12" name="NationalCode" id="NationalCode" data-mask="999-999999-9" placeholder="053-111111-1" required="required" style="font-family:Vazir;" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="space10"></div>
+
+                    <div class="row-fluid">
+
+                        <div class="span4">
+                            <label class="control-label text-warning">تلفن ثابت</label>
+                            <div class="controls input-icon left">
+                                <i class="icon-phone"></i>
+                                <input type="text" value="@Model.PhoneNumber" class="span12" name="PhoneNumber" id="PhoneNumber" data-mask="(999) 99999999" placeholder="(021) 22222222" />
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> تلفن همراه </label>
+                            <div class="controls input-icon left">
+                                <i class="icon-mobile-phone"></i>
+                                <input type="text" value="@Model.MobileNumber" class="span12" name="MobileNumber" id="MobileNumber" data-mask="99999999999" required="required" />
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning">آدرس</label>
+                            <div class="controls input-icon left">
+                                @*<i class="icon-map-marker"></i>*@
+                                <textarea type="text" tabindex="" class="span12 PrsianKey" name="Address" id="Address" onkeyup="text(this)" rows="1" style="font-family:Vazir;"> @Model.Address </textarea>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="space10"></div>
+
+                    <div class="row-fluid">
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> سال ساخت </label>
+                            <div class="controls">
+                                <select class="span12" tabindex="" data-placeholder="" id="ConstructionYear" style="" name="ConstructionYear" required="required">
+                                    <option value="@Model.ConstructionYear"> @Model.ConstructionYear </option>
+                                    @for (int i = 1300; i <= pc.GetYear(DateTime.Now); i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> پلاک خودرو </label>
+                            <div class="controls" style="border:0px solid #808080;">
+
+                                <div class="span3">
+                                    <input type="text" value="@Model.LeftNumberPlate" class="span12 text-center" name="LeftNumberPlate" id="LeftNumberPlate" placeholder="99" data-mask="99" required="required" />
+                                </div>
+
+                                <div class="span3 text-center">
+                                    <select tabindex="" class="span12 PrsianKey" data-placeholder="" id="AlphaPlate" style="font-family:Vazir;" name="AlphaPlate" required="required">
+                                        <option value="@Model.AlphaPlate"> @Model.AlphaPlate </option>
+                                        <option value="الف">الف</option>
+                                        <option value="ب">ب</option>
+                                        <option value="پ">پ</option>
+                                        <option value="ت">ت</option>
+                                        <option value="ث">ث</option>
+                                        <option value="ج">ج</option>
+                                        <option value="چ">چ</option>
+                                        <option value="ح">ح</option>
+                                        <option value="خ">خ</option>
+                                        <option value="د">د</option>
+                                        <option value="ذ">ذ</option>
+                                        <option value="ر">ر</option>
+                                        <option value="ز">ز</option>
+                                        <option value="ژ">ژ</option>
+                                        <option value="س">س</option>
+                                        <option value="ش">ش</option>
+                                        <option value="ص">ص</option>
+                                        <option value="ض">ض</option>
+                                        <option value="ط">ط</option>
+                                        <option value="ظ">ظ</option>
+                                        <option value="ع">ع</option>
+                                        <option value="غ">غ</option>
+                                        <option value="ف">ف</option>
+                                        <option value="ق">ق</option>
+                                        <option value="ک">ک</option>
+                                        <option value="گ">گ</option>
+                                        <option value="ل">ل</option>
+                                        <option value="م">م</option>
+                                        <option value="ن">ن</option>
+                                        <option value="و">و</option>
+                                        <option value="ه">ه</option>
+                                        <option value="ی">ی</option>
+                                    </select>
+                                </div>
+
+                                <div class="span3">
+                                    <input type="text" value="@Model.RightNumberPlate" class="span12 text-center" name="RightNumberPlate" id="RightNumberPlate" placeholder="754" data-mask="999" required="required" />
+                                </div>
+
+                                <div class="span3">
+                                    <span class="span8"><input type="text" value="@Model.IranNumberPlate" class="span12 text-center" name="IranNumberPlate" id="IranNumberPlate" placeholder="ایران" data-mask="99" required="required" /></span>
+                                    <span class="span4"><img src="~/img/plateimg.png" class="" width="15" height="20" /></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> شماره VIN </label>
+                            <div class="controls input-icon left">
+                                @*<i class="icon-mobile-phone"></i>*@
+                                <input type="text" value="@Model.VIN" class="span12 EnglishKey" name="VIN" id="VIN" placeholder="IRFC901V10O565126" style="text-transform: uppercase" required="required" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="space10"></div>
+
+                    <div class="row-fluid">
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> شماره موتور </label>
+                            <div class="controls input-icon left">
+                                <input type="text" value="@Model.EngineNumber" class="span12 EnglishKey" name="EngineNumber" id="EngineNumber" style="text-transform: uppercase" required="required" />
+                                <span id="CheckeEngineNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning">  <span class="help-inline text-danger text-l"> * </span> شماره شاسی </label>
+                            <div class="controls input-icon left">
+                                <input type="text" value="@Model.ChassisNumber" class="span12 EnglishKey" name="ChassisNumber" id="ChassisNumber" style="text-transform: uppercase" required="required" />
+                                <span id="CheckeChassisNumber" class="text-danger span12"></span>
+                            </div>
+                        </div>
+
+                        <div class="span4">
+                            <label class="control-label text-warning"> <span class="help-inline text-danger text-l"> * </span> شماره کارت سوخت </label>
+                            <div class="controls input-icon left">
+                                <i class="icon-credit-card"></i>
+                                <input type="text" dir="rtl" value="@Model.FuelCard" class="span12" name="FuelCard" id="FuelCard" data-mask="9999-9999-9999-9999" required="required" />
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="space10"></div>
+                    <div class="row-fluid">
+                        <input type="submit" value="ذخیره اطلاعات" class="text-success span12 btnSave" style="font-family:Vazir;" />
+                    </div>
+
+                </div>
+                <script>
+    $(function () {
+        $('.button-next').hide();
+        $('#EngineNumber').keyup(function () {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CheckeEngineNumber")',
+                dataType: 'json',
+                data: { EngineNumber: $("#EngineNumber").val() },
+                success: function (message) {
+                    if (message == "true")
+                    {
+                        $('.button-next').show();
+                        $("#CheckeEngineNumber").html("");
+                    }
+                    else
+                    {
+                        $("#CheckeEngineNumber").html(message);
+                        $('.button-next').hide();
+                    }
+                    //alert(message);
+                }
+            });
+
+        }).keyup();
+    });
+                </script>
+
+                <script>
+        $(function () {
+            $('.button-next').hide();
+            $('#ChassisNumber').keyup(function () {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CheckeChassisNumber")',
+                    dataType: 'json',
+                    data: { ChassisNumber: $("#ChassisNumber").val() },
+                    success: function (message) {
+                        if (message == "true")
+                        {
+                            $('.button-next').show();
+                            $("#CheckeChassisNumber").html("");
+                        }
+                        else
+                        {
+                            $("#CheckeChassisNumber").html(message);
+                            $('.button-next').hide();
+                        }
+                        //alert(message);
+                    }
+                });
+            }).keyup();
+
+        });
+                </script>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function text(name) {
+        var name = $(name).val();
+        if (name.length > 0) {
+            just_persian(name);
+        }
+    }
+
+    //function just_persian(str) {
+    //    var p = /^[\u0600-\u06FF\s]+$/;
+    //    if (!p.test(str)) {
+    //        alert("لطفا صفحه کلید خود را فارسی تغییر دهید!");
+    //    }
+    //}
+
+    $('.EnglishKey').on('keypress', function (event) {
+        var arregex = /^[a-zA-Z0-9_ ]*$/;
+        if (!arregex.test(event.key)) {
+            $(this).val("");
+            alert("لطفا صفحه کلید خود را به لاتین تغییر دهید!");
+        }
+    });
+
+    $('.PrsianKey').on('keypress', function (event) {
+        var arregex = /^[\u0600-\u06FF\s]+$/;
+        if (!arregex.test(event.key)) {
+            $(this).val("");
+            alert("لطفا صفحه کلید خود را به فارسی تغییر دهید!");
+        }
+    });
+</script>

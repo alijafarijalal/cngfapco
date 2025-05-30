@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "RegistrationCount";
+    Layout = "~/Views/Shared/_DataTableLayout.cshtml";
+}
+
+<div class="span12">
+    <h5>برای ثبت اطلاعات خودرو ابتدا یکی از گزینه‌های زیر را انتخاب کنید.</h5>
+</div>
+<div class="widget">
+
+    <div class="widget-body">
+
+        <div class="row-fluid">
+
+            <!-- BEGIN FORM-->
+            @foreach (var item in ViewBag.Type)
+            {
+                <div class="span6">
+                    <div class="thumbnail">
+                        <div class="text-center" style="border:2px solid silver;background-color:seagreen;">
+                            <h4 class="text-white" style="color:white;">@(item.Type + "- " + (item.Description)) </h4>
+                        </div>
+                        <div class="item" style="border:1px solid silver;height:auto;">
+                            @if (item.ID == 1)
+                            {
+                                <a class="fancybox-button" data-rel="fancybox-button" title="" href="/VehicleRegistrations/CreateSection1?Type=@item.ID">
+                                    <div class="icon-plus">
+                                        <img src="~/img/car/@item.Image" alt="Photo">
+                                        <div class="zoom-icon"></div>
+                                    </div>
+                                </a>
+                            }
+                            @if (item.ID == 2)
+                            {
+                                <a class="fancybox-button" data-rel="fancybox-button" title="" href="/VehicleRegistrations/CreateSection1_Type2?Type=@item.ID">
+                                    <div class="icon-plus">
+                                        <img src="~/img/car/@item.Image" alt="Photo">
+                                        <div class="zoom-icon"></div>
+                                    </div>
+                                </a>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

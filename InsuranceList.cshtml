@@ -1,0 +1,118 @@
+﻿@model IEnumerable<cngfapco.Models.Insurance>
+
+@{
+    ViewBag.Title = "InsuranceList";
+    Layout = "~/Views/Shared/_DataTableLayout.cshtml";
+}
+
+    <!-- BEGIN PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">       
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href="/VehicleRegistrations/Index">خودروهای ثبت شده</a> <span class="divider-last">&nbsp;</span>
+            </li>
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+
+<div class="space10"></div>
+<!-- BEGIN PAGE CONTENT-->
+<div class="row-fluid">
+    <div class="span12">
+        <div class="widget">
+            <div class="widget-title">
+                <h4><i class="icon-edit"></i>بیمه نامه های ثبت شده</h4>
+                <span class="tools">
+                    <a href="javascript:;" class="icon-chevron-down"></a>
+                    <a href="javascript:;" class="icon-remove"></a>
+                </span>
+               
+            </div>
+            <div class="widget-body">
+                <div class="row-fluid">
+                    <div class="span12" style="overflow:auto;">
+                        <table class="table table-striped table-bordered table-hover table-advance" id="sample_editable_1">
+                            <thead>
+                                <tr>
+                                    <th>ردیف</th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.VehicleRegistration.VehicleType.Type)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.VehicleRegistration.ChassisNumber)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.VehicleRegistration.VIN)
+                                    </th>
+                                    <th>
+                                        @(Html.DisplayNameFor(model => model.VehicleRegistration.OwnerName)+ " , " + Html.DisplayNameFor(model => model.VehicleRegistration.OwnerFamily))
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Number)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.VehicleRegistration.NationalCode)
+                                    </th>
+                                    <th>
+                                        تاریخ تبدیل
+                                    </th>
+                                    @*<th><i class="icon-cog "></i></th>*@
+                                </tr>
+                            </thead>
+
+                            @{ int rowNum = 0;}
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@(rowNum+=1)</td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.VehicleRegistration.VehicleType.Type)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.VehicleRegistration.ChassisNumber)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.VehicleRegistration.VIN)
+                                        </td>
+                                        <td>
+                                            @(item.VehicleRegistration.OwnerName + " " + item.VehicleRegistration.OwnerFamily)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Number)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.VehicleRegistration.NationalCode)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CreateDate)
+                                        </td>
+                                        @*<td>
+                                            @*<a href="/VehicleRegistrations/InsurancePreview?id=@item.VehicleRegistrationID ">
+                                                <i class="icon-search icon-white"></i>
+                                            </a>*@
+                                            @*<a href="# ">
+                                                <img src="@Url.Content("~/css/images/pen.png")" />
+                                            </a> |
+                                            <a href="#">
+                                                <img src="@Url.Content("~/css/images/bin.png")" />
+                                            </a>*
+                                        </td>*@
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,121 @@
+﻿@*@model IEnumerable<cngfapco.Models.VehicleRegistration>*@
+@using cngfapco.Models
+
+@{
+    ViewBag.Title = "LazyLoadPage";
+    Layout = "~/Views/Shared/_Layout_LazyLoad.cshtml";
+}
+
+<link href="/assets/bootstrap-rtl/css/bootstrap-rtl.min.css" rel="stylesheet" />
+<link href="/assets/bootstrap-rtl/css/bootstrap-responsive-rtl.min.css" rel="stylesheet" />
+<link href="/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+<link href="/css/style.css" rel="stylesheet" />
+<link href="/css/style_responsive.css" rel="stylesheet" />
+<link href="/css/style_default.css" rel="stylesheet" id="style_color" />
+
+<script src="~/assets/bootstrap-datatable/jquery-3.3.1.js"></script>
+<link href="~/assets/bootstrap-datatable/css/datatables.min.css" rel="stylesheet" />
+<link href="~/assets/bootstrap-datatable/css/buttons.dataTables.min.css" rel="stylesheet" />
+<script src="~/assets/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+<script src="~/assets/bootstrap-datatable/js/dataTables.buttons.min.js"></script>
+<script src="~/assets/bootstrap-datatable/js/buttons.flash.min.js"></script>
+<script src="~/assets/bootstrap-datatable/js/jszip.min.js"></script>
+<script src="~/assets/bootstrap-datatable/js/buttons.html5.min.js"></script>
+<script src="~/assets/bootstrap-datatable/js/buttons.print.min.js"></script>
+<script src="~/assets/bootstrap-datatable/js/pdfmake.min.js"></script>
+<script src="~/assets/bootstrap-datatable/js/vfs_fonts.js"></script>
+<script src="~/assets/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+<script src="~/assets/bootstrap-datatable/js/buttons.html5.min.js"></script>
+<link href="~/assets/bootstrap-datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<link href="~/assets/bootstrap-datatable/css/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/assets/bootstrap-datatable/css/fixedHeader.dataTables.min.css" rel="stylesheet" />
+
+<script src="~/assets/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+<script src="~/assets/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+<script src="~/assets/bootstrap-datatable/js/dataTables.fixedHeader.min.js"></script>
+<script src="/js/scripts.js"></script>
+<script src="/assets/bootstrap-rtl/js/bootstrap.min.js"></script>
+<script src="/js/jquery.blockui.js"></script>
+
+<h2>نمایش لیست خودروهای ثبت شده</h2>
+
+<table class="table table-striped table-bordered table-condensed infinite-scroll" id="sample_editable_1">
+    <thead>
+        <tr>
+            <th>ID #</th>
+            <th> نام کارگاه </th>
+            <th> نوع خودرو </th>
+            <th> نوع استفاده </th>
+            <th> نام و نام خانوادگی </th>
+            <th> شماره موبایل </th>
+            <th> شماره پلاک </th>
+        </tr>
+    </thead>
+    <tbody>
+        @Html.Partial("_ProjectData", (ViewBag.Projects as List<Registration>))
+    </tbody>
+</table>
+
+@section scripts{
+    <script src="~/Scripts/lazyLoading.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("div#loading").hide();
+        });
+
+        var url = '/VehicleRegistrations/GetProjects/';
+        $(window).scroll(scrollHandler);
+    </script>
+}
+
+<script>
+    $(document).ready(function () {
+        $('#sample_editable_1').DataTable({
+            dom: 'lBfrtip',
+            //lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            paging: false,
+            fixedHeader:true,
+            buttons: [
+                {
+                    extend: 'csv',
+                    text: 'Export csv',
+                    charset: 'utf-8',
+                    extension: '.csv',
+                    fieldSeparator: ';',
+                    fieldBoundary: '',
+                    filename: 'VehicleRegistrations_csv',
+                    bom: true
+                },
+                {
+                    extend: 'excel',
+                    text: 'Export excel',
+                    charset: 'utf-8',
+                    extension: '.xlsx',
+                    fieldSeparator: ';',
+                    fieldBoundary: '',
+                    filename: 'VehicleRegistrations',
+                    bom: true
+                }
+                //{
+                //    extend: 'pdf',
+                //    text: 'Export pdf',
+                //    charset: 'utf-8',
+                //    extension: '.pdf',
+                //    fieldSeparator: ';',
+                //    fieldBoundary: '',
+                //    filename: 'export pdf',
+                //    bom: true
+                //}
+            ]
+            //buttons: [
+            //    {
+            //        extend: 'excelHtml5',
+            //        title: 'Data export excel'
+            //    },
+            //    {
+            //        extend: 'csvHtml5',
+            //        title: 'Data export csv'
+            //    }
+            //]
+        });
+    });</script>

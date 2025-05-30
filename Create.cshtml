@@ -1,283 +1,956 @@
-﻿@model cngfapco.Models.Invoice
+﻿@model cngfapco.Models.VehicleRegistration
 
 @{
     ViewBag.Title = "Create";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_FormWizardLayout.cshtml";
+    System.Globalization.PersianCalendar pc = new System.Globalization.PersianCalendar();
 }
 
-    <h2>Create</h2>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(":input[type='submit']").button();
+        $(":input[type='text']").text();
+    });
+</script>
 
-@using (Html.BeginForm())
+<script src="~/js/admin/jquery-1.10.2.js"></script>
+<script src="~/js/admin/jquery-common.js"></script>
+<script src="~/js/admin/jquery-ui-1.10.3.custom.min.js"></script>
+
+<!-- BEGIN PAGE CONTAINER-->
+
+@using (Html.BeginForm("Create", "VehicleRegistrations", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    @Html.AntiForgeryToken()
+    <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="page-title hide">
+                    @*<small>form wizard sample</small>*@
+                    Form Wizard
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+                    </li>
+                    <li>
+                        <a href="/VehicleRegistrations/Index">ثبت خودرو</a> <span class="divider">&nbsp;</span>
+                    </li>
+                    <li><a href="#">ثبت اطلاعات خودروی جدید</a><span class="divider-last">&nbsp;</span></li>
 
-    <div class="form-horizontal">
-        <h4>Invoice</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.OwnersID, "OwnersID", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("OwnersID", null, " -- بدون انتخاب -- ", htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.OwnersID, "", new { @class = "text-danger" })
+                </ul>
+                <h5 class="text-warning">با توجه به راه اندازی بخش بارگذاری تصاویر در جزئیات خودرو، امکان ثبت فایل از این قسمت حذف شده است!</h5>
             </div>
         </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="widget box blue" id="form_wizard_1">
+                    <div class="widget-title">
+                        <h4>
+                            <i class="icon-reorder"></i> مراحل ثبت خودرو - <span class="step-title">مرحله 1 از 4</span>
+                        </h4>
+                        <span class="tools">
+                            <a href="javascript:;" class="icon-chevron-down"></a>
+                            <a href="javascript:;" class="icon-remove"></a>
+                        </span>
+                    </div>
+                    <div class="widget-body form form-horizontal">
+                        <div class="form-wizard">
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.WorkshopsID, "WorkshopsID", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("WorkshopsID", null, " -- بدون انتخاب -- ", htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.WorkshopsID, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                            <div class="navbar steps">
+                                <div class="navbar-inner">
+                                    <ul class="row-fluid">
+                                        <li class="span3">
+                                            <a href="#tab1" data-toggle="tab" class="step active">
+                                                <span class="number">1</span>
+                                                <span class="desc"><i class="icon-ok"></i>ثبت مشخصات خودرو</span>
+                                            </a>
+                                        </li>
+                                        <li class="span3">
+                                            <a href="#tab2" data-toggle="tab" class="step">
+                                                <span class="number">2</span>
+                                                <span class="desc"><i class="icon-ok"></i>ثبت فیش های واریزی</span>
+                                            </a>
+                                        </li>
+                                        <li class="span3">
+                                            <a href="#tab3" data-toggle="tab" class="step">
+                                                <span class="number">3</span>
+                                                <span class="desc"><i class="icon-ok"></i> ثبت مشخصات مخزن ها</span>
+                                            </a>
+                                        </li>
+                                        <li class="span3">
+                                            <a href="#tab4" data-toggle="tab" class="step">
+                                                <span class="number">4</span>
+                                                <span class="desc"><i class="icon-ok"></i> ثبت مشخصات تکمیلی</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="bar" class="progress progress-striped" style="border-radius:7px 7px;">
+                                <div class="bar"></div>
+                            </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.EquipmentsID, "EquipmentsID", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("EquipmentsID", null, " -- بدون انتخاب -- ", htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.EquipmentsID, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <h2 class="text-danger">@ViewBag.message</h2>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ServiceCode, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ServiceCode, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ServiceCode, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab1">
+                                    <div class="control-group">
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.InvoiceCode, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.InvoiceCode, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.InvoiceCode, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                        <label class="control-label">نوع خودرو<span class="help-inline text-danger text-l"> (الزامی) </span>  </label>
+                                        <div class="controls">
+                                            @Html.DropDownList("VehicleTypeID", null, "", htmlAttributes: new { @class = "span6 chosen", @tabindex = "" })
+                                            @Html.ValidationMessageFor(model => model.VehicleTypeID, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.CreatedDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.CreatedDate, new { @class = "form-control pdate", @id = "pcal1" })
-                @Html.ValidationMessageFor(model => model.CreatedDate, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                        </div>
+                                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.EmployerEconomicalnumber, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.EmployerEconomicalnumber, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.EmployerEconomicalnumber, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                    <div class="control-group">
+                                        <label class="control-label">سیستم <span class="help-inline text-danger text-l"> (الزامی) </span> </label>
+                                        <div class="controls">
+                                            <select class="span6 chosen" tabindex="" data-placeholder="" id="System" name="System">
+                                                <option value=""></option>
+                                                <option value="بنزینی">بنزینی</option>
+                                            </select>
+                                            @Html.ValidationMessageFor(model => model.System, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Employerregistrationnumber, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Employerregistrationnumber, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Employerregistrationnumber, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                        </div>
+                                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.EmployerState, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.EmployerState, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.EmployerState, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                    <div class="control-group">
+                                        <label class="control-label">نوع کاربری <span class="help-inline text-danger text-l"> (الزامی) </span> </label>
+                                        <div class="controls">
+                                            @Html.DropDownList("TypeofUseID", null, "", htmlAttributes: new { @class = "span6 chosen", @tabindex = "" })
+                                            @Html.ValidationMessageFor(model => model.TypeofUse, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.EmployerAddress, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.EmployerAddress, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.EmployerAddress, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                        </div>
+                                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.EmployerPostalcode, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.EmployerPostalcode, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.EmployerPostalcode, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                    <div class="control-group">
+                                        <label class="control-label"> نام مالک <span class="help-inline text-danger text-l"> (الزامی) </span></label>
+                                        <div class="controls input-icon left">
+                                            <i class="icon-user"></i>
+                                            <input type="text" tabindex="" class="span6" name="OwnerName" id="txtn" onkeyup="text(this)" />
+                                            @Html.ValidationMessageFor(model => model.OwnerName, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.EmployerPhone, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.EmployerPhone, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.EmployerPhone, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                        </div>
+                                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.EmployerFax, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.EmployerFax, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.EmployerFax, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                    <div class="control-group">
+                                        <label class="control-label"> نام خانوادگی مالک <span class="help-inline text-danger text-l"> (الزامی) </span></label>
+                                        <div class="controls input-icon left">
+                                            <i class="icon-user"></i>
+                                            <input type="text" tabindex="" class="span6" name="OwnerFamily" id="txtn" onkeyup="text(this)" />
+                                            @Html.ValidationMessageFor(model => model.OwnerFamily, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ServiceDesc, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ServiceDesc, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ServiceDesc, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                        </div>
+                                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Number, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Number, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Number, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                    <div class="control-group">
+                                        <label class="control-label"> کد ملی مالک <span class="help-inline text-danger text-l"> (الزامی) </span></label>
+                                        <div class="controls input-icon left">
+                                            <i class="icon-credit-card"></i>
+                                            <input type="text" tabindex="" class="span6" name="NationalCode" id="NationalCode" data-mask="999-999999-9" placeholder="053-111111-1" />
+                                            @Html.ValidationMessageFor(model => model.NationalCode, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.UnitofMeasurement, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.UnitofMeasurement, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.UnitofMeasurement, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                        </div>
+                                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.UnitAmount, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.UnitAmount, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.UnitAmount, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                    <div class="control-group" hidden>
+                                        <label class="control-label">اسکن کارت ملی (پشت و رو) @*<span class="help-inline text-danger text-l"> (الزامی) </span>*@ </label>
+                                        <div class="controls input-icon left">
+                                            <i class="icon-credit-card"></i>
+                                            <input type="file" tabindex="" class="span6" name="NationalCard" id="NationalCard" />
+                                            @Html.ValidationMessageFor(model => model.NationalCard, "", new { @class = "text-danger" })
+                                            <span class="help-inline text-danger">  در قالب یک فایل یا به صورت zip </span>
+                                        </div>
+                                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.TotalAmount, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.TotalAmount, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TotalAmount, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                    <div class="control-group">
+                                        <label class="control-label">@Html.LabelFor(model => model.PhoneNumber)</label>
+                                        <div class="controls input-icon left">
+                                            <i class="icon-phone"></i>
+                                            <input type="text" tabindex="" class="span6" name="PhoneNumber" id="PhoneNumber" data-mask="(999) 99999999" placeholder="(021) 22222222" />
+                                            @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+                                            @*<span class="help-inline text-danger"> * </span>*@
+                                        </div>
+                                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.DiscountAmount, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.DiscountAmount, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.DiscountAmount, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                    <div class="control-group">
+                                        <label class="control-label">تلفن همراه <span class="help-inline text-danger text-l"> (الزامی) </span></label>
+                                        <div class="controls input-icon left">
+                                            <i class="icon-mobile-phone"></i>
+                                            <input type="text" tabindex="" class="span6" name="MobileNumber" id="MobileNumber" data-mask="99999999999" />
+                                            @Html.ValidationMessageFor(model => model.MobileNumber, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.TotalAmountafterDiscount, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.TotalAmountafterDiscount, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TotalAmountafterDiscount, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                        </div>
+                                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Tax, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                    <div class="control-group">
+                                        <label class="control-label">@Html.LabelFor(model => model.Address)</label>
+                                        <div class="controls input-icon left">
+                                            @*<i class="icon-map-marker"></i>*@
+                                            <textarea type="text" tabindex="" class="span6" name="Address" id="txtn" onkeyup="text(this)"></textarea>
+                                            @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Complications, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.Complications, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Complications, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                        </div>
+                                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.AmountTaxandComplications, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.AmountTaxandComplications, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.AmountTaxandComplications, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                    <div class="control-group">
+                                        <label class="control-label"> سال ساخت <span class="help-inline text-danger text-l"> (الزامی) </span></label>
+                                        <div class="controls">
+                                            <select class="span6 chosen" tabindex="" data-placeholder="" id="ConstructionYear" style="" name="ConstructionYear">
+                                                <option value=""></option>
+                                                @for (int i = 1300; i <= pc.GetYear(DateTime.Now); i++)
+                                                {
+                                                    <option value="@i">@i</option>
+                                                }
+                                            </select>
+                                            @Html.ValidationMessageFor(model => model.ConstructionYear, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.TotalAmountTaxandComplications, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.TotalAmountTaxandComplications, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TotalAmountTaxandComplications, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                        </div>
+                                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                    <div class="control-group">
+                                        <label class="control-label">پلاک خودرو <span class="help-inline text-danger text-l"> (الزامی) </span></label>
+                                        <div class="controls input-icon left span6 text-center" style="border:1px solid #808080;">
+                                            <i class=""> ایران </i>
+                                            <input type="text" tabindex="" class="span3 text-center" name="IranNumberPlate" id="IranNumberPlate" placeholder="" data-mask="99" />
+                                            <input type="text" tabindex="" class="span3 text-center" name="RightNumberPlate" id="RightNumberPlate" placeholder="" data-mask="999" />
+                                            <select tabindex="" class="span3 " data-placeholder="" id="AlphaPlate" style="" name="AlphaPlate">
+                                                <option value=""></option>
+                                                <option value="الف">الف</option>
+                                                <option value="ب">ب</option>
+                                                <option value="پ">پ</option>
+                                                <option value="ت">ت</option>
+                                                <option value="ث">ث</option>
+                                                <option value="ج">ج</option>
+                                                <option value="چ">چ</option>
+                                                <option value="ح">ح</option>
+                                                <option value="خ">خ</option>
+                                                <option value="د">د</option>
+                                                <option value="ذ">ذ</option>
+                                                <option value="ر">ر</option>
+                                                <option value="ز">ز</option>
+                                                <option value="ژ">ژ</option>
+                                                <option value="س">س</option>
+                                                <option value="ش">ش</option>
+                                                <option value="ص">ص</option>
+                                                <option value="ض">ض</option>
+                                                <option value="ط">ط</option>
+                                                <option value="ظ">ظ</option>
+                                                <option value="ع">ع</option>
+                                                <option value="غ">غ</option>
+                                                <option value="ف">ف</option>
+                                                <option value="ق">ق</option>
+                                                <option value="ک">ک</option>
+                                                <option value="گ">گ</option>
+                                                <option value="ل">ل</option>
+                                                <option value="م">م</option>
+                                                <option value="ن">ن</option>
+                                                <option value="و">و</option>
+                                                <option value="ه">ه</option>
+                                                <option value="ی">ی</option>
+                                            </select>
+                                            <input type="text" tabindex="" class="span3 text-center" name="LeftNumberPlate" id="LeftNumberPlate" placeholder="" data-mask="99" />
+                                            <img src="~/img/plateimg.png" width="15" />
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.IranNumberPlate, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.SaleCondition, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.SaleCondition, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.SaleCondition, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                    <div class="control-group">
+                                        <label class="control-label"> شماره VIN <span class="help-inline text-danger text-l"> (الزامی) </span></label>
+                                        <div class="controls input-icon left">
+                                            @*<i class="icon-mobile-phone"></i>*@
+                                            <input type="text" tabindex="" class="span6" name="VIN" id="VIN" placeholder="IRFC901V10O565126" style="text-transform: uppercase"/>
+                                            @Html.ValidationMessageFor(model => model.VIN, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.AcceptedAmount, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.AcceptedAmount, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.AcceptedAmount, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                        </div>
+                                    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.AcceptedDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(model => model.AcceptedDate, new { @class = "form-control pdate", @id = "pcal2" })
-                @Html.ValidationMessageFor(model => model.AcceptedDate, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                                    <div class="control-group">
+                                        <label class="control-label"> شماره موتور <span class="help-inline text-danger text-l"> (الزامی) </span></label>
+                                        <div class="controls input-icon left">
+                                            @*<i class="icon-mobile-phone"></i>*@
+                                            <input type="text" tabindex="" class="span6" name="EngineNumber" id="EngineNumber" style="text-transform: uppercase"/>
+                                            @Html.ValidationMessageFor(model => model.EngineNumber, "", new { @class = "text-danger" })
+                                            <input id="CheckeEngineNumber" style="border:0px;width:100%;" class="text-danger"/>
+                                        </div>
+                                    </div>
+                                    <script>
+                                        $(function () {
+                                            $('.button-next').hide();
+                                            $('#EngineNumber').keyup(function () {
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: '@Url.Action("CheckeEngineNumber")',
+                                                    dataType: 'json',
+                                                    data: { EngineNumber: $("#EngineNumber").val() },
+                                                    success: function (message) {
+                                                        if (message == "true")
+                                                        {
+                                                            $('.button-next').show();
+                                                            $("input#CheckeEngineNumber").val("")
+                                                        }
+                                                        else
+                                                        {
+                                                            $("input#CheckeEngineNumber").val(message);
+                                                            $('.button-next').hide();
+                                                        }
+                                                        //alert(message);
+                                                    }
+                                                });
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Status)
-                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                                            }).keyup();
+
+                                        });
+                                    </script>
+                                    <div class="control-group">
+                                        <label class="control-label"> شماره شاسی <span class="help-inline text-danger text-l"> (الزامی) </span></label>
+                                        <div class="controls input-icon left">
+                                            @*<i class="icon-mobile-phone"></i>*@
+                                            <input type="text" tabindex="" class="span6" name="ChassisNumber" id="ChassisNumber" style="text-transform: uppercase"/>
+                                            @Html.ValidationMessageFor(model => model.ChassisNumber, "", new { @class = "text-danger" })
+                                            <input id="CheckeChassisNumber" style="border:0px;width:100%;" class="text-danger"/>
+
+                                        </div>
+                                    </div>
+                                    <script>
+                                        $(function () {
+                                            $('.button-next').hide();
+                                            $('#ChassisNumber').keyup(function () {
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: '@Url.Action("CheckeChassisNumber")',
+                                                    dataType: 'json',
+                                                    data: { ChassisNumber: $("#ChassisNumber").val() },
+                                                    success: function (message) {
+                                                        if (message == "true")
+                                                        {
+                                                            $('.button-next').show();
+                                                            $("input#CheckeChassisNumber").val("")
+                                                        }
+                                                        else
+                                                        {
+                                                            $("input#CheckeChassisNumber").val(message);
+                                                            $('.button-next').hide();
+                                                        }
+                                                        //alert(message);
+                                                    }
+                                                });
+
+                                            }).keyup();
+
+                                        });
+                                    </script>
+                                    <div class="control-group" hidden>
+                                        <label class="control-label"> اسکن کارت خودرو (پشت و رو)  @*<span class="help-inline text-danger text-l"> (الزامی) </span>*@ </label>
+                                        <div class="controls input-icon left">
+                                            <i class="icon-credit-card"></i>
+                                            <input type="file" tabindex="" class="span6" name="VehicleCard" id="VehicleCard" />
+                                            @Html.ValidationMessageFor(model => model.VehicleCard, "", new { @class = "text-danger" })
+                                            <span class="help-inline text-danger">  در قالب یک فایل یا به صورت zip </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label"> شماره کارت سوخت <span class="help-inline text-danger text-l"> (الزامی) </span></label>
+                                        <div class="controls input-icon left">
+                                            <i class="icon-credit-card"></i>
+                                            <input type="text" dir="rtl" tabindex="" class="span6" name="FuelCard" id="FuelCard" data-mask="9999-9999-9999-9999" />
+                                            @Html.ValidationMessageFor(model => model.FuelCard, "", new { @class = "text-danger" })
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="tab-pane" id="tab2">
+                                    <div class="row-fluid">
+                                        <div class="span6">
+                                            <div class="">
+                                                <table id="dataTable" width="50%" border="0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><INPUT type="checkbox" name="chk" /></td>
+                                                            <td> 1 </td>
+                                                            <td>
+                                                                <p><INPUT type="text" placeholder="شماره فیش" name="Number" /></p>
+                                                                <p><INPUT type="text" placeholder="مبلغ فیش" name="Amount" /></p>
+                                                                <p><INPUT type="text" placeholder="نوع واریزی" name="Type" /></p>
+                                                                <p><INPUT type="text" placeholder="1398/1/1" name="Date" class="pdate" id="pcal1" /></p>
+                                                                <p> <span>تصویر فیش</span><INPUT type="file" placeholder="تصویر فیش" name="InvoiceFile" /></p>
+                                                                <p><textarea type="text" placeholder="توضیحات" name="InvoiceDescription"></textarea></p>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <div class="span6">
+                                            <div class="">
+                                                <table id="dataTable" width="50%" border="0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><INPUT type="checkbox" name="chk" /></td>
+                                                            <td> 2 </td>
+                                                            <td>
+                                                                <p><INPUT type="text" placeholder="شماره فیش" name="Number" /></p>
+                                                                <p><INPUT type="text" placeholder="مبلغ فیش" name="Amount" /></p>
+                                                                <p><INPUT type="text" placeholder="نوع واریزی" name="Type" /></p>
+                                                                <p><INPUT type="text" placeholder="1398/1/1" name="Date" class="pdate" id="pcal2" /></p>
+                                                                <p><span>تصویر فیش</span><INPUT type="file" placeholder="تصویر فیش" name="InvoiceFile" /></p>
+                                                                <p><textarea type="text" placeholder="توضیحات" name="InvoiceDescription"></textarea></p>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+
+                                                </table>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="tab-pane" id="tab3">
+
+                                    <div class="control-group">
+                                        <label class="control-label">سریال مخزن <span class="help-inline text-danger text-l"> (الزامی) </span></label>
+                                        <div class="controls input-icon left">
+                                            @*<i class="icon-mobile-phone"></i>*@
+                                            <input type="text" class="span6" name="Serial" id="Serial" placeholder="مخزن اول" style="text-transform: uppercase" />
+                                            <input id="CheckeSerialNumber" style="border:0px;width:100%;" class="text-danger" />
+                                        </div>
+                                        <script>
+                                        $(function () {
+                                            $('.button-next').hide();
+                                            $('#Serial').keyup(function () {
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: '@Url.Action("CheckeSerialNumber")',
+                                                    dataType: 'json',
+                                                    data: { SerialNumber: $("#Serial").val() },
+                                                    success: function (message) {
+                                                        if (message == "true")
+                                                        {
+                                                            $('.button-next').show();
+                                                            $("input#CheckeSerialNumber").val("")
+                                                        }
+                                                        else
+                                                        {
+                                                            $("input#CheckeSerialNumber").val(message);
+                                                            $('.button-next').hide();
+                                                        }
+                                                        //alert(message);
+                                                    }
+                                                });
+
+                                            }).keyup();
+
+                                        });
+                                        </script>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label">حجم مخزن <span class="help-inline text-danger text-l"> (الزامی) </span></label>
+                                        <div class="controls input-icon left">
+                                            @*@Html.DropDownList("Volume", new SelectList(string.Empty, "Value", "Text"), new { @class = "span6" })
+                <span class="help-inline text-danger"> * </span>*@
+                                            <input type="text" class="span6" name="hajm" id="hajm" />
+                                            <input type="text" class="span6 hidden" name="Volume" id="Volume" />
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label">سازنده مخزن <span class="help-inline text-danger text-l"> (الزامی) </span></label>
+                                        <div class="controls input-icon left">
+                                            @*<i class="icon-mobile-phone"></i>*@
+                                            @Html.DropDownList("TankConstractorID", null, "", htmlAttributes: new { @class = "chosen" })
+
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label">تاریخ تولید مخزن <span class="help-inline text-danger text-l"> (الزامی) </span></label>
+                                        <div class="controls">
+                                            <div class="span3">
+                                                <select class="chosen" data-placeholder="ماه" id="ProductMonth" style="" name="ProductMonth">
+                                                    <option value=""></option>
+                                                    @for (int i = 1; i <= 12; i++)
+                                                    {
+                                                        <option value="@i">@i</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="span3">
+                                                <select class="chosen" data-placeholder="سال" id="ProductYear" style="" name="ProductYear">
+                                                    <option value=""></option>
+                                                    @for (int i = 2000; i <= DateTime.Now.Year; i++)
+                                                    {
+                                                        <option value="@i">@i</option>
+                                                    }
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label">تاریخ انقضا مخزن <span class="help-inline text-danger text-l"> (الزامی) </span></label>
+                                        <div class="controls">
+                                            <div class="span3">
+                                                <select class="chosen" data-placeholder="ماه" id="ExpirationMonth" style="" name="ExpirationMonth">
+                                                    <option value=""></option>
+                                                    @for (int i = 1; i <= 12; i++)
+                                                    {
+                                                        <option value="@i">@i</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="span3">
+                                                <select class="chosen" data-placeholder="سال" id="ExpirationYear" style="" name="ExpirationYear">
+                                                    <option value=""></option>
+                                                    @for (int i = 2000; i <= (DateTime.Now.Year + 20); i++)
+                                                    {
+                                                        <option value="@i">@i</option>
+                                                    }
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label"> سریال شیر مخزن <span class="help-inline text-danger text-l"> (الزامی) </span></label>
+                                        <div class="controls input-icon left">
+                                            @*<i class="icon-mobile-phone"></i>*@
+                                            <input type="text" class="span6" name="SerialTankValve" id="SerialTankValve" style="text-transform: uppercase" />
+                                            <input id="CheckeSerialTankValve" style="border:0px;width:100%;" class="text-danger" />
+                                        </div>
+                                        <script>
+                                        $(function () {
+                                            $('.button-next').hide();
+                                            $('#SerialTankValve').keyup(function () {
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: '@Url.Action("CheckeSerialTankValve")',
+                                                    dataType: 'json',
+                                                    data: { SerialTankValve: $("#SerialTankValve").val() },
+                                                    success: function (message) {
+                                                        if (message == "true")
+                                                        {
+                                                            $('.button-next').show();
+                                                            $("input#CheckeSerialTankValve").val("")
+                                                        }
+                                                        else
+                                                        {
+                                                            $("input#CheckeSerialTankValve").val(message);
+                                                            $('.button-next').hide();
+                                                        }
+                                                        //alert(message);
+                                                    }
+                                                });
+
+                                            }).keyup();
+
+                                        });
+                                        </script>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label">نوع شیر مخزن <span class="help-inline text-danger text-l"> (الزامی) </span></label>
+                                        <div class="controls">
+                                            <select class="chosen" data-placeholder="" id="TypeTankValve" name="TypeTankValve">
+                                                <option value=""></option>
+                                                <option value="دستی"> دستی </option>
+                                                <option value="برقی"> برقی </option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label">سازنده شیر مخزن <span class="help-inline text-danger text-l"> (الزامی) </span></label>
+                                        <div class="controls">
+                                            @Html.DropDownList("ValveConstractorID", null, "", htmlAttributes: new { @class = "chosen" })
+
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label"> سریال کیت (رگلاتور) <span class="help-inline text-danger text-l"> (الزامی) </span></label>
+                                        <div class="controls input-icon left">
+                                            <input type="text" class="span6" name="RegulatorSerial" id="RegulatorSerial" style="text-transform: uppercase" />
+                                            <input id="CheckeSerialRegulator" style="border:0px;width:100%;" class="text-danger" />
+                                        </div>
+                                        <script>
+                                        $(function () {
+                                            $('.button-next').hide();
+                                            $('#RegulatorSerial').keyup(function () {
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: '@Url.Action("CheckeSerialRegulator")',
+                                                    dataType: 'json',
+                                                    data: { SerialRegulator: $("#RegulatorSerial").val() },
+                                                    success: function (message) {
+                                                        if (message == "true")
+                                                        {
+                                                            $('.button-next').show();
+                                                            $("input#CheckeSerialRegulator").val("")
+                                                        }
+                                                        else
+                                                        {
+                                                            $("input#CheckeSerialRegulator").val(message);
+                                                            $('.button-next').hide();
+                                                        }
+                                                        //alert(message);
+                                                    }
+                                                });
+
+                                            }).keyup();
+
+                                        });
+                                        </script>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label">سازنده کیت (رگلاتور) <span class="help-inline text-danger text-l"> (الزامی) </span></label>
+                                        <div class="controls">
+                                            @Html.DropDownList("RegulatorConstractorID", null, "", htmlAttributes: new { @class = "chosen" })
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="tab-pane" id="tab4">
+
+                                    <div class="control-group">
+                                        <label class="control-label">@Html.LabelFor(model => model.SerialSparkPreview)</label>
+                                        <div class="controls input-icon left">
+                                            @*<i class="icon-user"></i>*@
+                                            <input type="text" class="span6" name="SerialSparkPreview" id="SerialSparkPreview" style="text-transform: uppercase"/>
+                                            @Html.ValidationMessageFor(model => model.SerialSparkPreview, "", new { @class = "text-danger" })
+                                            @*<span class="help-inline text-danger"> * </span>*@
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label">@Html.LabelFor(model => model.SerialKit)</label>
+                                        <div class="controls input-icon left">
+                                            @*<i class="icon-user"></i>*@
+                                            <input type="text" class="span6" name="SerialKit" id="SerialKit" style="text-transform: uppercase"/>
+                                            @Html.ValidationMessageFor(model => model.SerialKit, "", new { @class = "text-danger" })
+                                            @*<span class="help-inline text-danger"> * </span>*@
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label">@Html.LabelFor(model => model.SerialKey)</label>
+                                        <div class="controls input-icon left">
+                                            @*<i class="icon-user"></i>*@
+                                            <input type="text" class="span6" name="SerialKey" id="SerialKey"  style="text-transform: uppercase"/>
+                                            @Html.ValidationMessageFor(model => model.SerialKey, "", new { @class = "text-danger" })
+                                            @*<span class="help-inline text-danger"> * </span>*@
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label">@Html.LabelFor(model => model.RefuelingLable)</label>
+                                        <div class="controls input-icon left">
+                                            @*<i class="icon-user"></i>*@
+                                            <input type="text" class="span6" name="RefuelingLable" id="RefuelingLable"  style="text-transform: uppercase"/>
+                                            @Html.ValidationMessageFor(model => model.RefuelingLable, "", new { @class = "text-danger" })
+                                            @*<span class="help-inline text-danger"> * </span>*@
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label">@Html.LabelFor(model => model.SerialRefuelingValve)</label>
+                                        <div class="controls input-icon left">
+                                            @*<i class="icon-user"></i>*@
+                                            <input type="text" class="span6" name="SerialRefuelingValve" id="SerialRefuelingValve" style="text-transform: uppercase"/>
+                                            @Html.ValidationMessageFor(model => model.SerialRefuelingValve, "", new { @class = "text-danger" })
+                                            @*<span class="help-inline text-danger"> * </span>*@
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label">@Html.LabelFor(model => model.TrackingCode)</label>
+                                        <div class="controls input-icon left">
+                                            @*<i class="icon-user"></i>*@
+                                            <input type="text" class="span6" name="TrackingCode" id="TrackingCode" style="text-transform: uppercase"/>
+                                            @Html.ValidationMessageFor(model => model.TrackingCode, "", new { @class = "text-danger" })
+                                            @*<span class="help-inline text-danger"> * </span>*@
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label">@Html.LabelFor(model => model.License)</label>
+                                        <div class="controls input-icon left">
+                                            @*<i class="icon-user"></i>*@
+                                            <input type="text" class="span6" name="License" id="License" style="text-transform: uppercase"/>
+                                            @Html.ValidationMessageFor(model => model.License, "", new { @class = "text-danger" })
+                                            @*<span class="help-inline text-danger"> * </span>*@
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group" hidden>
+                                        <label class="control-label"> تصویر گواهینامه @*<span class="help-inline text-danger text-l"> (الزامی) </span>*@ </label>
+                                        <div class="controls input-icon left">
+                                            @*<i class="icon-user"></i>*@
+                                            <input type="file" class="span6" name="LicenseImage" id="LicenseImage" />
+                                            @Html.ValidationMessageFor(model => model.LicenseImage, "", new { @class = "text-danger" })
+                                            
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group" hidden>
+                                        <label class="control-label">تصویر گواهی سلامت @*<span class="help-inline text-danger text-l"> (الزامی) </span>*@ </label>
+                                        <div class="controls input-icon left">
+                                            @*<i class="icon-user"></i>*@
+                                            <input type="file" class="span6" name="HealthCertificate" id="HealthCertificate" />
+                                            @Html.ValidationMessageFor(model => model.HealthCertificate, "", new { @class = "text-danger" })
+                                            
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group">
+                                        <label class="control-label">@Html.LabelFor(model => model.InstallationStatus)</label>
+                                        <div class="controls input-icon left">
+                                            @*<i class="icon-user"></i>*@
+                                            <input type="checkbox" name="InstallationStatus" id="InstallationStatus" value="true" style="opacity: 0;">
+                                            @Html.ValidationMessageFor(model => model.InstallationStatus, "", new { @class = "text-danger" })
+                                            @*<span class="help-inline text-danger"> * </span>*@
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group Description">
+                                        <label class="control-label">@Html.LabelFor(model => model.Description)</label>
+                                        <div class="controls input-icon left">
+                                            @*<i class="icon-user"></i>*@
+                                            <textarea type="text" class="span6" name="Description" id="Description"></textarea>
+                                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                            @*<span class="help-inline text-danger"> * </span>*@
+                                        </div>
+                                    </div>
+                                    <script>
+                                        $('.Description').hide();
+                                        function onCheckChange() {
+                                            if ($("#InstallationStatus").is(':checked')) {
+                                                $('.Description').show();
+                                            } else {
+                                                $('.Description').hide();
+                                            }
+                                        }
+                                        $("#InstallationStatus").click(onCheckChange).change(onCheckChange);
+                                    </script>
+                                    <input type="submit" value="ثبت نهایی" id="" class="btn btn-success" />
+                                    <span class="help-inline text-warning">توجه داشته باشید تا زمانی که شما ثبت نهایی را انجام ندهید، داده های ثبت شده در 4 مرحله ذخیره نخواهند شد!</span>
+                                </div>
+
+                                <div class="form-actions clearfix">
+                                    <a href="javascript:;" class="btn button-previous">
+                                        <i class="icon-angle-right"></i> مرحله قبل
+                                    </a>
+                                    <a href="javascript:;" class="btn btn-primary blue button-next">
+                                        مرحله بعد <i class="icon-angle-left"></i>
+                                    </a>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.CurrencyTypeID, "CurrencyTypeID", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("CurrencyTypeID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.CurrencyTypeID, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.CreatorUser, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CreatorUser, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CreatorUser, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </div>
+        <!-- END PAGE CONTENT-->
     </div>
 }
+
+<!-- END PAGE CONTAINER-->
+<script>
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#VehicleForm").submit(function (e) {
+            e.preventDefault();
+            if ($(this).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: $(this).attr('action'),
+                    data: $(this).serialize(),
+                    success: function (res) {
+                        alert("Records added Successfully.");
+                    }
+                });
+            }
+        });
+    })
+</script>  
+
+<script>
+    $("form").on("click", "#btnSave", function () {
+    var invoices = new Array();
+    var invoice = {};
+    invoice.VehicleTypeID = $("VehicleTypeID").val();
+    invoice.OwnerName = $("OwnerName").val();
+
+    invoices.push(invoice);
+
+    //Send the JSON array to Controller using AJAX.
+    $.ajax({
+        type: "POST",
+        url: "/VehicleRegistrations/AddtoVehicleRegistration",
+        data: JSON.stringify(invoices),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            if (response.success) {
+                alert(response.responseText);
+            } else {
+                // DoSomethingElse()
+                alert(response.responseText);
+            }
+        },
+        error: function (response) {
+            alert("ثبت اطلاعات با خطا مواجه شد!"); //
+        }
+    });
+});
+
+
+</script>
+
+<script type="text/javascript">
+    debugger;
+    $(document).ready(function () {       
+        $("#hajm").val($("#VehicleTypeID option:selected").text().match(/\d+/) + " لیتری ");
+        //$("#Volume").val($("#VehicleTypeID option:selected").val());
+        $("#VehicleTypeID").change(function () {
+            $("#hajm").val($("#VehicleTypeID option:selected").text().match(/\d+/) + " لیتری ");
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetTypeofTanks")',
+                dataType: 'json',
+                data: { id: $("#VehicleTypeID option:selected").val() },
+                    success: function (response) {
+                        if (response.success) {
+                            //alert(response.responseText + " " + response.responseId);
+                            $("#Volume").val(response.responseId);
+                            //window.location.href = "";
+                        } else {
+                            // DoSomethingElse()
+                            alert(response.responseText);
+                        }
+                    },
+                    error: function (ex) {
+                        alert('خطا در یافتن لیتراژ مرتبط با مخزن .' + ex);
+                    }
+            });
+            return false;
+        });
+    });
+    //
+</script>
+
+@*<script type="text/javascript">
+    debugger;
+    $(document).ready(function () {
+        $("#VehicleTypeID").change(function () {
+            $("#Volume").empty();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("GetTypeofTanks")',
+                    dataType: 'json',
+                    //data: { Description: $("#VehicleTypeID option:selected").text().match(/\d+/) },
+                    data:{id: $("#VehicleTypeID").val()},
+                    success: function (volumes) {
+                        $.each(volumes, function (i, volume) {
+                            $("#Volume").append('<option value="' + volume.Value + '">' +
+                                volume.Text + '</option>');
+
+                        });
+                    },
+                    error: function (ex) {
+                        alert('خطا در یافتن لیتراژ مرتبط با مخزن .' + ex);
+                    }
+            });
+            return false;
+        });
+    });
+</script>*@
+
+<script>
+    function text(name) {
+        var name = $(name).val();
+        if (name.length > 0) {
+            just_persian(name);
+        }
+    }
+
+    function just_persian(str) {
+        var p = /^[\u0600-\u06FF\s]+$/;
+        if (!p.test(str)) {
+            alert("لطفا صفحه کلید خود را فارسی کنید!");
+        }
+    }
+</script>
+
+@*other sample for check keyboard language persian*@
+@*<script>
+    $("#txtpersian").on('change keyup paste keydown', function (e) {
+        if (just_persian(e.key) === false)
+            e.preventDefault();
+    });
+
+
+    function just_persian(str) {
+        var p = /^[\u0600-\u06FF\s]+$/;
+        if (!p.test(str)) {
+            return false
+        }
+        return true;
+    }
+</script>
+
+<script>
+    document.getElementById('nameFa').addEventListener('keypress', function (e) {
+
+        if ((e.charCode >= 97 && e.charCode <= 122) || (e.charCode >= 65 && e.charCode <= 90)) {
+            alert("Language is english");
+            e.preventDefault();
+        }
+
+        else if (isPersian(e.key))
+            alert("Language is Persian");
+        else
+            alert("Others");
+    });
+
+    function isPersian(str) {
+        var p = /^[\u0600-\u06FF\s]+$/;
+        return p.test(str);
+    }
+</script>*@
+@*<script src="~/js/jquery.autotab.js"></script>
+<script src="~/js/jquery.autotab.min.js"></script>*@

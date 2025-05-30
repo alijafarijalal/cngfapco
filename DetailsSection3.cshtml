@@ -1,0 +1,453 @@
+﻿@model cngfapco.Models.VehicleRegistration
+
+@{
+    ViewBag.Title = "DetailsSection3";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int? selectedId = (int?)ViewBag.selectedVehicleId;
+    int? existvehicleTank = (int?)ViewBag.existvehicleTank;
+    bool? isAdmin = (bool?)ViewBag.isAdmin;
+    bool userRole = (bool)ViewBag.userRole;
+    List<cngfapco.Models.Role> rolName = cngfapco.Helper.Helpers.GetCurrentUserRoles();
+    string Type = (string)ViewBag.Type;
+    if (Type == "1")
+    {
+        Type = "CreateSection1?Type=1";
+    }
+    else
+    {
+        Type = "CreateSection1_Type2?Type=2";
+    }
+}
+
+<script type="text/javascript">
+    //
+    function printtag(tagid) {
+        var hashid = "#" + tagid;
+        var tagname = $(hashid).prop("tagName").toLowerCase();
+        var attributes = "";
+        var attrs = document.getElementById(tagid).attributes;
+        $.each(attrs, function (i, elem) {
+            attributes += " " + elem.name + " ='" + elem.value + "' ";
+        })
+        var divToPrint = $(hashid).html();
+        var head = "<html><head>" + $("head").html() + "</head>";
+        var allcontent = head + "<body  dir='rtl' onload='window.print()' style='background-color:#ffffff'>" + "<" + tagname + attributes + ">" + divToPrint + "</" + tagname + ">" + "</body></html>";
+        var newWin = window.open('', 'Print-Window');
+        newWin.document.open();
+        newWin.document.write(allcontent);
+        newWin.document.close();
+        setTimeout(function () { newWin.close(); }, 10000);
+    }
+/**/</script>
+
+<div class="row-fluid">
+    <div class="span12">
+        <h3 class="page-title hide">
+            @*<small>form wizard sample</small>*@
+            Form Wizard
+        </h3>
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            @*<li>
+            <a href="/VehicleRegistrations/DetailsSection1/@selectedId"> مرحله قبل</a> <span class="divider">&nbsp;</span>
+            </li>*@
+            @if (Model.Status == true)
+            {
+                <li><a href="/VehicleRegistrations/WorkshopPage2"> لیست خودرو ها </a><span class="divider-last">&nbsp;</span></li>
+            }
+            else
+            {
+                <li><a href="/VehicleRegistrations/DetailsSection2?id=@selectedId&Goback=true&existvehicleTank=@existvehicleTank">مرحله قبل</a><span class="divider-last">&nbsp;</span></li>
+            }
+
+        </ul>
+    </div>
+</div>
+
+<div class="row-fluid">
+    <div class="navbar steps">
+        <div class="navbar-inner">
+            @if (Model.Status == true)
+            {
+                <span class="input-error tooltips" data-original-title="ویرایش اطلاعات برای شما امکان پذیر نمی باشد، در صورت نیاز با راهبر سامانه در ارتباط باشید!">
+                    <i class="icon-warning-sign text-warning"> <span class="h3" style="font-family:Vazir;"> توجه </span> </i>
+                </span>
+            }
+            else
+            {
+                <span class="input-error tooltips" data-original-title=" برای ویرایش اطلاعات بر روی عناوین شماره دار و یا دکمه مرحله قبل کلیک کنید. ">
+                     <i class="icon-exclamation-sign text-primary"> <span class="h3" style="font-family:Vazir;"> راهنما </span> </i>
+                </span>
+            }
+            <ul class="row-fluid">
+                @if (Model.Status == true)
+                {
+                    <li class="span3">
+                        <a href="#tab1" data-toggle="tab" class="step">
+                            <span class="number">1- </span>
+                            <span class="desc text-success"><i class="icon-ok"></i>  مشخصات خودرو ثبت شد </span>
+                        </a>
+                    </li>
+                    <li class="span3">
+                        <a href="#tab2" data-toggle="tab" class="step">
+                            <span class="number">2- </span>
+                            @if (existvehicleTank == 0)
+                            {
+                                <span class="desc text-danger"><i class="icon-remove"></i> مشخصات مخزن و متعلقات ثبت نشده </span>
+                            }
+                            else
+                            {
+                                <span class="desc text-success"><i class="icon-ok"></i> مشخصات مخزن و متعلقات ثبت شد </span>
+                            }
+                        </a>
+                    </li>
+                    <li class="span3">
+                        <a href="#tab3" data-toggle="tab" class="step">
+                            <span class="number">3- </span>
+                            <span class="desc text-success"><i class="icon-ok"></i>  مشخصات تکمیلی ثبت شد </span>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="span3">
+                        <a href="/VehicleRegistrations/EditSection1?id=@selectedId&Goback=true&existvehicleTank=@existvehicleTank">
+                            <span class="number">1- </span>
+                            <span class="desc text-success"><i class="icon-ok"></i>  مشخصات خودرو ثبت شد </span>
+                        </a>
+                    </li>
+                    <li class="span3">
+                        <a href="/VehicleRegistrations/DetailsSection1?id=@selectedId&Goback=true&existvehicleTank=@existvehicleTank">
+                            <span class="number">2- </span>
+                            @if (existvehicleTank == 0)
+                            {
+                                <span class="desc text-danger"><i class="icon-remove"></i> مشخصات مخزن و متعلقات ثبت نشده </span>
+                            }
+                            else
+                            {
+                                <span class="desc text-success"><i class="icon-ok"></i> مشخصات مخزن و متعلقات ثبت شد </span>
+                            }
+                        </a>
+                    </li>
+                    <li class="span3">
+                        <a href="/VehicleRegistrations/DetailsSection2?id=@selectedId&Goback=true&existvehicleTank=@existvehicleTank&icon=icon-chevron-up&style=display:none;">
+                            <span class="number">3- </span>
+                            <span class="desc text-success"><i class="icon-ok"></i>  مشخصات تکمیلی ثبت شد </span>
+                        </a>
+                    </li>
+                }
+                @foreach (var item in rolName)
+                {
+                    if (item.RoleName.Equals("مرکز خدمات (کارگاه)"))
+                    {
+                        <li class="span3 btn btn-default">
+                            <a href="/VehicleRegistrations/@Type">
+                                <span class="desc"><i class="icon-plus icon-white"></i> ثبت خودروی جدید </span>                               
+                            </a>
+                        </li>
+                    }
+                    @*else
+                    {
+                        <li class="span3">
+                            <a href="#">
+                                <span class="desc text-success"><i class="icon-plus icon-white"></i> ثبت خودروی جدید </span>
+                            </a>
+                        </li>
+                    }*@
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+<div id="DivIdToPrint">
+    <!-- BEGIN SAMPLE FORM widget-->
+    <div class="row-fluid">
+        <div class="widget">
+            <div class="widget-title">
+                @try
+                {
+                    <h4><i class="icon-reorder"></i>مشاهده اطلاعات خودرو ثبت شده - (@Model.RegistrationType.Type) -  (@Model.CreateDate)</h4>
+                }
+                catch
+                {
+                    <h4><i class="icon-reorder"></i>مشاهده اطلاعات خودرو ثبت شده - (@Model.CreateDate)</h4>
+                }
+                <span class="tools">                    
+                    <a href="javascript:;" class="icon-chevron-down"></a>
+                    <a href="javascript:;" class="icon-remove"></a>
+                </span>
+                <div class="actions">
+                    <div class="">
+                        <div class="btn-group">
+                            <a class="btn" href="#"><i class="icon-cogs"></i> تنظیمات </a><a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                <span class="icon-caret-down"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/VehicleRegistrations/ConversionCertificate?selectedId=@Model.ID" target="_blank"><i class="icon-qrcode"></i> صدور گواهی تبدیل </a></li>
+                                <li><a href="/VehicleRegistrations/UploadImageList?id=@Model.ID" target="_blank"><i class="icon-search"></i> تصویر مدارک  </a></li>
+                                @if (Model.Status != true)
+                                {
+                                    <li><a href="/VehicleRegistrations/UploadImages?id=@Model.ID" target="_blank"><i class="icon-upload-alt"></i>  افزودن تصویر مدارک </a></li>
+                                    @*<li><a href="/VehicleRegistrations/Edit?id=@Model.ID" class="text-warning"><i class="icon-pencil"></i> ویرایش </a></li>*@
+
+                                    if (isAdmin == true)
+                                    {
+                                        <li><a href="/VehicleRegistrations/Delete?id=@Model.ID" class="text-danger"><i class="icon-remove"></i> حذف </a></li>
+                                    }
+                                    if (userRole == true)
+                                    {
+                                        <li>
+                                            <a href="#" data-toggle="modal" data-target="#modal-large" onclick="EditPermit(@Model.ID)"><i class="icon-pencil"></i> مجوز ویرایش </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" data-toggle="modal" data-target="#modal-large" onclick="EditRegisterStatus(@Model.ID)"><i class="icon-pencil"></i> تغییر وضعیت تبدیل </a>
+                                        </li>
+                                    }
+                                }
+                                @if(isAdmin == true && !userRole == true)
+                                {
+                                    <li>
+                                        <a href="#" data-toggle="modal" data-target="#modal-large" onclick="EditPermit(@Model.ID)"><i class="icon-pencil"></i> مجوز ویرایش </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" data-toggle="modal" data-target="#modal-large" onclick="EditRegisterStatus(@Model.ID)"><i class="icon-pencil"></i> تغییر وضعیت تبدیل </a>
+                                    </li>
+                                }
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <script>
+                function EditPermit(id) {
+                    $.get("/VehicleRegistrations/EditPermit/" + id, function (res) {
+                        $("#modal-large").modal();
+                        $("#myModalLabel").html("مجوز ویرایش اطلاعات");
+                        $("#myModalBody").html(res);
+
+                    });
+                }
+                //
+            </script>
+            <script>
+                function EditRegisterStatus(id) {
+                    $.get("/VehicleRegistrations/EditRegisterStatus/" + id, function (res) {
+                        $("#modal-large").modal();
+                        $("#myModalLabel").html("تغییر وضعیت تبدیل");
+                        $("#myModalBody").html(res);
+
+                    });
+                }
+                //
+            </script>
+            <div class="widget-body form">
+                <!-- BEGIN FORM-->
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="span6">
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.VehicleType.Type)</span> :
+                                <span> @(Model.VehicleType.Type + " " + Model.VehicleType.Description)</span>
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.System)</span> :
+                                <span> @Model.System</span>
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.TypeofUse.Type)</span> :
+                                @try
+                                {<span> @Model.TypeofUse.Type</span>}
+                            catch { }
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.OwnerName) و @Html.DisplayNameFor(model => model.OwnerFamily)</span> :
+                                <span> @Model.OwnerName @Model.OwnerFamily</span>
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.NationalCode)</span> :
+                                <span dir="rtl"> @Model.NationalCode</span>
+                            </p>
+
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.PhoneNumber)</span> :
+                                <span> @Model.PhoneNumber</span>
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.MobileNumber)</span> :
+                                <span> @Model.MobileNumber</span>
+                            </p>
+
+                        </div>
+                        <div class="span6">
+                            <p>
+                                <span style="color:#808080;">شماره پلاک</span> :
+                                <span> ایران </span> <span> @Model.IranNumberPlate</span> |  <span> @Model.RightNumberPlate</span> <span> @Model.AlphaPlate</span> <span> @Model.LeftNumberPlate</span>
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.ConstructionYear)</span> :
+                                <span> @Model.ConstructionYear</span>
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.EngineNumber)</span> :
+                                @if (!string.IsNullOrEmpty(Model.EngineNumber))
+                                {
+                                    <span> @Model.EngineNumber.ToUpper()</span>
+                                }
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.ChassisNumber)</span> :
+                                @if (!string.IsNullOrEmpty(Model.ChassisNumber))
+                                {
+                                    <span> @Model.ChassisNumber.ToUpper()</span>
+                                }
+                            </p>
+                            <p>
+                                @if (!string.IsNullOrEmpty(Model.VIN))
+                                {
+                                    <span> @Model.VIN.ToUpper() : </span>
+                                }
+                                <span style="color:#808080;">VIN </span>
+
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.FuelCard)</span> :
+                                <span dir="rtl"> @Model.FuelCard</span>
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.Address)</span> :
+                                <span dir="rtl"> @Model.Address</span>
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- END FORM-->
+            </div>
+
+        </div>
+    </div>
+    <!-- END SAMPLE FORM widget-->
+    <!-- BEGIN SAMPLE FORM widget-->
+    <div>
+        @try
+        {
+            @Html.Action("Section2", new { id = selectedId, existvehicleTank=existvehicleTank, icon = "icon-chevron-down", style = "" })
+        }
+        catch
+        {            
+            <!-- BEGIN SAMPLE FORM widget-->
+            <div class="row-fluid">
+                <div class="widget">
+                    <div class="widget-title">
+                        <h4><i class="icon-reorder"></i>مشاهده اطلاعات مخزن و متعلقات ثبت شده </h4>
+                        <span class="tools">
+                            <a href="javascript:;" class="icon-chevron-down"></a>
+                            <a href="javascript:;" class="icon-remove"></a>
+                        </span>
+
+                    </div>
+
+                    <div class="widget-body form">
+                        <!-- BEGIN FORM-->
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <h3 class="text-danger"> <i class="icon-warning-sign"></i> اطلاعات مخزن و متعلقات ثبت نشده است، برای ثبت اطلاعات بر روی عنوان شماره 2 کلیک کنید!</h3>
+                            </div>
+                        </div>
+                        <!-- END FORM-->
+                    </div>
+
+                </div>
+            </div>
+            <!-- END SAMPLE FORM widget-->
+        }
+
+    </div>
+    <!-- END SAMPLE FORM widget-->
+    <!-- BEGIN SAMPLE FORM widget-->
+    <div class="row-fluid">
+        <div class="widget">
+            <div class="widget-title">
+                <h4><i class="icon-reorder"></i>مشاهده مشخصات تکمیلی ثبت شده  (@Model.CreateDate)</h4>
+                <span class="tools">
+                    <a href="javascript:;" class="icon-chevron-down"></a>
+                    <a href="javascript:;" class="icon-remove"></a>
+                </span>
+
+            </div>
+
+            <div class="widget-body form">
+                <!-- BEGIN FORM-->
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="span6">
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.SerialSparkPreview)</span> :
+                                <span> @Model.SerialSparkPreview</span>
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.SerialKey)</span> :
+                                <span> @Model.SerialKey</span>
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.RefuelingLable)</span> :
+                                <span> @Model.RefuelingLable</span>
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.SerialRefuelingValve)</span> :
+                                <span> @Model.SerialRefuelingValve</span>
+                            </p>
+
+                        </div>
+
+                        <div class="span6">
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.TrackingCode)</span> :
+                                <span> @Model.TrackingCode</span>
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.License)</span> :
+                                <span> @Model.License</span>
+                            </p>
+                            <p>
+                                <span style="color:#808080;">وضعیت نصب</span> :
+                                <span>
+                                    @if (Model.InstallationStatus == false)
+                                    {<input type="checkbox" checked /> <span>کامل</span>}
+
+                                    @if (Model.InstallationStatus == true)
+                                    {<input type="checkbox" checked /> <span>ناقص</span>}
+                                </span>
+                                
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.Description)</span> :
+
+                                @if (Model.InstallationStatus == true)
+                                {<span> - </span>}
+
+                                @if (Model.InstallationStatus == false)
+                                {<span> @Model.Description </span>}
+                                
+                            </p>
+
+                        </div>
+
+                    </div>
+                </div>
+                <!-- END FORM-->
+            </div>
+
+        </div>
+    </div>
+    <!-- END SAMPLE FORM widget-->
+</div>
+<div class="row-fluid">
+    <p>
+        <a href="javascipt::" onclick='printtag("DivIdToPrint")'> <i class="icon-print" style="color:#00ff21;font-size:30px;"></i> </a>
+    </p>
+</div>

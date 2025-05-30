@@ -1,0 +1,151 @@
+﻿@model IEnumerable<cngfapco.Models.VehicleAttachment>
+
+@{
+    ViewBag.Title = "UploadImageList";
+    Layout = null; //"~/Views/Shared/_Layout.cshtml";
+    int? RegistrationID = (int?)ViewBag.RegistrationID;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from byrushan.com/projects/material-admin/app/2.6/photo-gallery.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Jun 2019 14:59:27 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Vendor styles -->
+    <link rel="stylesheet" href="/vendors/material-design-iconic-font/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="/vendors/animate.css/animate.min.css">
+    <link rel="stylesheet" href="/vendors/jquery-scrollbar/jquery.scrollbar.css">
+    <link rel="stylesheet" href="/vendors/lightgallery/css/lightgallery.min.css">
+
+    <!-- App styles -->
+    <link rel="stylesheet" href="/css/app.min.css">
+</head>
+
+<body class="" style="background-color:#ffffff;">
+    <main class="main">
+        <section class="content">
+            <div class="content__inner">
+                <div class="" dir="rtl">
+                    <!-- BEGIN PAGE HEADER-->
+                    <div class="row-fluid">
+                        <div class="span12">
+
+                            <ul class="breadcrumb">
+                                <li>
+                                    <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+                                </li>
+                                <li>
+                                    <a href="/VehicleRegistrations/DetailsSection3?id=@ViewBag.RegistrationID">جزئیات اطلاعات خودرو</a> <span class="divider">&nbsp;</span> | 
+                                </li>
+                                <li> <a href="#">مشاهده فایل های پیوست </a><span class="divider-last">&nbsp;</span></li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- END PAGE HEADER-->
+                </div>
+                <!-- BEGIN SAMPLE FORM widget-->
+                <div class="widget" dir="rtl">
+                    <div class="widget-title">
+                        <h4>
+                            <i class="icon-reorder"></i>
+                            <span>
+                                مشاهده فایل های پیوست بارگذاری شده
+                            </span>
+                            @*<span class="text-center text-warning">
+                     @(Model.FirstOrDefault().VehicleRegistration.OwnerName + " " + Model.FirstOrDefault().VehicleRegistration.OwnerFamily)
+                    </span>*@
+                        </h4>
+                        <span class="tools">
+                            <a href="javascript:;" class="icon-chevron-down"></a>
+                            <a href="javascript:;" class="icon-remove"></a>
+                        </span>
+                        <div class="actions">
+                            @try
+                            {
+                                <a href="/VehicleRegistrations/UploadImages?id=@RegistrationID" class="btn btn-success"><i class="icon-upload-alt"></i> افزودن/ جایگزینی فایل </a>
+                            }
+                            catch { }
+                        </div>
+                    </div>
+
+                    <div class="widget-body">
+                        @foreach (var item in Model.OrderByDescending(m => m.ID).Take(1))
+                        {
+                            <h3 style="text-align:center;font-size:17px;"> @(item.VehicleRegistration.OwnerName + " " + item.VehicleRegistration.OwnerFamily) </h3>
+                        }
+                    </div>
+
+                </div>
+                <!-- END SAMPLE FORM widget-->
+
+                <div class="row lightbox photos">
+                    @foreach (var item in Model.Where(m => m.Image != "NULL"))
+                    {
+                        <a href="~/UploadedFiles/Vehicle/@item.Folder/@item.Image.Trim()" class="col-md-2 col-4">
+                            <div class="lightbox__item photos__item">
+                                <img src="~/UploadedFiles/Vehicle/@item.Folder/@item.Image.Trim()" alt=".../@item.Folder/@item.Image.Trim()" />
+                            </div>
+                        </a>
+                    }
+
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Older IE warning message -->
+    <!--[if IE]>
+        <div class="ie-warning">
+            <h1>Warning!!</h1>
+            <p>You are using an outdated version of Internet Explorer, please upgrade to any of the following web browsers to access this website.</p>
+
+            <div class="ie-warning__downloads">
+                <a href="http://www.google.com/chrome">
+                    <img src="img/browsers/chrome.png" alt="">
+                </a>
+
+                <a href="https://www.mozilla.org/en-US/firefox/new">
+                    <img src="img/browsers/firefox.png" alt="">
+                </a>
+
+                <a href="http://www.opera.com">
+                    <img src="img/browsers/opera.png" alt="">
+                </a>
+
+                <a href="https://support.apple.com/downloads/safari">
+                    <img src="img/browsers/safari.png" alt="">
+                </a>
+
+                <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">
+                    <img src="img/browsers/edge.png" alt="">
+                </a>
+
+                <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
+                    <img src="img/browsers/ie.png" alt="">
+                </a>
+            </div>
+            <p>Sorry for the inconvenience!</p>
+        </div>
+    <![endif]-->
+    <!-- Javascript -->
+    <!-- Vendors -->
+    <script src="/vendors/jquery/jquery.min.js"></script>
+    <script src="/vendors/popper.js/popper.min.js"></script>
+    <script src="/vendors/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/vendors/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+    <script src="/vendors/jquery-scrollLock/jquery-scrollLock.min.js"></script>
+
+    <!-- Light Gallery -->
+    <script src="/vendors/lightgallery/js/lightgallery-all.min.js"></script>
+
+    <!-- App functions and actions -->
+    <script src="/js/app.min.js"></script>
+</body>
+
+<!-- Mirrored from byrushan.com/projects/material-admin/app/2.6/photo-gallery.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Jun 2019 15:00:05 GMT -->
+</html>

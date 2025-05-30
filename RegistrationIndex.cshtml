@@ -1,0 +1,260 @@
+﻿@model IEnumerable<cngfapco.Models.VehicleRegistration>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_DataTableLayout.cshtml";
+}
+
+<!-- BEGIN PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            @*<li>
+                    <a href="#">کارگاه ها</a> <span class="divider">&nbsp;</span>
+                </li>*@
+            <li><a href="#">ثبت خودرو</a><span class="divider-last">&nbsp;</span></li>
+
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN SAMPLE FORM widget-->
+        <div class="widget">
+            <div class="widget-title">
+                <h4><i class="icon-reorder"></i>لیست خودروهای ثبت شده</h4>
+                <span class="tools">
+                    <a href="javascript:;" class="icon-chevron-down"></a>
+                    <a href="javascript:;" class="icon-remove"></a>
+                </span>
+                <div class="actions">
+                    <span> 
+                        <a href="/VehicleRegistrations/Create">
+                            <button class="btn btn-success"><i class="icon-plus icon-white"></i> افزودن </button>
+                        </a>
+                    </span> | 
+                    <span>
+                        <a href="/VehicleRegistrations/DetailsPrint" target="_blank">
+                            <i class="icon-print icon-white"></i> فرم خالی
+                        </a>
+                    </span> |
+                    <span>
+                        <a href="/VehicleRegistrations/ExportData" target="_blank">
+                            <i class="icon-download-alt icon-white"></i> Export
+                        </a>
+                    </span>
+                   
+                </div>
+            </div>
+            <div class="widget-body form">
+                
+                <!-- BEGIN FORM-->
+                <div style="overflow:auto;">
+                    @*<button id="btnExport">Export</button>*@
+                    <div class="space15"></div>
+                    <table class="table table-striped table-bordered table-hover table-advance" id="sample_editable_1">
+                        <thead>
+                            <tr>
+                                <th>ردیف</th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Workshop.Title)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VehicleType.Type)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.TypeofUse.Type)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.OwnerName) و @Html.DisplayNameFor(model => model.OwnerFamily)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.PhoneNumber)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.MobileNumber)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ConstructionYear)
+                                </th>
+                                <th>
+                                    شماره پلاک
+                                    @*@Html.DisplayNameFor(model => model.LeftNumberPlate)*@
+                                </th>
+                                @*<th>
+                        @Html.DisplayNameFor(model => model.AlphaPlate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RightNumberPlate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IranNumberPlate)
+                    </th>*@
+                                <th>
+                                    @Html.DisplayNameFor(model => model.EngineNumber)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.ChassisNumber)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.VIN)
+                                </th>
+                                <th>
+                                    شماره بیمه نامه
+                                </th>
+                                <th> <i class="icon-cog"></i> </th>
+                            </tr>
+                        </thead>
+
+                        @{
+                            int rowNum = 0;
+                        }
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @(rowNum += 1)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Workshop.Title)
+                                    </td>
+                                    <td>
+                                        <a href="/VehicleRegistrations/Details?id=@item.ID ">
+                                            @Html.DisplayFor(modelItem => item.VehicleType.Type)
+                                        </a>
+                                    </td>
+
+                                    <td>
+                                        @try
+                                        {
+                                            @Html.DisplayFor(modelItem => item.TypeofUse.Type)
+                                        }
+                                        catch { }
+                                        
+                                    </td>
+                                    <td>
+                                        @if (item.NationalCard != null)
+                                        {
+                                            if (Path.GetExtension(item.NationalCard) == ".jpg" || Path.GetExtension(item.NationalCard) == ".png")
+                                            {
+                                                <a href="~/UploadedFiles/Vehicle/NationalCard/@item.NationalCard" target="_blank">
+                                                    @*<img src="~/UploadedFiles/Vehicle/NationalCard/@item.NationalCard" class="thumbnailBusinessLicense" />*@
+                                                    @Html.DisplayFor(modelItem => item.OwnerName) @Html.DisplayFor(modelItem => item.OwnerFamily)
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a href="~/UploadedFiles/Vehicle/NationalCard/@item.NationalCard" target="_blank">
+                                                    @Html.DisplayFor(modelItem => item.OwnerName) @Html.DisplayFor(modelItem => item.OwnerFamily)
+                                                </a>
+                                            }
+
+                                        }
+
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PhoneNumber)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.MobileNumber)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ConstructionYear)
+                                    </td>
+                                    <td>
+                                        <span>ایران @Html.DisplayFor(modelItem => item.IranNumberPlate) | @Html.DisplayFor(modelItem => item.RightNumberPlate) @Html.DisplayFor(modelItem => item.AlphaPlate) @Html.DisplayFor(modelItem => item.LeftNumberPlate)</span>
+                                        @if (item.VehicleCard != null)
+                                        {                                            
+                                            if (Path.GetExtension(item.VehicleCard) == ".jpg" || Path.GetExtension(item.VehicleCard) == ".png")
+                                            {
+                                                <a href="~/UploadedFiles/Vehicle/VehicleCard/@item.VehicleCard" target="_blank">
+                                                    @*<img src="~/UploadedFiles/Vehicle/VehicleCard/@item.VehicleCard" class="thumbnailBusinessLicense" />*@
+                                                    <i class="icon-file-alt"></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a href="~/UploadedFiles/Vehicle/VehicleCard/@item.VehicleCard" target="_blank">
+                                                    @*ایران @Html.DisplayFor(modelItem => item.IranNumberPlate) | @Html.DisplayFor(modelItem => item.RightNumberPlate) @Html.DisplayFor(modelItem => item.AlphaPlate) @Html.DisplayFor(modelItem => item.LeftNumberPlate)*@
+                                                    <i class="icon-file-alt"></i>
+                                                </a>
+                                            }
+
+                                        }
+
+                                    </td>
+                                    @*<td>
+                            @Html.DisplayFor(modelItem => item.AlphaPlate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RightNumberPlate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IranNumberPlate)
+                        </td>*@
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EngineNumber)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ChassisNumber)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.VIN)
+                                    </td>
+                                    <td>
+                                        @if (cngfapco.Controllers.VehicleRegistrationsController.GetInsuranceCode(item.ID)=="+")
+                                        {
+                                            <a href="javascript:;" class="" data-toggle="modal" data-target="#modal-large" onclick="AddInsuranceCode(@item.ID)"><i class="icon-plus icon-white"></i> ثبت بیمه نامه </a>
+                                        }
+                                        else
+                                        {
+                                            <span>@cngfapco.Controllers.VehicleRegistrationsController.GetInsuranceCode(item.ID)</span>
+                                            @*<a href="/VehicleRegistrations/InsurancePreview?id=@item.ID ">
+                                                
+                                            </a>*@
+                                        }
+                                    </td>
+                                    <td>
+                                        @*<a href="/VehicleRegistrations/Edit?id=@item.ID ">
+                                <button class="btn btn-primary"><i class="icon-pencil icon-white"></i>  </button>
+                            </a>*@
+                                        <a href="/VehicleRegistrations/Details?id=@item.ID ">
+                                            <i class="icon-search icon-white"></i>
+                                        </a> |
+                                        <a href="/VehicleRegistrations/Delete?id=@item.ID ">
+                                            <img src="@Url.Content("~/css/images/bin.png")" />
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- END FORM-->
+            </div>
+        </div>
+        <!-- END SAMPLE FORM widget-->
+    </div>
+</div>
+
+<script>
+     debugger;
+    //ثبت بیمه نامه
+    function AddInsuranceCode(id) {
+        $.get("/VehicleRegistrations/AddInsuranceCode/" + id , function (res) {
+            $("#modal-large").modal();
+            $("#myModalLabel").html("ثبت بیمه نامه");
+            $("#myModalBody").html(res);
+
+        });
+    }
+</script>

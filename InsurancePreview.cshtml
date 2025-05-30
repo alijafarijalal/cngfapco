@@ -1,0 +1,346 @@
+﻿@model cngfapco.Models.VehicleRegistration
+
+@{
+    ViewBag.Title = "کارت بیمه ادواری";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row-fluid">
+    <div class="span12">
+        <div class="widget">
+            <div class="widget-title">
+                <h4><i class="icon-print"></i>کارت بیمه ادواری</h4>
+                <span class="tools">
+                    <a href="javascript:;" class="icon-chevron-down"></a>
+                    <a href="javascript:;" class="icon-remove"></a>
+                </span>
+            </div>
+            <div id="DivIdToPrint">
+                <div class="widget-body">
+                    <!--BEGIN ABOUT US-->
+                    <div class="about-us">
+                        <div class="row-fluid">
+                            <div class="span6" style="text-align:justify;">
+                                <div class="span12">
+                                    <table width="100%">
+                                        <tr>
+                                            <td width="20%"><img src="~/img/fapaLogo2.jpg" /></td>
+                                            <td width="60%"></td>
+                                            <td width="20%"><img src="~/img/InsuranceLogo.png" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="20%"></td>
+                                            <td width="60%"><h4 style="text-align:center;color:#000000;">گواهی بیمه مسئولیت مدنی</h4></td>
+                                            <td width="20%"></td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+                                <span> شماره بیمه نامه : </span> <strong style="color:#0e3ec3;"> @cngfapco.Controllers.VehicleRegistrationsController.GetInsuranceCode(Model.ID) </strong>
+                                <p>
+                                    بر اساس قرارداد شماره <strong style="color:#0e3ec3;">185/999-897-2658</strong> تایید و گواهی می شود مسئولیت مدنی کارگاه/ شرکت <strong style="color:#0e3ec3;">@cngfapco.Controllers.VehicleRegistrationsController.GetWorkshopUser(Model.Creator)</strong> در رابطه با خسارت جانی و مالی ناشی از نصب سیستم کیت گازسوز خودرو در قبال استفاده کننده و اشخاص ثالث مطابق با ظرفیت مندرج در کارت خودرو از تاریخ نصب به مدت <strong style="color:#0e3ec3;">یکسال</strong> تحت پوشش بیمه ای شرکت سهامی <strong style="color:#0e3ec3;">بیمه کوثر</strong> می باشد.
+                                </p>
+                                <div class="span12">
+                                    <table width="100%">
+                                        <tr>
+                                            <td width="40%">شرکت فن آوران پارسیان</td>
+                                            <td width="30%"></td>
+                                            <td width="30%">شرکت سهامی بیمه کوثر</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="40%">22947554 (021)</td>
+                                            <td width="30%"></td>
+                                            <td width="30%">-------- (021)</td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+                            </div>
+
+                            <div class="span6">
+                                <div class="space20"></div>
+                                <h5 style="text-align:center;">این قسمت توسط بیمه گذار تکمیل می شود:</h5>
+                                <div class="space20"></div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="span6">
+                                            <ul class="">
+                                                <li>
+                                                    <span>نوع خودرو : </span>
+                                                    @try
+                                                    {
+                                                        <strong style="margin-right:7px;color:#0e3ec3;"> @(Model.TypeofUse.Type) </strong>
+                                                    }
+                                                    catch { }
+                                                </li>
+                                                <li><span>شماره شاسی : </span>  <strong style="margin-right:7px;color:#0e3ec3;"> @(Model.ChassisNumber) </strong> </li>
+                                                <li><span>شماره موتور : </span>  <strong style="margin-right:7px;color:#0e3ec3;"> @(Model.EngineNumber)</strong> </li>
+                                                <li>
+                                                    <span>شماره شهربانی : </span>
+                                                    <strong style="margin-right:7px;color:#0e3ec3;">
+                                                        @( Model.IranNumberPlate + "ایران" + "- " + Model.RightNumberPlate + " " + Model.AlphaPlate + " " + Model.LeftNumberPlate)
+                                                    </strong>
+                                                </li>
+                                                <li> <span>نام مالک : </span>  <strong style="margin-right:7px;color:#0e3ec3;"> @(Model.OwnerName + " " + Model.OwnerFamily) </strong></li>
+                                            </ul>
+                                        </div>
+                                        <div class="span6">
+                                            <ul class="">
+                                                <li> <span>کد ملی : </span>  <strong style="margin-right:7px;color:#0e3ec3;" dir="rtl"> @Model.NationalCode </strong></li>
+                                                <li> <span>شماره موبایل : </span>  <strong style="margin-right:7px;color:#0e3ec3;"> @Model.MobileNumber </strong></li>
+                                                <li> <span>تاریخ نصب : </span>  <strong style="margin-right:7px;color:#0e3ec3;"> @(Model.CreateDate.ToShortDateString()) </strong></li>
+
+                                            </ul>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="space20"></div>
+                                    <p style="text-align:left;">مهر و امضا بیمه گذار یا نمایندگان وی</p>
+                                    <div class="space20"></div>
+
+                                    <p class="text-info" style="text-align:center;">
+                                        کارت بیمه بدون ثبت ماشینی و مهر و امضا نماینده بیمه گذار اعتباری ندارد.
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <!--END ABOUT US-->
+                </div>
+                <hr />
+                <div class="widget-body">
+                    <!--BEGIN ABOUT US-->
+                    <div class="about-us">
+                        <div class="row-fluid">
+                            <div class="span6" style="text-align:justify;">
+                                <div class="span12">
+                                    <table width="100%">
+                                        <tr>
+                                            <td width="20%"><img src="~/img/fapaLogo2.jpg" /></td>
+                                            <td width="60%"></td>
+                                            <td width="20%"><img src="~/img/InsuranceLogo.png" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="20%"></td>
+                                            <td width="60%"><h4 style="text-align:center;color:#000000;">گواهی بیمه مسئولیت مدنی</h4></td>
+                                            <td width="20%"></td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+                                <span> شماره بیمه نامه : </span> <strong style="color:#0e3ec3;"> @cngfapco.Controllers.VehicleRegistrationsController.GetInsuranceCode(Model.ID) </strong>
+                                <p>
+                                    بر اساس قرارداد شماره <strong style="color:#0e3ec3;">185/999-897-2658</strong> تایید و گواهی می شود مسئولیت مدنی کارگاه/ شرکت <strong style="color:#0e3ec3;">@cngfapco.Controllers.VehicleRegistrationsController.GetWorkshopUser(Model.Creator)</strong> در رابطه با خسارت جانی و مالی ناشی از نصب سیستم کیت گازسوز خودرو در قبال استفاده کننده و اشخاص ثالث مطابق با ظرفیت مندرج در کارت خودرو از تاریخ نصب به مدت <strong style="color:#0e3ec3;">یکسال</strong> تحت پوشش بیمه ای شرکت سهامی <strong style="color:#0e3ec3;">بیمه کوثر</strong> می باشد.
+                                </p>
+                                <div class="span12">
+                                    <table width="100%">
+                                        <tr>
+                                            <td width="40%">شرکت فن آوران پارسیان</td>
+                                            <td width="30%"></td>
+                                            <td width="30%">شرکت سهامی بیمه کوثر</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="40%">22947554 (021)</td>
+                                            <td width="30%"></td>
+                                            <td width="30%">-------- (021)</td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+                            </div>
+
+                            <div class="span6">
+                                <div class="space20"></div>
+                                <h5 style="text-align:center;">این قسمت توسط بیمه گذار تکمیل می شود:</h5>
+                                <div class="space20"></div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="span6">
+                                            <ul class="">
+                                                <li>
+                                                    <span>نوع خودرو : </span>
+                                                    @try
+                                                    {
+                                                        <strong style="margin-right:7px;color:#0e3ec3;"> @(Model.TypeofUse.Type) </strong>
+                                                    }
+                                                    catch { }
+                                                </li>
+                                                <li><span>شماره شاسی : </span>  <strong style="margin-right:7px;color:#0e3ec3;"> @(Model.ChassisNumber) </strong> </li>
+                                                <li><span>شماره موتور : </span>  <strong style="margin-right:7px;color:#0e3ec3;"> @(Model.EngineNumber)</strong> </li>
+                                                <li>
+                                                    <span>شماره شهربانی : </span>
+                                                    <strong style="margin-right:7px;color:#0e3ec3;">
+                                                        @( Model.IranNumberPlate + "ایران" + "- " + Model.RightNumberPlate + " " + Model.AlphaPlate + " " + Model.LeftNumberPlate)
+                                                    </strong>
+                                                </li>
+                                                <li> <span>نام مالک : </span>  <strong style="margin-right:7px;color:#0e3ec3;"> @(Model.OwnerName + " " + Model.OwnerFamily) </strong></li>
+                                            </ul>
+                                        </div>
+                                        <div class="span6">
+                                            <ul class="">
+                                                <li> <span>کد ملی : </span>  <strong style="margin-right:7px;color:#0e3ec3;" dir="rtl"> @Model.NationalCode </strong></li>
+                                                <li> <span>شماره موبایل : </span>  <strong style="margin-right:7px;color:#0e3ec3;"> @Model.MobileNumber </strong></li>
+                                                <li> <span>تاریخ نصب : </span>  <strong style="margin-right:7px;color:#0e3ec3;"> @(Model.CreateDate.ToShortDateString()) </strong></li>
+
+                                            </ul>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="space20"></div>
+                                    <p style="text-align:left;">مهر و امضا بیمه گذار یا نمایندگان وی</p>
+                                    <div class="space20"></div>
+
+                                    <p class="text-info" style="text-align:center;">
+                                        کارت بیمه بدون ثبت ماشینی و مهر و امضا نماینده بیمه گذار اعتباری ندارد.
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <!--END ABOUT US-->
+                </div>
+                <hr />
+                <div class="widget-body">
+                    <!--BEGIN ABOUT US-->
+                    <div class="about-us">
+                        <div class="row-fluid">
+                            <div class="span6" style="text-align:justify;">
+                                <div class="span12">
+                                    <table width="100%">
+                                        <tr>
+                                            <td width="20%"><img src="~/img/fapaLogo2.jpg" /></td>
+                                            <td width="60%"></td>
+                                            <td width="20%"><img src="~/img/InsuranceLogo.png" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td width="20%"></td>
+                                            <td width="60%"><h4 style="text-align:center;color:#000000;">گواهی بیمه مسئولیت مدنی</h4></td>
+                                            <td width="20%"></td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+                                <span> شماره بیمه نامه : </span> <strong style="color:#0e3ec3;"> @cngfapco.Controllers.VehicleRegistrationsController.GetInsuranceCode(Model.ID) </strong>
+                                <p>
+                                    بر اساس قرارداد شماره <strong style="color:#0e3ec3;">185/999-897-2658</strong> تایید و گواهی می شود مسئولیت مدنی کارگاه/ شرکت <strong style="color:#0e3ec3;">@cngfapco.Controllers.VehicleRegistrationsController.GetWorkshopUser(Model.Creator)</strong> در رابطه با خسارت جانی و مالی ناشی از نصب سیستم کیت گازسوز خودرو در قبال استفاده کننده و اشخاص ثالث مطابق با ظرفیت مندرج در کارت خودرو از تاریخ نصب به مدت <strong style="color:#0e3ec3;">یکسال</strong> تحت پوشش بیمه ای شرکت سهامی <strong style="color:#0e3ec3;">بیمه کوثر</strong> می باشد.
+                                </p>
+                                <div class="span12">
+                                    <table width="100%">
+                                        <tr>
+                                            <td width="40%">شرکت فن آوران پارسیان</td>
+                                            <td width="30%"></td>
+                                            <td width="30%">شرکت سهامی بیمه کوثر</td>
+                                        </tr>
+                                        <tr>
+                                            <td width="40%">22947554 (021)</td>
+                                            <td width="30%"></td>
+                                            <td width="30%">-------- (021)</td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+                            </div>
+
+                            <div class="span6">
+                                <div class="space20"></div>
+                                <h5 style="text-align:center;">این قسمت توسط بیمه گذار تکمیل می شود:</h5>
+                                <div class="space20"></div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="span6">
+                                            <ul class="">
+                                                <li>
+                                                    <span>نوع خودرو : </span>
+                                                    @try
+                                                    {
+                                                        <strong style="margin-right:7px;color:#0e3ec3;"> @(Model.TypeofUse.Type) </strong>
+                                                    }
+                                                    catch { }
+                                                </li>
+                                                <li><span>شماره شاسی : </span>  <strong style="margin-right:7px;color:#0e3ec3;"> @(Model.ChassisNumber) </strong> </li>
+                                                <li><span>شماره موتور : </span>  <strong style="margin-right:7px;color:#0e3ec3;"> @(Model.EngineNumber)</strong> </li>
+                                                <li>
+                                                    <span>شماره شهربانی : </span>
+                                                    <strong style="margin-right:7px;color:#0e3ec3;">
+                                                        @( Model.IranNumberPlate + "ایران" + "- " + Model.RightNumberPlate + " " + Model.AlphaPlate + " " + Model.LeftNumberPlate)
+                                                    </strong>
+                                                </li>
+                                                <li> <span>نام مالک : </span>  <strong style="margin-right:7px;color:#0e3ec3;"> @(Model.OwnerName + " " + Model.OwnerFamily) </strong></li>
+                                            </ul>
+                                        </div>
+                                        <div class="span6">
+                                            <ul class="">
+                                                <li> <span>کد ملی : </span>  <strong style="margin-right:7px;color:#0e3ec3;" dir="rtl"> @Model.NationalCode </strong></li>
+                                                <li> <span>شماره موبایل : </span>  <strong style="margin-right:7px;color:#0e3ec3;"> @Model.MobileNumber </strong></li>
+                                                <li> <span>تاریخ نصب : </span>  <strong style="margin-right:7px;color:#0e3ec3;"> @(Model.CreateDate.ToShortDateString()) </strong></li>
+
+                                            </ul>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="space20"></div>
+                                    <p style="text-align:left;">مهر و امضا بیمه گذار یا نمایندگان وی</p>
+                                    <div class="space20"></div>
+
+                                    <p class="text-info" style="text-align:center;">
+                                        کارت بیمه بدون ثبت ماشینی و مهر و امضا نماینده بیمه گذار اعتباری ندارد.
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <!--END ABOUT US-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <a onclick='printtag("DivIdToPrint")' class="btn btn-success btn-large hidden-print"> چاپ <i class="icon-print icon-big"></i></a>
+</div>
+
+<script type="text/javascript">
+    //
+    function printtag(tagid) {
+        var hashid = "#" + tagid;
+        var tagname = $(hashid).prop("tagName").toLowerCase();
+        var attributes = "";
+        var attrs = document.getElementById(tagid).attributes;
+        $.each(attrs, function (i, elem) {
+            attributes += " " + elem.name + " ='" + elem.value + "' ";
+        })
+        var divToPrint = $(hashid).html();
+        var head = "<html><head>" + $("head").html() + "</head>";
+        var allcontent = head + "<body  dir='rtl' onload='window.print()' style='background-color:#ffffff'>" + "<" + tagname + attributes + ">" + divToPrint + "</" + tagname + ">" + "</body></html>";
+        var newWin = window.open('', 'Print-Window');
+        newWin.document.open();
+        newWin.document.write(allcontent);
+        newWin.document.close();
+        setTimeout(function () { newWin.close(); }, 10000);
+    }
+     //other way to print sample
+     //function PrintDiv() {
+     //    var divToPrint = document.getElementById('divToPrint');
+     //    var popupWin = window.open('', '_blank', 'width=300,height=300');
+     //    popupWin.document.open();
+     //    popupWin.document.write('<html><body onload="window.print()" dir="rtl" style="background-color:#ffffff">' + divToPrint.innerHTML + '</html>');
+     //    popupWin.document.close();
+     //}
+
+</script>
+
+@*<script language="javascript">
+        $(function () {
+            $(".btn").click(function () {
+                $("#DivIdToPrint").load("/VehicleRegistrations/InsurancePreview");
+            });
+        });
+    </script>*@

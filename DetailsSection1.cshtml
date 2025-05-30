@@ -1,0 +1,228 @@
+﻿@model cngfapco.Models.VehicleRegistration
+
+@{
+    ViewBag.Title = "DetailsSection1";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int? selectedId = (int?)ViewBag.selectedVehicleId;
+    bool? Goback = (bool?)ViewBag.Goback;
+    int? existvehicleTank = (int?)ViewBag.existvehicleTank;
+    bool existCylinder = (bool)ViewBag.existCylinder;
+    List<cngfapco.Models.Role> rolName = cngfapco.Helper.Helpers.GetCurrentUserRoles();
+}
+
+    <div class="row-fluid">
+        <div class="span12">
+            <h3 class="page-title hide">
+                Form Wizard
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+                </li>
+                <li>
+                    <a href="/VehicleRegistrations/EditSection1?id=@selectedId&Goback=true&existvehicleTank=@existvehicleTank"> مرحله قبل</a> <span class="divider">&nbsp;</span>
+                </li>
+                <li><a href="#">ثبت مشخصات مخزن و متعلقات</a><span class="divider-last">&nbsp;</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="navbar steps">
+            <div class="navbar-inner">
+                @if (Model.Status == true)
+                {
+                    <span class="input-error tooltips" data-original-title="ویرایش اطلاعات برای شما امکان پذیر نمی باشد، در صورت نیاز با راهبر سامانه در ارتباط باشید!">
+                        <i class="icon-warning-sign text-warning"> <span class="h3" style="font-family:Vazir;"> توجه </span> </i>
+                    </span>
+                }
+                else
+                {
+                    <span class="input-error tooltips" data-original-title=" برای ویرایش اطلاعات بر روی عناوین شماره دار و یا دکمه مرحله قبل کلیک کنید. ">
+                        <i class="icon-exclamation-sign text-primary"> <span class="h3" style="font-family:Vazir;"> راهنما </span> </i>
+                    </span>
+                }
+                <ul class="row-fluid">
+                    @if (Model.Status == true)
+                    {
+                        <li class="span3">
+                            <a href="#tab1" data-toggle="tab" class="step">
+                                <span class="number">1- </span>
+                                <span class="desc text-success"><i class="icon-ok"></i>  مشخصات خودرو ثبت شد </span>
+                            </a>
+                        </li>
+                        <li class="span3">
+                            <a href="#tab2" data-toggle="tab" class="step">
+                                <span class="number">2- </span>
+                                <span class="desc"><strong> ثبت مشخصات مخزن و متعلقات </strong> </span>
+                            </a>
+                        </li>
+                        <li class="span3">
+                            <a href="#tab3" data-toggle="tab" class="step">
+                                <span class="number">3- </span>
+                                <span class="desc"> ثبت مشخصات تکمیلی</span>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="span3">
+                            <a href="/VehicleRegistrations/EditSection1?id=@selectedId&Goback=@Goback&existvehicleTank=@existvehicleTank">
+                                <span class="number">1- </span>
+                                <span class="desc text-success"><i class="icon-ok"></i>  مشخصات خودرو ثبت شد </span>
+                            </a>
+                        </li>
+                        <li class="span3">
+                            <a href="#tab2" data-toggle="tab" class="step">
+                                <span class="number">2- </span>
+                                <span class="desc"><strong> ثبت مشخصات مخزن و متعلقات </strong> </span>
+                            </a>
+                        </li>
+                        <li class="span3">
+                            <a href="/VehicleRegistrations/DetailsSection2?id=@selectedId&Goback=true&icon=icon-chevron-up&style=display:none&existvehicleTank=@existvehicleTank">
+                                <span class="number">3- </span>
+                                <span class="desc"> ثبت مشخصات تکمیلی</span>
+                            </a>
+                        </li>
+                    }
+                    @foreach (var item in rolName)
+                    {
+                        if (item.RoleName.Equals("مرکز خدمات (کارگاه)"))
+                        {
+                            <li class="span3 btn btn-default">
+                                <a href="/VehicleRegistrations/PreSelectType">
+                                    <span class="desc text-success"><i class="icon-plus icon-white"></i> ثبت خودروی جدید </span>
+                                </a>
+                            </li>
+                        }
+                        @*else
+                        {
+                            <li class="span3">
+                                <a href="#">
+                                    <span class="desc text-success"><i class="icon-plus icon-white"></i> ثبت خودروی جدید </span>
+                                </a>
+                            </li>
+                        }*@
+                    }
+
+                </ul>
+            </div>
+        </div>
+    </div>
+<!-- BEGIN SAMPLE FORM widget-->
+    <div class="row-fluid">
+        <div class="widget">
+            <div class="widget-title">
+                <h4><i class="icon-reorder"></i>مشاهده اطلاعات خودرو ثبت شده  (@Model.CreateDate)</h4>
+                <span class="tools">
+                    <a href="javascript:;" class="icon-chevron-up"></a>
+                    <a href="javascript:;" class="icon-remove"></a>
+                </span>
+
+            </div>
+
+            <div class="widget-body form" style="display:none;">
+                <!-- BEGIN FORM-->
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="span6">
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.VehicleType.Type)</span> :
+                                <span> @(Model.VehicleType.Type + " " + Model.VehicleType.Description)</span>
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.System)</span> :
+                                <span> @Model.System</span>
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.TypeofUse.Type)</span> :
+                                @try
+                                {<span> @Model.TypeofUse.Type</span>}
+                            catch { }
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.OwnerName) و @Html.DisplayNameFor(model => model.OwnerFamily)</span> :
+                                <span> @Model.OwnerName @Model.OwnerFamily</span>
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.NationalCode)</span> :
+                                <span dir="rtl"> @Model.NationalCode</span>
+                            </p>
+
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.PhoneNumber)</span> :
+                                <span> @Model.PhoneNumber</span>
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.MobileNumber)</span> :
+                                <span> @Model.MobileNumber</span>
+                            </p>
+
+                        </div>
+                        <div class="span6">
+                            <p>
+                                <span style="color:#808080;">شماره پلاک</span> :
+                                <span> ایران </span> <span> @Model.IranNumberPlate</span> |  <span> @Model.RightNumberPlate</span> <span> @Model.AlphaPlate</span> <span> @Model.LeftNumberPlate</span>
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.ConstructionYear)</span> :
+                                <span> @Model.ConstructionYear</span>
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.EngineNumber)</span> :
+                                @if (!string.IsNullOrEmpty(Model.EngineNumber))
+                                {
+                                    <span> @Model.EngineNumber.ToUpper()</span>
+                                }
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.ChassisNumber)</span> :
+                                @if (!string.IsNullOrEmpty(Model.ChassisNumber))
+                                {
+                                    <span> @Model.ChassisNumber.ToUpper()</span>
+                                }
+                            </p>
+                            <p>
+                                @if (!string.IsNullOrEmpty(Model.VIN))
+                                {
+                                    <span> @Model.VIN.ToUpper() : </span>
+                                }
+                                <span style="color:#808080;">VIN </span>
+
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.FuelCard)</span> :
+                                <span dir="rtl"> @Model.FuelCard</span>
+                            </p>
+                            <p>
+                                <span style="color:#808080;">@Html.DisplayNameFor(model => model.Address)</span> :
+                                <span dir="rtl"> @Model.Address</span>
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- END FORM-->
+            </div>
+
+        </div>
+    </div>
+
+<!-- END SAMPLE FORM widget-->
+    <div class="row-fluid">
+        @if (Model.Status != true)
+        {
+            if (Goback == true && existCylinder==true)
+            {
+                @Html.Action("EditSection2", new { id = selectedId,icon = "icon-chevron-up", style = "display:none"})
+            }
+            if (Goback == true && existCylinder == false)
+            {
+                @Html.Action("CreateSection2", new { id = selectedId, Goback = true, icon = "icon-chevron-up", style = "display:none" })
+            }
+            if (Goback == false)
+            {
+                @Html.Action("CreateSection2", new { id = selectedId, icon = "icon-chevron-up", style = "display:none" })
+            }
+        }
+
+    </div>

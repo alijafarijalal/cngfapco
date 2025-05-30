@@ -13,25 +13,20 @@
             <li>
                 <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
             </li>
-            <li>
-                <a href="#">مدیریت مالی</a> <span class="divider">&nbsp;</span>
-            </li>
-            <li><a href="#">فاکتور فروش خدمات</a><span class="divider-last">&nbsp;</span></li>
+            @*<li>
+                    <a href="#">  </a> <span class="divider">&nbsp;</span>
+                </li>*@
+            <li><a href="#"> مشاهده لیست تبدیل </a><span class="divider-last">&nbsp;</span></li>
 
         </ul>
         <!-- END PAGE TITLE & BREADCRUMB-->
     </div>
 </div>
 <!-- END PAGE HEADER-->
-<span class="text-warning">مجموع فاکتورهای صادر شده: </span>
-<strong class="">
-    @cngfapco.Controllers.FinancialsController.GetInvoicValueTotal() ریال
-</strong>
-
 
 <div class="widget">
     <div class="widget-title">
-        <h4><i class="icon-reorder"></i>لیست مراکز خدمات CNG</h4>
+        <h4><i class="icon-list-ul"></i> لیست مراکز خدمات CNG </h4>
         <span class="tools">
             <a href="javascript:;" class="icon-chevron-down"></a>
             <a href="javascript:;" class="icon-remove"></a>
@@ -48,19 +43,17 @@
                     {
                         <div class="row-fluid">
                             <div class="">
-                                <div class="icon-btn span3" style="border:1px solid #0094ff;border-radius:4px 5px;font-family:Vazir-Medium-FD;">
+
+                                <div class="icon-btn span3" style="border:1px solid #0094ff;border-radius:4px 5px;font-family:Vazir-Medium-FD;">                                   
                                     <p>
-                                        <a href="/Financials/InvoicesListTotal?workshopId=@item.ID&workshopTitle=@item.Title">
+                                        <a href="/VehicleRegistrations/Index?WorkshopID=@item.ID">
                                             @if (item.closedServices.HasValue ? item.closedServices.Value == true : false)
                                             {
                                                 <label style="font-size:12px;background-color:red;color:white;">
                                                     @("توقف فعالیت در تاریخ: " + " " + item.closedDate.Value.ToShortDateString())
-                                                </label>
+                                                </label>                                               
                                                 <div>
                                                     @item.Title.Replace("مرکز خدمات CNG ", "") - @item.City.Title
-                                                    <h5 class="text-info">
-                                                        @cngfapco.Controllers.FinancialsController.GetInvoiceFapaValue(item.ID) ریال
-                                                    </h5>
                                                 </div>
                                             }
                                             else
@@ -70,43 +63,29 @@
                                                 </label>
                                                 <div>
                                                     @item.Title.Replace("مرکز خدمات CNG ", "") - @item.City.Title
-                                                    <h5 class="text-info">
-                                                        @cngfapco.Controllers.FinancialsController.GetInvoiceFapaValue(item.ID) ریال
-                                                    </h5>
                                                 </div>
                                             }
                                         </a>
                                     </p>
-                                    @*<p> @cngfapco.Controllers.FinancialPaymentsController.GetSumofPayment(item.ID) </p>*@
+
                                 </div>
                             </div>
                         </div>
 
                     }
                     else
-                    {
+                    {                       
                         <div class="icon-btn span3" style="border:1px solid #0094ff;border-radius:4px 5px;font-family:Vazir-Medium-FD;">
+
                             <p>
-                                <a href="/Financials/InvoicesListTotal?workshopId=@item.ID&workshopTitle=@item.Title">
+                                <a href="/VehicleRegistrations/Index?WorkshopID=@item.ID">
                                     @if (item.closedServices.HasValue ? item.closedServices.Value == true : false)
                                     {
-                                    <label style="font-size:12px;background-color:red;color:white;">
-                                        @if (item.closedDate.HasValue == true)
-                                        {
-                                            <span>
-                                                @("توقف فعالیت در تاریخ: " + " " + item.closedDate.Value.ToShortDateString())
-                                            </span>
-                                        }
-                                        else
-                                        {
-                                            <span>توقف فعالیت</span>
-                                        }
-                                    </label>
+                                        <label style="font-size:12px;background-color:red;color:white;">
+                                            @("توقف فعالیت در تاریخ: " + " " + item.closedDate.Value.ToShortDateString())
+                                        </label>                                       
                                         <div>
                                             @item.Title.Replace("مرکز خدمات CNG ", "") - @item.City.Title
-                                            <h5 class="text-info">
-                                                @cngfapco.Controllers.FinancialsController.GetInvoiceFapaValue(item.ID) ریال
-                                            </h5>
                                         </div>
                                     }
                                     else
@@ -116,13 +95,12 @@
                                         </label>
                                         <div>
                                             @item.Title.Replace("مرکز خدمات CNG ", "") - @item.City.Title
-                                            <h5 class="text-info">
-                                                @cngfapco.Controllers.FinancialsController.GetInvoiceFapaValue(item.ID) ریال
-                                            </h5>
                                         </div>
                                     }
                                 </a>
+
                             </p>
+
                             @*<p> @cngfapco.Controllers.FinancialPaymentsController.GetSumofPayment(item.ID) </p>*@
                         </div>
                     }
