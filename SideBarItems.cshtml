@@ -1,0 +1,116 @@
+﻿@model IEnumerable<cngfapco.Models.SideBarItem>
+
+@{
+    ViewBag.Title = "SideBarItems";
+    int? parentId = (int?)ViewBag.parentId;
+    int? itemId = (int?)ViewBag.itemId;
+    DateTime Date = DateTime.Now;
+}
+
+@try
+{
+    <div id="sidebar" class="nav-collapse collapse">        
+        <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+        <div class="sidebar-toggler hidden-phone"></div>
+        <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+        <ul class="sidebar-menu">
+            <li>
+                <i class="icon-calendar" style="margin-right:25px;margin-left:25px;"></i> <strong class="text-center" style="color:blue;">@(cngfapco.Helper.Helpers.GetDayOfWeek(Date.DayOfWeek.ToString()) + " - " + Date.ToShortDateString())</strong>
+            <li/>
+            <li><a class="active" href="/Home/Index?parentId=0&itemId=0"><span class="icon-box"><i class="icon-home"></i></span> صفحه اصلی </a></li>
+
+            @foreach (var item in Model)
+            {
+                if (item.isParent == false && Convert.ToInt32(item.parentId) == 0)
+                {
+                    <li><a href="@Url.Action(item.action, item.controller)"><span class="icon-box"><i class="@item.imageClass"></i></span> @item.nameOption</a></li>
+                }
+                if (item.isParent == true && !string.IsNullOrEmpty(item.controller))
+                {
+                    <li><a href="/@item.controller/@item.action?parentId=@item.ID"><span class="icon-box"><i class="@item.imageClass"></i></span> @item.nameOption</a></li>
+                }
+                else
+                {
+                    if (item.isParent == true && Convert.ToInt32(item.ID) == parentId)
+                    {
+                        <li class="has-sub active">
+                            <a href="javascript:;" class="">
+                                <span class="icon-box"><i class="@item.imageClass"></i></span> @item.nameOption
+                                <span class="arrow open"></span>
+                            </a>
+                            <ul class="sub">
+                                @try
+                                {
+                                    foreach (var child in Model.Where(p => p.parentId == Convert.ToInt32(item.ID)))
+                                    {
+                                        if (child.controller == null)
+                                        {
+                                            <li><a href="#">@child.nameOption</a></li>
+                                        }
+                                        else
+                                        {
+                                            if (child.ID == itemId)
+                                            {
+                                                <li class="loader active text-center"><a href="/@child.controller/@child.action?parentId=@item.ID&itemId=@child.ID" class="child">@child.nameOption</a></li>
+                                            }
+                                            if (child.ID != itemId)
+                                            {
+                                                <li class="loader"><a href="/@child.controller/@child.action?parentId=@item.ID&itemId=@child.ID" class="child">@child.nameOption</a></li>
+                                            }
+                                        }
+                                    }
+                                }
+                                catch { }
+                            </ul>
+                        </li>
+                    }
+                    if (item.isParent == true && Convert.ToInt32(item.ID) != parentId)
+                    {
+                        <li class="has-sub">
+                            <a href="javascript:;" class="">
+                                <span class="icon-box"><i class="@item.imageClass"></i></span> @item.nameOption
+                                <span class="arrow"></span>
+                            </a>
+                            <ul class="sub">
+                                @try
+                                {
+                                    foreach (var child in Model.Where(p => p.parentId == Convert.ToInt32(item.ID)))
+                                    {
+                                        if (child.controller == null)
+                                        {
+                                            <li><a href="#">@child.nameOption</a></li>
+                                        }
+                                        else
+                                        {
+                                            if (child.ID == itemId)
+                                            {
+                                                <li class="loader active"><a href="/@child.controller/@child.action?parentId=@item.ID&itemId=@child.ID" class="child">@child.nameOption</a></li>
+                                            }
+                                            if (child.ID != itemId)
+                                            {
+                                                <li class="loader"><a href="/@child.controller/@child.action?parentId=@item.ID&itemId=@child.ID" class="child">@child.nameOption</a></li>
+                                            }
+                                        }
+                                    }
+                                }
+                                catch { }
+                            </ul>
+                        </li>
+                    }
+                }
+            }
+            @*<li class="has-sub active">
+            <a href="javascript:;" class="">
+                <span class="icon-box"><i class="icon-facetime-video"></i></span> آموزش
+                <span class="arrow"></span>
+            </a>
+            <ul class="sub" style="display: none;">
+                <li><a href="~/UploadedFiles/Instruction/Video_۲۰-۰۶-۰۱_۲۱-۲۹-۲۰.wmv"> آموزش ثبت خودرو </a></li>
+            </ul>
+        </li>*@
+            <li><a class="" href="/Users/LogOff"><span class="icon-box"><i class="icon-key"></i></span> خـروج </a></li>
+        </ul>
+    </div>
+}
+catch { }
+

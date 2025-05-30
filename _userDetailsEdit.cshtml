@@ -1,0 +1,115 @@
+﻿@model cngfapco.Models.User
+    @{ 
+        string errormessage = (string)ViewBag.message;
+    }
+@{if (Model != null)
+  {     
+    <div id="expanderContent" style="overflow:auto;">
+        <table style='width: 100%'>     
+            <tr>
+                <td style='width: 10%; font-weight: bold' class='userTable'>
+                    @Html.LabelFor(model => model.Firstname,"نام")
+                </td>
+                <td style='width: 28%' class='userTable'>
+                    @Html.TextBoxFor(model => model.Firstname, new { @class = "singlelinetextinput" })
+                    @Html.ValidationMessageFor(model => model.Firstname)
+                </td>
+                <td style='width: 10%; font-weight: bold' class='userTable'>
+                    @Html.LabelFor(model => model.Lastname, "نام خانوادگی")
+                </td>
+                <td style='width: 28%' class='userTable'>
+                    @Html.TextBoxFor(model => model.Lastname, new { @class = "singlelinetextinput" })
+                    @Html.ValidationMessageFor(model => model.Lastname)
+                </td>            
+                
+                <td style='width: 10%; font-weight: bold' class='userTable'>
+                    @Html.LabelFor(model => model.Username, "نام کاربری")
+                </td>
+                <td style='width: 28%' class='userTable'>
+                    @Html.TextBoxFor(model => model.Username, new { @class = "singlelinetextinput disabled" })
+                    @Html.ValidationMessageFor(model => model.Username)
+                </td> 
+            </tr>
+            <tr>
+                <td style='width: 10%; font-weight: bold' class='userTable'>
+                    @Html.LabelFor(model => model.Password, "کلمه عبور")
+                </td>
+                <td style='width: 28%' class='userTable'>
+                    @Html.TextBoxFor(model => model.Password, new { @class = "singlelinetextinput" })
+                    @Html.ValidationMessageFor(model => model.Password)
+                </td>   
+                <td style='width: 10%; font-weight: bold' class='userTable'>
+                    @Html.LabelFor(model => model.EMail, "پست الکترونیک")
+                </td>
+                <td style='width: 28%' class='userTable'>
+                    @Html.TextBoxFor(model => model.EMail, new { @class = "singlelinetextinput" })
+                    @Html.ValidationMessageFor(model => model.EMail)
+                </td>    
+                <td style='width: 10%; font-weight: bold' class='userTable'>
+                    @Html.LabelFor(model => model.Workshop.Title, "واحد مربوطه")
+                </td>
+                <td style='width: 20%' class='userTable'>
+                    @Html.DropDownList("WorkshopID", null, htmlAttributes: new { @class = "form-control select2" })
+                    @Html.ValidationMessageFor(model => model.Workshop.Title)
+                </td> 
+               
+                        
+            </tr>
+            <tr>              
+               
+                <td style='width: 10%; font-weight: bold' class='userTable'>
+                    @Html.LabelFor(model => model.MobileNumber, "شماره موبایل")
+                </td>
+                <td style='width: 28%' class='userTable'>
+                    @Html.TextBoxFor(model => model.MobileNumber, new { @class = "singlelinetextinput" })
+                    @Html.ValidationMessageFor(model => model.MobileNumber)
+                </td>  
+                <td style='width: 10%; font-weight: bold' class='userTable'>
+                    @Html.LabelFor(model => model.Inactive, "وضعیت")
+                </td>
+                <td style='width: 28%' class='userTable'>
+                    @*@Html.TextBoxFor(model => model.Inactive, new { @class = "singlelinetextinput" })*@
+                    <select name="Inactive" class="singlelinetextinput">
+                        @if (Model.Inactive == true)
+                        {
+                            <option id="Inactive" value="True" selected>
+                                فعال
+                            </option>
+                            <option id="Inactive" value="False">
+                                غیر فعال
+                            </option>
+                        }
+                        else
+                        {
+                            <option id="Inactive" value="True">
+                                فعال
+                            </option>
+                            <option id="Inactive" value="False" selected>
+                                غیر فعال
+                            </option>
+                        }
+
+                    </select>
+                    @Html.ValidationMessageFor(model => model.Inactive)
+                </td>    
+                <td style='width: 10%; font-weight: bold' class='userTable'>
+                    @Html.LabelFor(model => model.Image, "عکس")
+                </td>
+                <td style='width: 20%' class='userTable'>
+                    @Html.Hidden("Image", Model.Image)
+                    <input class="dropzone dz-clickable form-control" name="Image" type="file" id="dropzone-upload" multiple>
+                    @if (Model.Image != null)
+                    {
+                        <a href="/UploadedFiles/UsersImage/@Model.Image" target="_blank">
+                            <i class="zmdi zmdi-image"></i>
+                        </a>
+                    }
+                    @Html.ValidationMessageFor(model => model.Image)
+                    <span style="color:#ff0000;" class="h2">@errormessage</span>
+                </td> 
+            </tr>
+
+        </table>
+    </div>
+  }
+}

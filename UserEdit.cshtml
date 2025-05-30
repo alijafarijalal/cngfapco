@@ -1,0 +1,173 @@
+﻿@model cngfapco.Models.User
+  
+@{
+    ViewBag.Title = "User - " + Model.Username;
+    if ((Model.Username != null) && (Model.Username != ""))
+    {
+        ViewBag.Title = ViewBag.Title + " (" + Model.Username + ")";
+    }
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string errormessage = (string)ViewBag.message;
+}
+
+<script src="~/js/admin/jquery-1.10.2.js"></script>
+<script src="~/js/admin/jquery-common.js"></script>
+<script src="~/js/admin/jquery-ui-1.10.3.custom.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(":input[type='button']").button();
+        $(":input[type='submit']").button();
+    });
+</script>
+
+<!-- BEGIN PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN THEME CUSTOMIZER-->
+        <div id="theme-change" class="hidden-phone">
+            <i class="icon-cogs"></i>
+            <span class="settings">
+                <span class="text">Theme:</span>
+                <span class="colors">
+                    <span class="color-default" data-style="default"></span>
+                    <span class="color-gray" data-style="gray"></span>
+                    <span class="color-purple" data-style="purple"></span>
+                    <span class="color-navy-blue" data-style="navy-blue"></span>
+                </span>
+            </span>
+        </div>
+        <!-- END THEME CUSTOMIZER-->
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href="/Users/Index"> کاربران </a> <span class="divider">&nbsp;</span>
+            </li>
+            <li><a href="#">ویرایش اطلاعات کاربر </a><span class="divider-last">&nbsp;</span></li>
+           
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN SAMPLE FORM widget-->
+        <div class="widget">
+            <div class="widget-title">
+                <h4><i class="icon-reorder"></i>جزئیات اطلاعات کاربر</h4>
+                <span class="tools">
+                    <a href="javascript:;" class="icon-chevron-down"></a>
+                    <a href="javascript:;" class="icon-remove"></a>
+                </span>
+            </div>
+            <div class="widget-body form">
+                <!-- BEGIN FORM-->
+                <div>
+                    @using (Html.BeginForm("UserEdit", "Users", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.ValidationSummary(true)
+                        @Html.HiddenFor(model=>model.UserID)
+                        <input name='User_Id' id='User_Id' type="hidden" value="@ViewBag.UserId" />
+                        <input name='DataPermission' id='DataPermission' type="hidden" value="@ViewBag.Datapermission" />
+                        <fieldset style="overflow:auto;">
+                            @Html.Partial("_userDetailsEdit", Model)
+                            <br />
+                            <input class="btn btn-warning" type="submit" value="ثبت تغییرات" />
+                        </fieldset>                       
+                    }
+                    
+                </div>
+                <!-- END FORM-->
+            </div>
+        </div>
+        <!-- END SAMPLE FORM widget-->
+    </div>
+</div>
+
+<div class="row-fluid">
+    <div class="span6 ">
+        <div class="widget">
+            <div class="widget-title">
+                <h4><i class="icon-reorder"></i>نقش های اختصاص یافته به این کاربر</h4>
+                <span class="tools">
+                    <a href="javascript:;" class="icon-chevron-down"></a>
+                    <a href="javascript:;" class="icon-remove"></a>
+                </span>
+            </div>
+            <div class="widget-body form">
+                <div class="panel" id="RolesTable">
+                    @Html.Partial("_ListUserRoleTable", Model)
+                </div>
+                @Html.Partial("_ListEditableUserRoleTable")
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="span6 ">
+        <div class="widget">
+            <div class="widget-title">
+                <h4><i class="icon-reorder"></i>کارگاه های اختصاص یافته به این کاربر</h4>
+                <span class="tools">
+                    <a href="javascript:;" class="icon-chevron-down"></a>
+                    <a href="javascript:;" class="icon-remove"></a>
+                </span>
+            </div>
+            <div class="widget-body form">
+                <div class="panel" id="WorkshopTable">
+                    @Html.Partial("_ListUserWorkshopTable", Model)
+                </div>
+                @Html.Partial("_ListEditableUserWorkshopTable")
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<div class="row-fluid">
+    <div class="span12">
+        <div class="widget">
+            <div class="widget-title">
+                <h4><i class="icon-reorder"></i>منوهای اختصاص یافته به این کاربر</h4>
+                <span class="tools">
+                    <a href="javascript:;" class="icon-chevron-down"></a>
+                    <a href="javascript:;" class="icon-remove"></a>
+                </span>
+            </div>
+            <div>
+                <div id="SideBarItemsTable">
+                    @Html.Partial("_ListSideBarItems", Model)
+                    @*<br />
+                    *@
+                </div>
+                @Html.Partial("_ListEditableSideBarItemsTable")
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div>
+    @Html.ActionLink("مشاهده لیست کاربران", "Index", "Users")
+</div>
+
+@*<div class="widget-body">
+    <fieldset>
+
+        <br />
+
+        <br />
+        <div class="panel" id="DataPermissionTable">
+            @Html.Partial("_ListUserDataPermissionTable", Model)
+        </div>
+        @Html.Partial("_ListEditableUserDataPermissionTable")
+        <br />
+        <div>
+            @Html.ActionLink("مشاهده لیست نقش ها", "RoleIndex", "Admin")
+        </div>
+    </fieldset>
+</div>*@

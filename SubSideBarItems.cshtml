@@ -1,0 +1,57 @@
+﻿@model IEnumerable<cngfapco.Models.SideBarItem>
+
+@{
+    ViewBag.Title = "SubSideBarItems";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int? parentId = (int?)ViewBag.parentId;
+    int? itemId = (int?)ViewBag.itemId;
+    int? counter = 0;
+}
+<!-- BEGIN PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">        
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+           
+            <li><a href="#"> @ViewBag.parentOptionName </a><span class="divider-last">&nbsp;</span></li>
+
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+
+<div class="widget">
+    <div class="widget-body">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="">
+                    <div class="row-fluid">
+                        @foreach (var items in Model.GroupBy(s => s.Category))
+                        {
+                            <div class="boxed" style="border:1px solid #d0cdcd;padding:0.5em;border-radius:3px 4px;">
+                                <h4 class="text-info" style="margin-top:20px;">@items.Key</h4>
+                                <hr style="width:10%;" />
+                                @foreach (var item in items)
+                                {
+                                    <span style="font-size:14px;" dir="rtl">
+                                        <a class="" href="/@item.controller/@item.action?parentId=@parentId&itemId=@item.ID" target="_blank">
+                                            <i class="@item.imageClass text-warning"></i>
+                                            <span>@item.nameOption</span>
+                                        </a>
+                                    </span>
+                                    <span style="margin-right:10px;margin-left:10px;color:#aeabab;font-size:12px;"> | </span>                                    
+                                }
+                            </div>    
+                            <div class="space15"></div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

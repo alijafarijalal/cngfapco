@@ -1,0 +1,103 @@
+﻿@model cngfapco.Models.User
+
+@*<script src="~/js/admin/jquery-1.10.2.js"></script>
+<script src="~/js/admin/jquery-common.js"></script>
+<script src="~/js/admin/jquery-ui-1.10.3.custom.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(":input[type='button']").button();
+        $(":input[type='submit']").button();
+    });
+</script>*@
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var $dialog = $('<div class="ui-dialog"></div>')
+            .html('آیا از حذف این نقش اطمینان دارید؟')
+            .dialog({
+                autoOpen: false,
+                resizable: false,
+                height: 150,
+                modal: true,
+                title: 'تاییدیه حذف نقش',
+                open: function () {
+                    $("#deleteRole").button({ icons: { primary: "ui-icon-trash" } });
+                },
+                buttons: [
+                    {
+                        text: "حذف",
+                        id: "deleteRole",
+                        click: function () {
+                            var _url = window.location;
+                            var _userId = window.location.pathname.substring(window.location.pathname.lastIndexOf("/") + 1);
+                            var _id = $(this).data('id');
+
+                            var _parameters = { userId: _userId, id: _id };
+                            $.ajax({
+                                url: "/Users/DeleteUserRoleReturnPartialView",
+                                type: "GET",
+                                data: _parameters,
+                                success: function (data, textStatus, jqXHR) {
+                                    $('#RolesTable').html(data);
+                                }
+                            });
+                            $(this).dialog('close');
+                        }
+                    },
+                    {
+                        text: "انصراف",
+                        id: "cancelbtn",
+                        click: function () { $(this).dialog("close"); }
+                    }]
+            });
+
+        $(".bin1").click(function () {
+            $dialog.data("id", $(this).attr("id")).dialog("open");
+        });
+    })
+</script>
+
+@{if (Model.Roles.Count == 0)
+{
+    <h4><font color="red">هیچ نقشی اختصاص نیافته ...</font></h4>
+    <br />
+}
+else
+{
+    <table id="RoleTable" class="table table-striped table-advance">
+        <thead>
+            <tr>
+                <th>ردیف</th>
+                <th>
+                    نقش
+                </th>
+                <th>
+                    <i class="icon icon-cog"></i>
+                </th>
+            </tr>        
+        </thead>
+
+        <tbody>
+            @{ int rowNum = 0;}
+            @foreach (var role in Model.Roles.OrderBy(r => r.RoleDescription))
+            {
+                <tr>
+                    <td>@(rowNum+=1)</td>
+                    <td>
+                        @Html.ActionLink(role.RoleName, "RoleDetails", new { id = role.Role_Id })
+                    </td>
+                    <td>
+                        <center><img class="bin bin1 deleteRole" src="@Url.Content("~/css/images/bin.png")" alt="Delete" id="@role.Role_Id" /></center>
+                        @*<a href="@Url.Action("DeleteRole", "Users", new { id = role.Role_Id, userId = Model.UserID })" class="deleteRole" id=@role.Role_Id userId=@Model.UserID>
+                            <img src="@Url.Content("~/css/images/bin.png")" />
+                        </a>*@
+                    </td>
+                </tr>
+            }
+        </tbody>
+  
+    </table>
+    <br />
+}
+}

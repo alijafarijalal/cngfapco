@@ -1,0 +1,87 @@
+﻿@model cngfapco.Models.Role
+<script type="text/javascript">
+    $(document).ready(function () {
+        //Unbind the original image 'href' set by the controller...
+        $('.deleteUser').attr('href', 'javascript://');
+        $('.deleteUser').click(function () {
+            $dialog.data('id', $(this).attr('id')).data('userId', $(this).attr('userId')).dialog("open");
+        });
+
+        var $dialog = $('<div/>')
+		.html("کاربر انتخاب شده از نقش اعطایی حذف خواهد شد.<br/><br/>آیا موافق هستید؟")
+		.dialog({
+		    autoOpen: false,
+		    resizable: false,
+		    height: 200,
+		    modal: true,
+		    title: 'تاییدیه حذف نقش',
+		    buttons: [
+                        {
+                            text: "ادامه",
+                            id: "continuebtn",
+                            click: function () {
+                                var _userId = $(this).data('userId');
+                                var _id = $(this).data('id');
+
+                                var _parameters = { userId: _userId, id: _id };
+                                $.ajax({
+                                    url: "/Users/DeleteUserFromRoleReturnPartialView",
+                                    type: "GET",
+                                    data: _parameters,
+                                    success: function (data, textStatus, jqXHR) {
+                                        $('#UsersTable').html(data);
+                                    }
+                                });
+                                $(this).dialog('close');
+                            }
+                        },
+                        {
+                            text: "انصراف",
+                            id: "cancelbtn",
+                            click: function () {
+                                $(this).dialog("close");
+                            }
+                        }]
+		});
+    });
+</script>
+
+@{if (Model.Users.Count == 0)
+{
+    <h2><font color="red">هیچ کاربری به این نقش اختصاص نیافته...</font></h2>
+    <br />
+}
+else
+{
+    <table id="UserTable" class="table table-striped table-advance">
+        <thead>
+            <tr>
+                <th>ردیف</th>
+                <th>
+                    کاربر
+                </th>
+                <th>
+                    تنطیمات
+                </th>
+            </tr>
+
+        </thead>
+        @{ int rowNum = 0;}
+        @foreach (cngfapco.Models.User user in Model.Users.OrderBy(u => u.Username))
+        {
+            <tr>
+                <td>@(rowNum += 1)</td>
+                <td>
+                    @Html.ActionLink(user.Username, "UserDetails", new { id = user.UserID })
+                </td>
+                <td>
+                        <a href="@Url.Action("DeleteUser", "Users", new { id = Model.Role_Id, userId = user.UserID })" class="deleteUser" id=@Model.Role_Id userid=@user.UserID>
+                            <img src="@Url.Content("~/css/images/bin.png")" />
+                        </a>
+                </td>
+            </tr>
+        }
+    </table>
+    <br />
+}}
+

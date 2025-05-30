@@ -1,0 +1,34 @@
+﻿@model cngfapco.Models.User
+@{
+    Layout = null;
+}
+<div class="">
+    <div class="">
+        @using (Html.BeginForm("UserImageUpdate", "Users", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.Hidden("userID", Model.UserID)
+
+                <div class="form-group">
+                    <span class="text-muted">با قابلیت کشیدن و رها کردن فایل</span>
+                    <div class="col-md-10">
+                        <input class="form-control" name="Image" type="file" id="dropzone-upload">
+                        @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <hr />
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <span class="progress-demo">
+                            <button class="ladda-button" data-color="mint" data-style="expand-left" data-size="s" id="btnSave" onclick="return handleChange()"><i class="zmdi zmdi-floppy zmdi-hc-fw"></i>تغییر عکس</button>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+

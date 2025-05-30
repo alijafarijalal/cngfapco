@@ -1,0 +1,84 @@
+﻿@model cngfapco.Models.User
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var $dialog = $('<div class="ui-dialog"></div>')
+		.html('آیا از حذف این دسترسی اطلاعات اطمینان دارید؟')
+		.dialog({
+		    autoOpen: false,
+		    resizable: false,
+		    height: 150,
+		    modal: true,
+		    title: 'Delete Confirmation?',
+		    open: function () {
+		        $("#deletebtn").button({ icons: { primary: "ui-icon-trash" } });
+		    },
+		    buttons: [
+                        {
+                            text: "Delete",
+                            id: "deletebtn",
+                            click: function () {
+                                var _url = window.location;
+                                var _userId = window.location.pathname.substring(window.location.pathname.lastIndexOf("/") + 1);
+                                var _id = $(this).data('id');
+
+                                var _parameters = { userId: _userId, id: _id };
+                                $.ajax({
+                                    url: "/Users/DeleteUserDataPermissionReturnPartialView",
+                                    type: "GET",
+                                    data: _parameters,
+                                    success: function (data, textStatus, jqXHR) {
+                                        $('#DataPermissionTable').html(data);
+                                    }
+                                });
+                                $(this).dialog('close');
+                            }
+                        },
+                        {
+                            text: "Cancel",
+                            id: "cancelbtn",
+                            click: function () { $(this).dialog("close"); }
+                        }]
+		});
+
+        $(".bin").click(function () {
+            $dialog.data("id", $(this).attr("id")).dialog("open");
+        });
+    })
+</script>
+@{
+    if (Model.DataPermission == "")
+    {
+        <h2><font color="red">هیچ دسترسی به اطلاعات اختصاص نیافته ...</font></h2>
+        <br />
+    }
+    else
+    {
+        <table id="DataPermissionTable" style="width: 65%">
+            <thead>
+            <th style="width: 90%; text-align:center;">
+                سطوح دسترسی
+            </th>
+            <th style="width: 10%; text-align:center;">
+                وضعیت
+            </th>
+            </thead>
+            @*@foreach (var item in List<string>model)
+            {*@
+                <tr>
+                    <td>
+                        <h4>
+                            @Model.DataPermission
+                        </h4>
+                    </td>
+                    <td>
+                        <center><img class="bin" src="@Url.Content("~/css/images/bin.png")" alt="Delete" id="@Model.UserID" /></center>
+                    </td>
+                </tr>
+            @*}*@
+        </table>
+        <br />
+    }
+}
+
+<br />

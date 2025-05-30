@@ -1,0 +1,23 @@
+﻿@model cngfapco.Models.User
+
+    <li class="dropdown mtop5">
+        <a class="dropdown-toggle element" data-placement="bottom" data-toggle="tooltip" href="/Users/SubSideBarItems?parentId=61" data-original-title="ارتباط با مشتری">
+            <i class="icon-headphones"></i>
+        </a>
+    </li>
+@try
+{
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <img src="~/UploadedFiles/UsersImage/@Model.Image" alt=" " class="" width="35" height="35" />
+            <span class="username"> @(Model.Firstname + " " + Model.Lastname) </span>
+            <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            <li><a href="/Users/MyProfile?userid=@Model.UserID"><i class="icon-user"></i> پروفایل من </a></li>
+            <li class="divider"></li>
+            <li><a href="/Users/LogOff"><i class="icon-key"></i> خـروج </a></li>
+        </ul>
+    </li>
+}
+catch { }

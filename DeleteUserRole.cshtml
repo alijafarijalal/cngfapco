@@ -1,0 +1,20 @@
+﻿@model cngfapco.Models.Role
+    @{ 
+        int? userId = (int?)ViewBag.userID;
+        //int? Role_Id = (int?)ViewBag.Role_Id;
+    }
+
+@using (Html.BeginForm("DeleteUserRole", "Users", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.Hidden("userId", userId)
+    @*@Html.Hidden("Role_Id", Role_Id)*@
+
+    <div class="control-group">
+       <p>آیا از حذف نقش مطمئن هستید؟</p>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-danger">حذف نقش</button>
+    </div>
+}
+

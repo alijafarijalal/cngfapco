@@ -1,0 +1,85 @@
+﻿@model cngfapco.Models.User
+@{ 
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(":input[type='button']").button();
+        $(":input[type='submit']").button();
+    });
+</script>
+
+<!-- BEGIN PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN THEME CUSTOMIZER-->
+        <div id="theme-change" class="hidden-phone">
+            <i class="icon-cogs"></i>
+            <span class="settings">
+                <span class="text">Theme:</span>
+                <span class="colors">
+                    <span class="color-default" data-style="default"></span>
+                    <span class="color-gray" data-style="gray"></span>
+                    <span class="color-purple" data-style="purple"></span>
+                    <span class="color-navy-blue" data-style="navy-blue"></span>
+                </span>
+            </span>
+        </div>
+        <!-- END THEME CUSTOMIZER-->
+        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+        <ul class="breadcrumb">
+            <li>
+                <a href="/Home/Index"><i class="icon-home"></i></a><span class="divider">&nbsp;</span>
+            </li>
+            <li>
+                <a href="/Users/Index"> کاربران </a> <span class="divider">&nbsp;</span>
+            </li>
+            <li><a href="#">جزئیات اطلاعات کاربر </a><span class="divider-last">&nbsp;</span></li>
+
+        </ul>
+        <!-- END PAGE TITLE & BREADCRUMB-->
+    </div>
+</div>
+<!-- END PAGE HEADER-->
+<div class="row-fluid">
+    <div class="span12">
+        <!-- BEGIN SAMPLE FORM widget-->
+        <div class="widget">
+            <div class="widget-title">
+                <h4><i class="icon-reorder"></i> جزئیات کاربر</h4>
+                <span class="tools">
+                    <a href="javascript:;" class="icon-chevron-down"></a>
+                    <a href="javascript:;" class="icon-remove"></a>
+                </span>
+            </div>
+            <div class="widget-body form">
+                <!-- BEGIN FORM-->
+                <div class="col-lg-12">                    
+
+                    @using (Html.BeginForm("UserDetails", "Users", FormMethod.Post))
+                    {
+                        @Html.ValidationSummary(true)
+                        <fieldset>
+                            @Html.Partial("_userDetails", Model)
+                            <br />
+                            <input class="btn btn-warning" type="button" value="ویرایش" onclick="location.href='@Url.Action("UserEdit", "Users", new { id = Model.UserID })'" />
+                        </fieldset>
+                        
+                    }
+                   
+
+                </div>
+               
+                <!-- END FORM-->
+            </div>
+            
+        </div>
+        <!-- END SAMPLE FORM widget-->
+    </div>
+</div>
+
+<br />
+<div>
+    @Html.ActionLink("مشاهده لیست کاربران", "Index", "Users")
+</div>

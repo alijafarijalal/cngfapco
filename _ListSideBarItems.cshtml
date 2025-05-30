@@ -1,0 +1,108 @@
+﻿@model cngfapco.Models.User
+
+<script src="~/js/admin/jquery-1.10.2.js"></script>
+<script src="~/js/admin/jquery-common.js"></script>
+<script src="~/js/admin/jquery-ui-1.10.3.custom.min.js"></script>
+<link href="~/css/themes/ui-lightness/jquery-ui-1.10.3.min.css" rel="stylesheet" />
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //Unbind the original image 'href' set by the controller...
+        var $dialog = $('<div/>')
+		.html("هشدار: توجه داشته باشید با حذف این دسترسی، دیگر کاربران صاحب نقشی که با این دسترسی مرتبط است دیگر قادر به مشاهده بخش حذف شده نخواهد بود!<br/><br/>آیا از حذف این مورد اطمینان دارید؟")
+		.dialog({
+		    autoOpen: false,
+		    resizable: false,
+		    height: 250,
+		    modal: true,
+            title: 'تاییدیه حذف عنوان از منو',
+            open: function () {
+                $("#deletesidebaritems").button({ icons: { primary: "ui-icon-trash" } });
+            },
+		    buttons: [
+                        {
+                            text: "حذف",
+                            id: "deletesidebaritems",
+                            click: function () {
+                                var _userId = window.location.pathname.substring(window.location.pathname.lastIndexOf("/") + 1);
+                                var _id = $(this).data('id');
+
+                                var _parameters = { userId: _userId, id: _id };
+                                $.ajax({
+                                    url: "/Users/DeleteUserSideBarItemsReturnPartialView",
+                                    type: "GET",
+                                    data: _parameters,
+                                    success: function (data, textStatus, jqXHR) {
+                                        $('#SideBarItemsTable').html(data);
+                                    }
+                                });
+                                $(this).dialog('close');
+                            }
+                        },
+                        {
+                            text: "انصراف",
+                            id: "cancelbtn",
+                            click: function () {
+                                $(this).dialog("close");
+                            }
+                        }]
+            });
+        $(".bin3").click(function () {
+            $dialog.data("id", $(this).attr("id")).dialog("open");
+        });
+    });
+</script>
+@{if (Model.SideBarItems.Count == 0)
+{
+    <h4><font color="red">هیچ منویی اختصاص نیافته ...</font></h4>
+    <br />
+}
+else
+{
+    <table id="SideBarItemsTable" class="table table-striped table-advance">
+        <thead>
+            <tr>
+                <th>ردیف</th>
+                <th>
+                    عنوان منو
+                </th>
+                <th>
+                    والد
+                </th>
+                <th>
+                    تنطیمات
+                </th>
+            </tr>
+       
+        </thead>
+        @{ int rowNum = 0;}
+        @foreach (var permission in Model.SideBarItems.OrderBy(r => r.orderBy))
+        {
+            <tr>
+                <td>@(rowNum+=1)</td>
+                <td>
+                    @try
+                    {
+                        @Html.ActionLink(permission.nameOption, "PermissionDetails", new { id = permission.ID })
+                    }
+                    catch
+                    {
+                        <span> تعریف نشده </span>
+                    }
+                </td>
+                <td>
+                    @permission.imageClass
+                </td>
+                <td>
+                    <center><img class="bin bin3 deletesidebaritems" src="@Url.Content("~/css/images/bin.png")" alt="Delete" id="@permission.ID" /></center>
+                        @*<a href="@Url.Action("DeleteSidebarItems", "Users", new { id = Model.UserID, permissionId = permission.ID })" class="deleteSidebarItems" id=@Model.UserID permissionid=@permission.ID>
+                            <img src="@Url.Content("~/css/images/bin.png")" />
+                        </a>*@
+                </td>
+            </tr>
+        }
+    </table>
+    <br />
+}
+}
+

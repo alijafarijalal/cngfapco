@@ -1,0 +1,51 @@
+﻿@model cngfapco.Models.User
+@{if (Model != null)
+  {     
+    <div id="expanderContent">
+        <table style='width: 100%'>
+            <tr>
+                <td style='width: 10%; font-weight: bold' class='userTable'>
+                    نام کاربری:
+                </td>
+                <td style='width: 28%' class='userTable'>
+                    @Model.Username
+                </td>
+                <td style='width: 8%; font-weight: bold' class='userTable'>
+                    نام خانوادگی:
+                </td>
+                <td style='width: 20%' class='userTable'>
+                    @Model.Lastname
+                </td>                
+                <td style='font-weight: bold;width: 10%' class='userTable'>
+                    شماره موبایل:
+                </td>
+                <td class='userTable'>
+                    @Model.MobileNumber
+                </td>
+            </tr>
+            <tr>
+                <td style='font-weight: bold' class='userTable'>
+                    پست الکترونیک:
+                </td>
+                <td class='userTable'>
+                    @Model.EMail
+                </td>
+                <td style='width: 10%; font-weight: bold' class='userTable'>
+                    نام:
+                </td>
+                <td style='width: 30%' class='userTable'>
+                    @Model.Firstname
+                </td>
+                <td style='font-weight: bold' class='userTable'>
+                    وضعیت:
+                </td>
+                <td class='userTable'>
+                    @Model.Inactive
+                </td> 
+                
+            </tr>
+            
+        </table>
+    </div>
+  }
+}

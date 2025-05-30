@@ -1,0 +1,43 @@
+﻿@model cngfapco.Models.Permission
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(":input[type='submit']").button();
+        $(":input[type='text']").text();
+    });
+</script>
+<div class="panel">
+    <fieldset>
+        <legend>
+            <h3>
+                افزودن دسترسی</h3>
+        </legend>
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary(true)    
+            <div class="editor-label">
+                @Html.LabelFor(model => model.PermissionDescription, "عنوان لاتین")
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.PermissionDescription, new { style = "width:450px" })
+                @Html.ValidationMessageFor(model => model.PermissionDescription)
+            </div>   
+            
+            <div class="editor-label">
+                @Html.LabelFor(model => model.PersianDescription, "عنوان فارسی")
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.PersianDescription, new { style = "width:450px" })
+                @Html.ValidationMessageFor(model => model.PersianDescription)
+            </div>          
+            <br />
+            <input type="submit" value="افـزودن" />           
+        }
+    </fieldset>
+</div>
+<div>
+    @Html.ActionLink("مشاهده لیست دسترسی ها", "PermissionIndex", "Users")
+</div>

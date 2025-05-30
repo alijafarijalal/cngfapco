@@ -1,0 +1,106 @@
+﻿
+<input name='UserId' id='UserId' type="hidden" value="@ViewBag.UserId" />
+<div>
+    <hr />
+    <strong> انتخاب کارگاه </strong>
+    @Html.DropDownList("WorkshopId", null, string.Empty, new { style = "width:250px" })
+    @*<div class="controls multiselect">
+        <div class="selectBox span6" onclick="showCheckboxes()">
+            <select>
+                <option style="font-family:Vazir;">انتخاب از لیست</option>
+            </select>
+            <div class="overSelect"></div>
+        </div>
+        <div class="span6" id="allWorkshop">
+            <input type="checkbox" class="group-checkable" data-set=".allWorkshop" id="allWorkshopcheck" /> همه
+            @foreach (var item in ViewBag.WorkshopId)
+            {
+                <label for="@item.Value">
+                    <input type="checkbox" id="@item.Value" name="Users" value="@item.Value" class="allWorkshop" /> @item.Text
+                </label>
+
+            }
+
+        </div>
+    </div>*@
+    <input class="btn btn-success" type="button" id="AddWorkshop" value="تخصیص به کاربر" />
+</div>
+<script>
+    var expanded = false;
+    function showCheckboxes() {
+        var checkboxes = document.getElementById("allWorkshop");
+        if (!expanded) {
+            checkboxes.style.display = "block";
+            expanded = true;
+        } else {
+            checkboxes.style.display = "none";
+            expanded = false;
+        }
+    }
+    //
+    $(document).ready(function () {
+        $("#allWorkshop").click(function () {
+            $(".alluser").prop('checked',
+                $(this).prop('checked'));
+        });
+    });
+</script>
+
+<style>
+    .multiselect {
+        /*width: 200px;*/
+    }
+
+    .selectBox {
+        position: relative;
+    }
+
+        .selectBox select {
+            width: 100%;
+            font-weight: bold;
+        }
+
+    .overSelect {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+
+    #allWorkshop {
+        display: none;
+        border: 1px #dadada solid;
+    }
+
+        #allWorkshop label {
+            display: block;
+        }
+
+            #allWorkshop label:hover {
+                background-color: #1e90ff;
+            }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(":input[type='button']").button();
+        $('#AddWorkshop').click(function () {
+            var _userId = $('#UserId').val();
+            var _id = $('#WorkshopId').val();
+
+            if (_userId == '') {
+                return false;
+            }
+
+            var _parameters = { userId: _userId, id: _id };
+            $.ajax({
+                url: "/Users/AddUserWorkshopReturnPartialView",
+                type: "GET",
+                data: _parameters,
+                success: function (data, textStatus, jqXHR) {
+                    $('#WorkshopTable').html(data);
+                }
+            });
+        });
+    });
+</script>

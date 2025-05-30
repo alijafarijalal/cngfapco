@@ -1,0 +1,38 @@
+﻿<script src="~/js/admin/jquery-1.10.2.js"></script>
+<script src="~/js/admin/jquery-common.js"></script>
+<script src="~/js/admin/jquery-ui-1.10.3.custom.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {    
+        $(":input[type='button']").button();  
+        $('#AddDataPermission').click(function () {
+            var _userId = $('#UserId').val();
+            var _id = $('#WorkshopId').val();
+
+            if (_userId == '') {
+                return false;
+            }
+
+            var _parameters = { userId: _userId, id: _id };
+            $.ajax({
+                url: "/Users/AddUserDataPermissionReturnPartialView",
+                type: "GET",
+                data: _parameters,
+                success: function (data, textStatus, jqXHR) {
+                    $('#DataPermissionTable').html(data);
+                }
+            });
+        });
+    });
+</script>
+<input name='UserId' id='UserId' type="hidden" value="@ViewBag.UserId" />
+<fieldset style="padding: 1em; font: 100%; color: Black; border-color: Black; border-style: solid;
+    border-width: thin; border-color: Silver; width: 650px">
+    <legend><strong>افزودن سطوح دسترسی اطلاعات به کاربر</strong></legend>
+    <br />
+    <label>
+        نقش:
+    </label>
+    @Html.DropDownList("WorkshopId", null, string.Empty, new { style = "width:250px" })
+    <input type="button" id="AddDataPermission" value="افزودن سطح دسترسی اطلاعات به کاربر" />
+</fieldset>

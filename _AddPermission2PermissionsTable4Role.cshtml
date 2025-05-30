@@ -1,0 +1,95 @@
+﻿@model cngfapco.Models.Role
+
+<script src="~/js/admin/jquery-1.10.2.js"></script>
+<script src="~/js/admin/jquery-common.js"></script>
+<script src="~/js/admin/jquery-ui-1.10.3.custom.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {     
+        $('#AddPermission').click(function () {               
+            var _permissionId = $('#PermissionId').val();            
+            var _roleId = $('#Role_Id').val();
+            if (_permissionId == '') {
+                return false;
+            }
+
+            var _parameters = { permissionId: _permissionId, id: _roleId };
+            $.ajax({
+                url: "/Users/AddPermission2RoleReturnPartialView",
+                type: "GET",
+                data: _parameters,
+                success: function (data, textStatus, jqXHR) {
+                    $('#PermissionsTable').html(data);
+                    $('#PermissionId').val("");
+                }
+            });
+        });
+
+        $('#AddAllPermissions').click(function () {
+            var _roleId = $('#Role_Id').val();
+            var _parameters = { id: _roleId };
+            $.ajax({
+                url: "/Users/AddAllPermissions2RoleReturnPartialView",
+                type: "GET",
+                data: _parameters,
+                success: function (data, textStatus, jqXHR) {
+                    $('#PermissionsTable').html(data);
+                    $('#PermissionId').val("");
+                }
+            });
+        });  
+
+        var $dialog = $('<div class="ui-dialog"></div>')
+            .html('آیا از حذف کامل دسترسی ها اطمینان دارید؟')
+            .dialog({
+                autoOpen: false,
+                resizable: false,
+                height: 150,
+                modal: true,
+                title: 'تاییدیه حذف تمام منوها',
+                open: function () {
+                    $("#PermissionDelete").button({ icons: { primary: "ui-icon-trash" } });
+                },
+                buttons: [
+                    {
+                        text: "ادامه",
+                        id: "PermissionDelete",
+                        click: function () {
+                            var _url = window.location;
+                            var _userId = window.location.pathname.substring(window.location.pathname.lastIndexOf("/") + 1);
+                            var _roleId = $('#Role_Id').val();
+                            var _parameters = { id: _roleId };
+
+                            $.ajax({
+                                url: "/Users/DeleteAllPermissionfromUser",
+                                type: "GET",
+                                data: _parameters,
+                                success: function (data, textStatus, jqXHR) {
+                                    $('#PermissionsTable').html(data);
+                                }
+                            });
+                            $(this).dialog('close');
+                        }
+                    },
+                    {
+                        text: "انصراف",
+                        id: "cancelbtn",
+                        click: function () { $(this).dialog("close"); }
+                    }]
+            });
+
+        $(".PermissionDelete").click(function () {
+            $dialog.data("id", $(this).attr("id")).dialog("open");
+        });
+        
+    });
+</script>
+@Html.HiddenFor(model => model.Role_Id)
+<div>
+    <strong> دسترسی جدید</strong>
+    <br />    
+    @Html.DropDownList("PermissionId", null, string.Empty, new { style = "width:350px" })
+    <input class="btn btn-success" type="button" id="AddPermission" value="افزودن دسترسی" />
+    <input class="btn btn-warning" type="button" id="AddAllPermissions" value="افزودن همه دسترسی ها" />
+    <input class="btn btn-danger PermissionDelete" type="button" id="DeleteAllPermissions" value="حذف همه دسترسی ها" />
+</div>

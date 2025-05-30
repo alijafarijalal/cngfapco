@@ -1,0 +1,317 @@
+﻿@model cngfapco.Models.User
+
+@{
+    Layout = null;
+    string message = (string)ViewBag.Message;
+    string message2 = (string)ViewBag.Message2;
+    string usernsme = (string)Session["username"];
+    string password = (string)Session["password"];
+    string focus = (string)ViewBag.focus;
+    int? count = (int?)ViewBag.userlogedStatusCount;
+    if (focus == null)
+    {
+        focus = "username";
+    }
+    string ReturnURL = (string)ViewBag.ReturnURL;
+}
+<!DOCTYPE html>
+
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8" />
+    <title>cngfapco | Login page</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <link href="/assets/bootstrap-rtl/css/bootstrap-rtl.min.css" rel="stylesheet" />
+    <link href="/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <link href="/css/style_responsive.css" rel="stylesheet" />
+    <link href="/css/style_default.css" rel="stylesheet" id="style_color" />
+    <link href='http://www.fontonline.ir/css/IranNastaliq.css' rel='stylesheet' type='text/css'>   
+    
+    <style>
+        .banner 
+        {
+          background-image: url('~/img/FAP_TOP_HEADER.jpg');
+          background-size: cover; /* تصویر رو کامل پوشش میده */
+          background-position: center; /* تصویر رو وسط‌چین می‌کنه */
+          width: 100%;
+          height: auto; /* یا مثلاً 30vh */
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .banner img 
+        {
+          width: 100%;
+          height: 300px; /* ارتفاع ثابت یا نسبی */
+          object-fit: cover; /* تصویر رو بدون کش آمدن، متناسب می‌کنه */
+        }
+    </style>
+
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body id="login-body">
+
+    <img src="~/img/FAP_TOP_HEADER.jpg" class="banner" alt="بنر">
+
+    <div id="login">
+
+        <form name="form" action="/Users/Login?count=@count&ReturnURL=@ReturnURL" method="post" onsubmit="return validate()">
+            <div class="lock" style="margin-top:-12px;">
+                <i class="icon-lock"></i>
+            </div>
+            <div class="control-wrap">
+                <div class="control-group">
+                    <div class="controls">
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-user"></i></span><input name="UserName" id="username" type="text" placeholder="نام کاربری" value="@usernsme" />
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="control-group">
+                    <div class="controls">
+                        <script type="text/javascript">
+                            $(document).ready(function () {
+                                //"Password" is the id of the password textbox
+                                //yours may be different so make sure to change this if necessary
+                                $("#Password").keyup(function () {
+                                    var length = $("#Password").val().length;
+                                    var colour = "";
+
+                                    if (length <= 4)
+                                        colour = "red";
+                                    else if (length <= 7)
+                                        colour = "orange";
+                                    else
+                                        colour = "green";
+
+                                    $("#strength").css("background-color", colour);
+                                });
+                            });
+                        </script>
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-key"></i></span><input name="Password" id="password" type="password" placeholder="کلمه عبور" value="@password" />
+                        </div>
+                        <div class="mtop10">
+                            <div class="block-hint pull-left small">
+                                <input type="checkbox" id=""> مرا به خاطر بسپار
+                            </div>
+                            <div class="block-hint pull-right">
+                                <a href="javascript:;" class="" id="forget-password">فراموشی کلمه عبور ؟</a>
+                            </div>
+                        </div>
+
+                        <div class="clearfix space5"></div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modalloading">
+                <div class="page-loader">
+                    <div class="page-loader__spinner">
+                        <svg viewBox="25 25 50 50">
+                            <circle cx="50" cy="50" r="20" fill="none" stroke-width="10" stroke-miterlimit="10" />
+                        </svg>
+                        <img src="~/assets/pre-loader/Thin fading line.gif" />
+                    </div>
+                </div>
+            </div>
+            <div class="yourLoadingImage" id='yourLoadingImage' style="display:none;">
+                <img src='~/img/loading.gif' />
+            </div>
+            <input class="btn btn-block login-btn" type="submit" value="ورود" style="font-family:Vazir;" />
+            <h4 style="color:#d04444;text-align:center;">@message</h4>
+            <h5 style="color:#d04444;text-align:center;">@message2</h5>
+        </form>
+        <!-- END LOGIN FORM -->
+        <!-- BEGIN FORGOT PASSWORD FORM -->
+        <form id="forgotform" class="form-vertical no-padding no-margin hide" action="/User/Login">
+            <p class="center">پست الکترونیک خود را جهت بازیابی کلمه عبور وارد کنید</p>
+            <div class="control-group">
+                <div class="controls">
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-envelope"></i></span><input id="input-email" type="text" placeholder="پست الکترونیک" />
+                    </div>
+                </div>
+                <div class="space20"></div>
+            </div>
+            <input type="button" id="forget-btn" class="btn btn-block login-btn" value="ارسال" />
+        </form>
+        <!-- END FORGOT PASSWORD FORM -->
+    </div>
+    <p class="text-center" style="font-size:20px;">
+        <a href="/Website/Index" target="_blank">
+            <img src="~/img/globe-earth-animation-8-3.GIF" width="4%" />
+            @*<i class="icon-globe"></i>*@ وب سایت
+        </a>
+    </p>
+    <!-- END LOGIN -->
+    <!-- BEGIN COPYRIGHT -->
+    <div id="login-copyright">
+        Copyright © 2020 Fanavaran Parsian Co. All Rights Reserved.
+    </div>
+    <!-- END COPYRIGHT -->
+    <!-- BEGIN JAVASCRIPTS -->
+    <script src="/js/jquery-1.8.3.min.js"></script>
+    <script src="/assets/bootstrap-rtl/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.blockui.js"></script>
+    <script src="/js/scripts.js"></script>
+    <script src="~/js/loader.js"></script>
+    <script type="text/javascript">document.getElementById('@focus').focus();</script>
+
+    <script>
+        jQuery(document).ready(function () {
+            App.initLogin();
+        });
+    </script>
+    <!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>
+
+<script type="text/javascript">
+
+    function UserOrEmailAvailability() { //This function call on text change.
+        $.ajax({
+            type: "POST",
+            url: "/Users/CheckEmail", // this for calling the web method function in cs code.
+            /*data: '{useroremail: "' + $("#<%=txtUsernameOrEmail.ClientID%>")[0].value + '" }',*/// user name or email value
+            data: { UserName: $("#UserName").val(), Password: $("#Password").val() },
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: OnSuccess,
+            failure: function (response) {
+                alert(response);
+            }
+        });
+    }
+
+    // function OnSuccess
+    function OnSuccess(response) {
+        var msg = $("#<%=lblStatus.ClientID%>")[0];
+        switch (response.d) {
+            case "true":
+                msg.style.display = "block";
+                msg.style.color = "red";
+                msg.innerHTML = "User Name Or Email already exists.";
+                break;
+            case "false":
+                msg.style.display = "block";
+                msg.style.color = "green";
+                msg.innerHTML = "User Name Or Email Available";
+                break;
+        }
+    }
+
+</script>
+<script>
+    function validate() {
+        var username = document.form.UserName.value;
+        var password = document.form.Password.value;
+        //
+        var username = webkit.documentElement.form.UserName.value;
+        var password = webkit.documentElement.form.Password.value;
+
+        if (username == null || username == "") {
+            alert("نام کاربری نمی تواند خالی باشد !");
+            return false;
+        }
+        else if (password == null || password == "") {
+            alert("کلمه عبور نمی تواند خالی باشد !");
+            return false;
+        }
+         $(function(){
+
+        LoadingElementId = "please-wait";
+    }
+</script>
+<script>
+         function requestFullScreen(element) {
+             // Supports most browsers and their versions.
+             var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
+
+             if (requestMethod) { // Native full screen.
+                 requestMethod.call(element);
+             } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+                 var wscript = new ActiveXObject("WScript.Shell");
+                 if (wscript !== null) {
+                     wscript.SendKeys("{F11}");
+                 }
+             }
+         }
+
+         var elem = document.body; // Make the body go full screen.
+         requestFullScreen(elem);
+</script>
+<script>
+    var elem = document.documentElement;
+    function openFullscreen() {
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.mozRequestFullScreen) { /* Firefox */
+            elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE/Edge */
+            elem.msRequestFullscreen();
+        }
+    }
+
+    function closeFullscreen() {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+    }
+</script>
+<script>
+    $('#yourLoadingImage').hide();
+    $('#loder').click(function () {
+        $(this).attr('disabled', 'disabled');
+        $(this).hide();
+        $('#yourLoadingImage').show();
+
+        $.ajax({
+            async=false,
+            url: "/Users/Login?ReturnURL=@ReturnURL",
+        }).done(function () {
+            $('#loder').attr('disabled', false);
+            $('#loder').show();
+            $('#yourLoadingImage').hide();
+            setTimeout(function () {
+                //AJAX REQUEST CODE
+                $("#loder").hide();
+            }, 10);
+        });
+
+    });
+</script>
+<script>
+    $body = $("body");
+
+    $(document).on({
+        ajaxStart: function () { $body.addClass("loading"); },
+        ajaxStop: function () { $body.removeClass("loading"); }
+    });
+
+    // Initiates an AJAX request on click
+    $('.btn').on("click", function () {
+        $.get("/mockjax");
+    });
+
+</script>
+

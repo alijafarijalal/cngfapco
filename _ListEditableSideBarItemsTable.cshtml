@@ -1,0 +1,104 @@
+﻿
+<input name='UserId' id='UserId' type="hidden" value="@ViewBag.UserId" />
+<div>
+    <strong> منوی جدید </strong>
+    @Html.DropDownList("SideBarItemsId", null, string.Empty, new { style = "width:250px" })
+    <input class="btn btn-success" type="button" id="AddMenueItems" value="تخصیص به کاربر" /> 
+    <input class="btn btn-warning" type="button" id="AddAllSideBarItems" value="دسترسی به همه منوها" />
+    <input class="btn btn-danger SideBarItems" type="button" id="DeleteAllSideBarItems" value="حذف دسترسی همه منوها" />
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(":input[type='button']").button();
+        $('#AddMenueItems').click(function () {
+            var _userId = $('#UserId').val();
+            var _id = $('#SideBarItemsId').val();
+
+            if (_userId == '') {
+                return false;
+            }
+
+            var _parameters = { userId: _userId, id: _id };
+            $.ajax({
+                url: "/Users/AddUserSideBarItemsReturnPartialView",
+                type: "GET",
+                data: _parameters,
+                success: function (data, textStatus, jqXHR) {
+                    $('#SideBarItemsTable').html(data);
+                }
+            });
+        });
+
+        $('#AddAllSideBarItems').click(function () {
+            var _userId = $('#UserId').val();
+            var _parameters = { userId: _userId };
+            $.ajax({
+                url: "/Users/AddAllSideBarItems2User",
+                type: "GET",
+                data: _parameters,
+                success: function (data, textStatus, jqXHR) {
+                    $('#SideBarItemsTable').html(data);
+                    $('#SideBarItemsId').val("");
+                }
+            });
+        });    
+
+        //$('#DeleteAllSideBarItems').click(function () {
+        //    var _userId = $('#UserId').val();
+        //    var _parameters = { userId: _userId };
+        //    $.ajax({
+        //        url: "/Users/DeleteAllSideBarItemsfromUser",
+        //        type: "GET",
+        //        data: _parameters,
+        //        success: function (data, textStatus, jqXHR) {
+        //            $('#SideBarItemsTable').html(data);
+        //            $('#SideBarItemsId').val("");
+        //        }
+        //    });
+        //});  
+
+        var $dialog = $('<div class="ui-dialog"></div>')
+            .html('آیا از حذف کامل منوها اطمینان دارید؟')
+            .dialog({
+                autoOpen: false,
+                resizable: false,
+                height: 150,
+                modal: true,
+                title: 'تاییدیه حذف تمام منوها',
+                open: function () {
+                    $("#DeleteAllSideBarItems").button({ icons: { primary: "ui-icon-trash" } });
+                },
+                buttons: [
+                    {
+                        text: "حذف",
+                        id: "DeleteAllSideBarItems",
+                        click: function () {
+                            var _url = window.location;
+                            var _userId = window.location.pathname.substring(window.location.pathname.lastIndexOf("/") + 1);
+                            var _id = $(this).data('id');
+
+                            var _parameters = { userId: _userId, id: _id };
+                            $.ajax({
+                                url: "/Users/DeleteAllSideBarItemsfromUser",
+                                type: "GET",
+                                data: _parameters,
+                                success: function (data, textStatus, jqXHR) {
+                                    $('#SideBarItemsTable').html(data);
+                                }
+                            });
+                            $(this).dialog('close');
+                        }
+                    },
+                    {
+                        text: "انصراف",
+                        id: "cancelbtn",
+                        click: function () { $(this).dialog("close"); }
+                    }]
+            });
+
+        $(".SideBarItems").click(function () {
+            $dialog.data("id", $(this).attr("id")).dialog("open");
+        });
+
+    });
+</script>

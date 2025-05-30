@@ -1,0 +1,94 @@
+﻿@model cngfapco.Models.User
+<script type="text/javascript">
+    $(document).ready(function () {
+        //Unbind the original image 'href' set by the controller...
+        var $dialog = $('<div data-toggle="modal" data-target="#modal-large"></div>')
+		.html('آیا از حذف دسترسی به این کارگاه اطمینان دارید؟')
+		.dialog({
+		    autoOpen: false,
+		    resizable: false,
+		    height: 150,
+		    modal: true,
+		    title: 'تاییدیه حذف دسترسی به کارگاه',
+		    open: function () {
+                $("#deleteworkshop").button({ icons: { primary: "icon-remove" } });
+		    },
+		    buttons: [
+                        {
+                            text: "حذف",
+                            id: "deleteworkshop",
+                            click: function () {
+                                var _url = window.location;
+                                var _userId = window.location.pathname.substring(window.location.pathname.lastIndexOf("/") + 1);
+                                var _id = $(this).data('id');
+
+                                var _parameters = { userId: _userId, id: _id };
+                                $.ajax({
+                                    url: "/Users/DeleteUserWorkshopReturnPartialView",
+                                    type: "GET",
+                                    data: _parameters,
+                                    success: function (data, textStatus, jqXHR) {
+                                        $('#WorkshopTable').html(data);
+                                    }
+                                });
+                                $(this).dialog('close');
+                            }
+                        },
+                        {
+                            text: "انصراف",
+                            id: "cancelbtn",
+                            click: function () { $(this).dialog("close"); }
+                        }]
+		});
+
+        $(".bin2").click(function () {
+            $dialog.data("id", $(this).attr("id")).dialog("open");
+        });
+    })
+    //
+   
+</script>
+
+@{if (Model.Workshops.Count == 0)
+{
+    <h4><font color="red">کاربر به هیچ کارگاهی دسترسی ندارد ...</font></h4>
+    <br />
+}
+else
+{
+    <table id="WorkshopTable" class="table table-striped table-advance">
+        <thead>
+            <tr>
+                <th>ردیف</th>
+                <th>
+                    کارگاه
+                </th>
+                <th>
+                    <i class="icon icon-cog"></i>
+                </th>
+            </tr>        
+        </thead>
+
+        <tbody>
+            @{ int rowNum = 0;}
+           @foreach (cngfapco.Models.Workshop workshop in Model.Workshops.OrderBy(n => n.Title))
+           {
+            <tr>
+                <td>@(rowNum += 1)</td>                
+                <td>
+                   @Html.ActionLink(workshop.Title, "WorkshopDetails", new { id = workshop.ID })
+                </td>
+                <td>
+                    <center><img class="bin2 deleteworkshop" src="@Url.Content("~/css/images/bin.png")" alt="Delete" id="@workshop.ID" /></center>
+                    @*<a href="@Url.Action("DeleteWorkshop", "Users", new { id = Model.WorkshopID, userId = Model.UserID })" class="deleteWorkshop" id=@Model.WorkshopID userId=@Model.UserID>
+                        <img src="@Url.Content("~/css/images/bin.png")" />
+                    </a>*@
+                </td>
+            </tr>
+           }
+        </tbody>
+  
+    </table>
+    <br />
+}
+}
